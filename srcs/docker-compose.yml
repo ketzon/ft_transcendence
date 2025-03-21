@@ -1,0 +1,22 @@
+services:
+  back:
+    build: requirements/back/.
+    container_name: back
+    ports:
+      - "3000:3000"
+    networks:
+      - transcendence
+ 
+  front:
+    build: requirements/front/.
+    container_name: front
+    ports:
+      - "8080:8080"
+    depends_on:
+      - back
+    networks:
+      - transcendence
+
+networks:
+  transcendence:
+    name: transcendence

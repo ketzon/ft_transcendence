@@ -22,6 +22,7 @@ registerCors();
 // All files in the routes directory are API endpoints
 server.register(import('./routes/root.js')); // special API endpoint for the root page (localhost:3000/)
 server.register(import('./routes/ping.js')); // simple API call that replies with "pong" if the backend functions properly 
+server.register(import('./routes/print.js'));
 
 // Run web server
 server.listen({ port: 3000, host: '0.0.0.0' }, (err, address) => {

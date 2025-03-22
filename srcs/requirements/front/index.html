@@ -13,17 +13,19 @@
 
         <div id="mainDiv"></div>
         <script>
-            const API_URL = 'http://localhost:8080/routes/ping';
+            const API_URL = 'http://localhost:8080/routes';
             const mainDiv = document.getElementById("mainDiv");
 
             async function pingAPI() {
                 try {
-                    const response = await fetch(API_URL);
+                    const response = await fetch(API_URL.concat("/ping"));
                     const data = await response.json();
                     console.log(data);
                 }
                 catch (error) {
-                    console.error('Error fetching tasks:', error);
+                    console.error('Error: couldn\'t reach back-end server: ', error);
+                }
+            }
             async function change_main_div(route) {
                 try {
                     const response = await fetch(API_URL.concat(route));

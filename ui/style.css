@@ -16,6 +16,7 @@ a:visited {
     color: white;
 }
 
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -39,7 +40,7 @@ nav {
     background-size: cover;
     background-position: center;
     filter: blur(5px);
-    z-index: -1;
+    z-index: -2;
     box-shadow: 0 0 200px rgba(0,0,0,1) inset;
 }
 
@@ -51,7 +52,7 @@ nav {
     height: 100%;
     background: linear-gradient(#8E2DE2, #4A00E0);
     opacity: 0.2;
-    z-index: -1;
+    z-index: -2;
     box-shadow: 0 0 200px rgba(0,0,0,1) inset;
 }
 
@@ -78,6 +79,8 @@ nav {
     justify-content: flex-start;
     align-items: center;
     gap: 15%;
+
+    z-index: -1;
 }
 
 .nav-box {
@@ -137,4 +140,45 @@ nav {
 
 .home-button {
     margin-left: 5%;
+}
+
+.sign-up-popup {
+    display: none;
+    flex-direction: column;
+    width: 40%;
+    height: 500px;
+    margin: auto;
+    padding: 20px;
+
+    justify-content: space-evenly;
+    align-items: center;
+    border: 5px solid white;
+    border-radius: 10px;
+
+    gap: 15px;
+    background-color: #e9c46a;
+
+    z-index: 1;
+}
+
+.active {
+    display: flex;
+}
+
+.sign-up-popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.sign-up-popup form button {
+    color: white;
+}
+
+input {
+    margin: 10px;
+    font-size: 20px;
+}
+
+label {
+    margin: 10px;
 }

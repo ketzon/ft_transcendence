@@ -1,0 +1,43 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/florian/work/tran-git/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+*	style.css	/^* {$/;"	s
+.animated-line	style.css	/^.animated-line{$/;"	c
+.beta-badge	style.css	/^.beta-badge {$/;"	c
+.button-connect	style.css	/^.button-connect{$/;"	c
+.button-connect:hover	style.css	/^.button-connect:hover{$/;"	c
+.container	style.css	/^.container {$/;"	c
+.footer	style.css	/^.footer {$/;"	c
+.footer-link	style.css	/^.footer-link {$/;"	c
+.footer-link-gap	style.css	/^.footer-link-gap {$/;"	c
+.footer-link:hover	style.css	/^.footer-link:hover {$/;"	c
+.footer-links	style.css	/^.footer-links {$/;"	c
+.form-content	style.css	/^.form-content{$/;"	c
+.logo-form	style.css	/^.logo-form{$/;"	c
+.logo-image	style.css	/^.logo-image{$/;"	c
+.navbar	style.css	/^.navbar {$/;"	c
+.navbar-logo-container	style.css	/^.navbar-logo-container {$/;"	c
+.styled-button	style.css	/^.styled-button {$/;"	c
+.styled-button:active	style.css	/^.styled-button:active {$/;"	c
+.styled-button:disabled	style.css	/^.styled-button:disabled {$/;"	c
+.styled-button:hover	style.css	/^.styled-button:hover {$/;"	c
+.text	style.css	/^.text{$/;"	c
+AnonymousFunctionb43910f50100	main.js	/^document.addEventListener("DOMContentLoaded", function() {$/;"	f
+AnonymousFunctionb43910f50200	main.js	/^    loginButton.addEventListener("click", function(event) {$/;"	f
+AnonymousFunctionb43910f50300	main.js	/^    document.addEventListener('click', function(event) {$/;"	f
+body	style.css	/^body {$/;"	s
+contenu principal	index.html	/^        <h1>contenu principal<\/h1>$/;"	h
+form	style.css	/^form {$/;"	s
+form input	style.css	/^form input {$/;"	s
+form label	style.css	/^form label {$/;"	s
+h1	style.css	/^h1 {$/;"	s
+login	index.html	/^            <input type="text" id="login" name="login" placeholder="login">$/;"	I
+password	index.html	/^                <input type="password" id="password" name="password" placeholder="password"> <br/;"	I

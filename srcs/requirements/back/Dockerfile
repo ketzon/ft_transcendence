@@ -11,8 +11,6 @@ RUN npm install
 # Copy remaining files to docker
 COPY . .
 
-RUN npm run build
-
 EXPOSE 3000
 
 CMD ["npm", "start"]

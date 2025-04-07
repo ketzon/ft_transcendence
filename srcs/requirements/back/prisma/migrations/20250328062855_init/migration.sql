@@ -1,0 +1,12 @@
+-- CreateTable
+CREATE TABLE "Stats" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "game" INTEGER NOT NULL DEFAULT 0,
+    "wins" INTEGER NOT NULL DEFAULT 0,
+    "looses" INTEGER NOT NULL DEFAULT 0,
+    "userId" INTEGER NOT NULL,
+    CONSTRAINT "Stats_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Stats_userId_key" ON "Stats"("userId");

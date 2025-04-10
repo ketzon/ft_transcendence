@@ -3,7 +3,7 @@ import fastifyMultipart from 'fastify-multipart';
 
 
 //tools
-const getBody = (req, reply) => {
+const getBody = (req, reply ) => {
 	if (!req.body) {
 		return reply.status(400).send("Missing body in request.")
 	}
@@ -60,9 +60,8 @@ const signin = async(req, reply) => {
 		if (!isPasswordValid) {
 			throw new Error({message: "Invalid password"})
 		}
-		const token = await userService.createJWT(req.server, user.id, user.email);
-		return reply.status(200).send({message: "Succesfully connected", user: user, token: token})
-
+		const twoFactAuth = await userService.sendTwoFactAuth(user.id, email)
+		return reply.status(200).send({message: "Code authentification sent to:", user: user})
 	}
 	catch(error) {
 		return reply.status(500).send({message: "Internal error", details: error.message})
@@ -88,19 +87,17 @@ const displayCurrentUser = async(req, reply) => {
 
 const logout = async(req, reply) => {
 	try {
-        return reply
-            .clearCookie("token", {
-                path: "/",
-                secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
-                sameSite: 'strict',
-            })
-            .status(200)
-            .send({ message: "User logged out successfully", token: req.cookies });
-    } catch (error) {
-        return reply
-            .status(500)
-            .send({ message: "Error logging out", details: error.message });
-    }
+	return reply
+		.clearCookie("token", {
+		path: "/",
+		secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
+		sameSite: 'strict',
+		}).status(200).send({ message: "User logged out successfully", token: req.cookies });
+	} catch (error) {
+	return reply
+		.status(500)
+		.send({ message: "Error logging out", details: error.message });
+	}
 }
 
 const customUsername = async (req, reply) => {
@@ -125,7 +122,7 @@ const customAvatar = async (req, reply) => {
 		reply.status(200).send({message: "Avatar succesfully changed.", user: userUpdated})
 	}
 	catch (error) {
-		reply.status(500).send({message: "customAvatar internal error", details: error.message})
+		reply.status(500).send({message: "customAvatar internal error", details: error.message, userID: user.id})
 	}
 }
 
@@ -138,13 +135,21 @@ const modifyPassword = async (req, reply) => {
 		if (!isPasswordValid) {
 			throw new Error("Invalid password")
 		}
-		// console.log("password = %s, NEWPASS = %s", password, newPassword)
 		const userUpdated = await userService.updatePassword(user, newPassword)
 		reply.status(200).send({message: "Password succesfully changed.", user: userUpdated})
 	}
 	catch (error) {
 		reply.status(500).send({message: "modifyPassword internal error", details: error.message})
 	}
+}
+
+const verify2FA = async (req, reply) => {
+	const {auth, user} = req.body
+
+	if (auth !== user.otp || Date.now > user.otp_expiration)
+		return reply.status(401).send({message: "One Time Password invalid."})
+	const token = await userService.createJWT(req.server, user.id, user.email);
+	return reply.status(200).send({message: "Successfully connected.", user: user})
 }
 
 export default {
@@ -155,5 +160,5 @@ export default {
 	customAvatar,
 	displayCurrentUser,
 	modifyPassword,
-
+	verify2FA,
 }

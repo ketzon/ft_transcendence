@@ -1,6 +1,7 @@
 import prisma from "../config/prismaClient.js"
-import bcrypt from "bcryptjs";
-
+import mailSender from "./mailSender.js"
+import bcrypt from "bcryptjs"; // JTW pluggin
+import crypto from "crypto"; // for 2FA 
 
 import { customAlphabet } from "nanoid";
 
@@ -12,8 +13,6 @@ const generateRandomUsername = () => {
 }
 
 const comparePass = async (password, user) => {
-	console.log("password = ",user)
-
 	return await bcrypt.compare(password, user.password)
 }
 
@@ -57,6 +56,22 @@ const getUserById = async (id) => {
 		where: {id: id}
 	})
 	return user;
+}
+
+const sendTwoFactAuth = async (id, email) => {
+	const otp = crypto.randomInt(100000, 999999);
+	const otp_expire = Date.now() + 5 * 60 * 1000;
+	await mailSender.sendMail({
+		to: email,
+		text: `Authentification code for next 5 minutes: ${otp}`,
+	});
+	
+	await prisma.user.update({
+		where: {id: id},
+		data: {	otp: otp, 
+			otp_expire: otp_expire,
+		}
+	})
 }
 
 const updateUsername = async (user, newUsername) => {
@@ -103,4 +118,5 @@ export default {
 	updateUsername,
 	updateAvatar,
 	updatePassword,
+	sendTwoFactAuth,
 }

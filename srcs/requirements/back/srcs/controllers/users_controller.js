@@ -161,5 +161,4 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
-
 }

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "otp" INTEGER;
+ALTER TABLE "User" ADD COLUMN "otp_expire" INTEGER;

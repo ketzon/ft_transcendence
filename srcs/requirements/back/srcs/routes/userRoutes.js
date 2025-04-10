@@ -7,6 +7,7 @@ export default async function registerUserRoute(fastify) {
 	fastify.post("/customUsername", userManagement.customUsername)
 	fastify.post("/customAvatar", userManagement.customAvatar)
 	fastify.post("/modifyPassword", userManagement.modifyPassword)
+	fastify.post("/verify-2FA", userManagement.verify2FA)
 	fastify.get("/profil", userManagement.displayCurrentUser)
 
 }

@@ -6,6 +6,8 @@ services:
       - "3000:3000"
     networks:
       - transcendence
+    volumes:
+      - db:/usr/src/app/prisma
  
   front:
     build: requirements/front/.
@@ -20,3 +22,12 @@ services:
 networks:
   transcendence:
     name: transcendence
+
+volumes:
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      device: ./requirements/back/prisma
+      o : bind
+      type : none

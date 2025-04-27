@@ -27,3 +27,5 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo 
+spa_tailwind/.vite/deps/_metadata.json
+spa_tailwind/.vite/deps/package.json

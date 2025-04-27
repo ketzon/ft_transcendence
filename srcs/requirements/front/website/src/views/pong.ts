@@ -36,11 +36,11 @@ export function pongView(): string {
     <!-- tout les liens -->
        <div class="flex justify-between">
          <div class="fixed bottom-4 right-4">
-         <a href="images/pong-infos2.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
+         <a href="../../images/pong-infos2.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
          「 pong infos black 」
          </a>
         <div class="fixed bottom-4 left-4">
-         <a href="images/pong-infos.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
+         <a href="../../images/pong-infos.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
          「 pong infos white 」
          </a>
         </div>

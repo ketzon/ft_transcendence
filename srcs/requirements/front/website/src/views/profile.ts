@@ -71,9 +71,9 @@ function loadUserInfos() {
 
 
 export function initProfile(): void {
-    // loadUserInfos();
-    // initAvatarBtns();
-    // initUploadAvatar();
+    loadUserInfos();
+    initAvatarBtns();
+    initUploadAvatar();
 }
 
 
@@ -95,10 +95,10 @@ export function profileView(): string {
         </div>
         <div id="avatar-selection" class="profile-subpart w-3/4 h-2/4 gap-3 flex justify-center ">
             <div class="avatar-selection w-full flex flex-wrap gap-10 justify-center items-center bg-white rounded-3xl">
-                <img id="man-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="images/default_avatar.png" alt="Default user avatar">
-                <img id="woman-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="images/woman_avatar.png" alt="Woman user avatar">
-                <img id="alien-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="images/alien_avatar.png" alt="Alien user avatar">
-                <img id="detective-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="images/detective_avatar.png" alt="Detective user avatar">
+                <img id="man-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="/images/default_avatar.png" alt="Default user avatar">
+                <img id="woman-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="/images/woman_avatar.png" alt="Woman user avatar">
+                <img id="alien-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="/images/alien_avatar.png" alt="Alien user avatar">
+                <img id="detective-avatar" class="w-30 h-30 border-2 cursor-pointer rounded-3xl hover:opacity-60" src="/images/detective_avatar.png" alt="Detective user avatar">
             </div>
             <div class="avatar-selection w-full flex justify-center text-center items-center bg-white rounded-3xl">
                 <p>Activate 2FA Option ?</p>

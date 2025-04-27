@@ -13,7 +13,7 @@ export function getUserData(): userInfos {
     let userData: userInfos = {
         nickname: "Ykaercs",
         email: "yka@mail.com",
-        avatar: "images/alien_avatar.png"
+        avatar: "../images/alien_avatar.png"
     };
     return userData;
 }

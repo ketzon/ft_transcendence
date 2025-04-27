@@ -1,6 +1,6 @@
-Branch tournaments back and front.  
-Merce of three branches: develop, feture/trounaments_back, feature/tournaments_front)
+orBranch tournaments back and front.    
+Merge of three branches: develop, feture/trounaments_back, feature/tournaments_front.
 
-Test:
+Test:  
 docker-compose build  
 docker-compose up

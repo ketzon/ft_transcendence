@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>Pongu.sh</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="style.css">
-        <script src="main.js" defer></script>
+        <!-- <link rel="stylesheet" href="src/style.css"> -->
+        <link rel="stylesheet" href="src/style_tailwind.css">
+        <script type="module" src="src/main.js" defer></script>
     </head>
     <body>
+        <div id="main-box" class="h-full flex items-center">
+            <nav id="navbar-box" class="h-full bg-violet-200 flex flex-col justify-around gap-8 px-5">
+              <div class="flex flex-col gap-5">
+                <a class="nav-link border-black border text-center p-7" href="/dashboard">HOME</a>
+                <a class="nav-link border-black border text-center p-7" href="/profile">PROFILE</a>
+                <a class="nav-link border-black border text-center p-7" href="/play">PLAY</a>
+                <a class="nav-link border-black border text-center p-7" href="/settings">SETTINGS</a>
+                <a class="nav-link border-black border text-center p-7" href="/tournaments">TOURNAMENTS</a>
+              </div>
+            </nav>
+            <div id="changingArea" class="h-full w-full bg-[#fdf8e1]">
+            </div>
+        </div>
     </body>
 </html>

@@ -16,6 +16,7 @@ import { isUserAuth } from "./auth.ts";
 import { initSettings, settingsView } from "./views/settings.ts";
 
 const routes = {
+    indexhtml : "/index.html/",
     index : "/",
     dashboard : "/dashboard",
     tournaments : "/tournaments",
@@ -51,6 +52,11 @@ export async function router(): Promise<void> {
 
     console.log("Current path = " + location.pathname);
     switch (location.pathname) {
+
+        case routes.indexhtml:
+            redirectTo("/");
+            return;
+
         case routes.index:
             if (isAuth === true)
             {

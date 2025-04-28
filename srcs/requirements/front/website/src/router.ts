@@ -19,7 +19,6 @@ const routes = {
     index : "/",
     dashboard : "/dashboard",
     tournaments : "/tournaments",
-    profile : "/profile",
     play : "/play",
     login : "/login",
     signup : "/signup",
@@ -97,18 +96,6 @@ export async function router(): Promise<void> {
         case routes.tournaments:
             changingArea.innerHTML = tournamentsView();
             initializeTournaments();
-            break ;
-
-        case routes.profile:
-            if (isAuth === false)
-            {
-                redirectTo("/");
-                return;
-            }
-
-            changingArea.innerHTML = profileView();
-            initProfile();
-            stopPong();//reset pong
             break ;
 
         case routes.play:

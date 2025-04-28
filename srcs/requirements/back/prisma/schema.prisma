@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -30,7 +30,7 @@ model Stats {
   game    Int @default(0)
   wins    Int @default(0)
   looses  Int @default(0)
-  
+
   User    User  @relation(onDelete: Cascade, fields: [userId], references: [id])
   userId  Int  @unique
 

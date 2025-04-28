@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+:root {
+    --accent-color: #8672FF;
+    --base-color: white;
+    --text-color: #2E2B41;
+    --input-color: #F3F0FF;
+    --error-color: #f06272;
+}
+
+.incorrect label {
+    @apply bg-[#f06272];
+}
+
+.incorrect input {
+    @apply border-[#f06272];
+}

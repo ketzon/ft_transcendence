@@ -17,11 +17,61 @@ function loadProfileCard(): void {
     }
 }
 
+function resetInput(inputId: string): void {
+    const input = document.getElementById(inputId) as HTMLInputElement;
+
+    if (input)
+        input.value = "";
+}
+
+async function updatePassword(newPassword: string): Promise<void> {
+    try
+    {
+        const res = await fetch("http://localhost:3000/routes/user/changePassword", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(newPassword),
+            credentials: "include"
+        });
+        if (!res.ok)
+        {
+            const resMsg = await res.json();
+
+            console.log("Could not update password : ", resMsg.message);
+            toasts.error("Failed to update password");
+            return;
+        }
+        toasts.success("Password updated");
+    }
+    catch(error)
+    {
+        console.error("Call to API /updatePassword FAILED");
+        toasts.error("Failed to update password");
+    }
+    resetInput("update-password-value");
+}
+
+//Init the password form
+function initPasswordForm(): void {
+    const passwordForm = document.getElementById("update-password-form") as HTMLFormElement;
+    const passwordValue = document.getElementById("update-password-value") as HTMLInputElement;
+
+    if (passwordForm)
+    {
+        passwordForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            //isValidPassword() //We can add a front password checking here.
+            updatePassword(passwordValue.value);
+        })
+    }
+}
+
 //Call the API for nickname Update
 async function updateNickname(newNickname: string): Promise<void> {
     try
     {
-        const res = await fetch ("https://reqres.in/api/users", {
+        const res = await fetch ("http://localhost:3000/routes/user/changeNickname", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,6 +94,7 @@ async function updateNickname(newNickname: string): Promise<void> {
     {
         console.error("Error with API when trying to update nickname");
     }
+    resetInput("update-nickname-value");
 }
 
 //Init the nickname form.
@@ -157,6 +208,7 @@ function initAvatarUpload(): void {
 export function initSettings(): void {
     loadProfileCard();
     initNicknameForm();
+    initPasswordForm();
     initAvatarUpload();
 }
 
@@ -187,10 +239,10 @@ export function settingsView(): string {
                                     <button id="update-nickname-btn" type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                 </div>
                             </form>
-                            <form class="flex items-center gap-10">
+                            <form id="update-password-form" class="flex items-center gap-10">
                                 <label for="update-password" class="w-full">Change Password</label>
                                 <div class="w-full flex justify-center">
-                                    <input type="password" name="update-password" id="update-password" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
+                                    <input type="password" name="update-password" id="update-password-value" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
                                     <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                 </div>
                             </form>

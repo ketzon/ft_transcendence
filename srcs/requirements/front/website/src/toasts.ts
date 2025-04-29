@@ -4,7 +4,7 @@ export const toasts = {
     error(message: string) {
         Toastify({
             text: message,
-            duration: 2000,
+            duration: 3000,
             gravity: "top", // `top` or `bottom`
             position: "right", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover
@@ -19,7 +19,7 @@ export const toasts = {
     success(message:string): void {
         Toastify({
             text: message,
-            duration: 2000,
+            duration: 3000,
             gravity: "top", // `top` or `bottom`
             position: "right", // `left`, `center` or `right`
             stopOnFocus: false, // Prevents dismissing of toast on hover

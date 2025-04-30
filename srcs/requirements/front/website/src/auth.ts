@@ -1,31 +1,14 @@
 import { router } from "./router";
 
-export type userInfos = {
-    nickname: string,
-    email: string,
-    avatar: string
-};
-
-
-export function getUserData(): userInfos {
-    // Call API here.
-
-    let userData: userInfos = {
-        nickname: "Ykaercs",
-        email: "yka@mail.com",
-        avatar: "../images/alien_avatar.png"
-    };
-    return userData;
-}
-
 export async function isUserAuth():Promise<boolean> {
-    return false; // tmp
+    // initLogoutButton(); //tmp
+    // return true; // tmp
     try
     {
-        const res = await fetch("https://reqres.in/api/users", {
+        const res = await fetch("http://localhost:3000/user/profil", {
             method: "GET",
             headers: {},
-            // credentials: "include"
+            credentials: "include"
         });
 
         if (!res.ok)
@@ -33,10 +16,13 @@ export async function isUserAuth():Promise<boolean> {
             console.log("User is NOT LOGGED");
             return (false);
         }
+        const user = await res.json();
+        console.log("User infos = ", user);
         console.log("User is LOGGED");
-        // const user = await res.json();
+        checkLocalStorage(user);
+
+
         initLogoutButton();
-        checkStorageInfos();
         return (true);
     }
     catch(error)
@@ -47,15 +33,13 @@ export async function isUserAuth():Promise<boolean> {
     }
 }
 
-function checkStorageInfos()
+function checkLocalStorage(user)
 {
-    let userData: userInfos;
     if (!localStorage.getItem("email") || !localStorage.getItem("nickname") || !localStorage.getItem("avatar"))
     {
-        userData = getUserData();
-        localStorage.setItem("email", userData.email);
-        localStorage.setItem("nickname", userData.nickname);
-        localStorage.setItem("avatar", userData.avatar);
+        localStorage.setItem("email", user.email);
+        localStorage.setItem("nickname", user.username);
+        localStorage.setItem("avatar", user.avatar);
     }
 }
 
@@ -82,10 +66,10 @@ export async function initLogoutButton(): Promise<void> {
         //Ici faire le call a l'API pour vraiment deconnecter et clear les cookies.
         try
         {
-            const res = await fetch("https://reqres.in/api/users", {
+            const res = await fetch("http://localhost:3000/user/logout", {
                 method: "POST",
                 headers: {},
-                // credentials: "include" // Rajouter pour le vrai call.
+                credentials: "include" // Rajouter pour le vrai call.
             });
 
             if (!res.ok)

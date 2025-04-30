@@ -66,12 +66,12 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     try
     {
         //changer l'url par celle de l'api
-        const res = await fetch ("https://reqres.in/api/users", {
+        const res = await fetch ("http://localhost:3000/user/signin", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            // credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
+            credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
             body: JSON.stringify(data),
         });
 

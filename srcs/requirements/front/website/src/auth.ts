@@ -19,7 +19,7 @@ export function getUserData(): userInfos {
 }
 
 export async function isUserAuth():Promise<boolean> {
-    return true; // tmp
+    return false; // tmp
     try
     {
         const res = await fetch("https://reqres.in/api/users", {

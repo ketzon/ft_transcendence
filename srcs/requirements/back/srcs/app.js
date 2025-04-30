@@ -1,3 +1,5 @@
+import fastifyCors from '@fastify/cors';
+
 //Tools
 import Fastify from "fastify"
 
@@ -19,6 +21,11 @@ const fastify = Fastify({
     },
 });
 
+await fastify.register(fastifyCors, {
+    origin: "http://localhost:8080",
+    credentials: true               
+  });
+
 fastify.register(fastifyCookie);
 fastify.register(fastifyJwt, {
   secret: process.env.JWT_SECRET,
@@ -31,11 +38,10 @@ fastify.register(fastifyJwt, {
 fastify.register(registerUserRoute, {prefix: "/user"});
 
 
-fastify.listen({port: PORT}, (err, address) => {
+fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {
 	if (err) {
 		fastify.log.error(err),
 		process.exit(1)
 	}
 	console.log(`Computer is transcending on : http://localhost:${PORT}`)
 })
-

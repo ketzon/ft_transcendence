@@ -35,31 +35,30 @@ async function sendCode(form:HTMLFormElement): Promise<void> {
     console.log("2FA FORM | Code will be sent to back");
 
 //     A Tester avec la route du backend
-    const code = document.getElementById("code") as HTMLInputElement;
+    const otp = document.getElementById("code") as HTMLInputElement;
     const errElement = document.getElementById("error-message") as HTMLElement;
 
     try
     {
-        const res = await fetch("https://reqres.in/api/users", {
+        const res = await fetch("http://localhost:3000/user/verify-2FA", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             },
-            // credentials: "include", // A rajouter pour la vraie route.
-            body: JSON.stringify({ code }),
+            credentials: "include", // A rajouter pour la vraie route.
+            body: JSON.stringify({otp}),
         });
-
-
         if (!res.ok)
         {
-            const error = res.json();
+            const error = await res.json();
             if (errElement)
             {
                 // errElement.innerText = error.message; //Vrai message du back.
+                console.log(error);
                 errElement.innerText = "Invalid code";
+                return;
             }
         }
-
         console.log("2FA Successfull , redirecting to dashboard");
 
         setTimeout(() => {

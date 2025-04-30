@@ -27,17 +27,17 @@ function resetInput(inputId: string): void {
 async function updatePassword(newPassword: string): Promise<void> {
     try
     {
-        const res = await fetch("http://localhost:3000/routes/user/changePassword", {
+        const res = await fetch("http://localhost:3000/user/modifyPassword", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(newPassword),
+            body: JSON.stringify({newPassword}),
             credentials: "include"
         });
         if (!res.ok)
         {
             const resMsg = await res.json();
 
-            console.log("Could not update password : ", resMsg.message);
+            console.log(resMsg);
             toasts.error("Failed to update password");
             return;
         }
@@ -45,7 +45,6 @@ async function updatePassword(newPassword: string): Promise<void> {
     }
     catch(error)
     {
-        console.error("Call to API /updatePassword FAILED");
         toasts.error("Failed to update password");
     }
     resetInput("update-password-value");
@@ -68,26 +67,24 @@ function initPasswordForm(): void {
 }
 
 //Call the API for nickname Update
-async function updateNickname(newNickname: string): Promise<void> {
+async function updateNickname(newUsername: string): Promise<void> {
     try
     {
-        const res = await fetch ("http://localhost:3000/routes/user/changeNickname", {
+        const res = await fetch ("http://localhost:3000/user/customUsername", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            // credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
-            body: JSON.stringify({newNickname}),
+            credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
+            body: JSON.stringify({newUsername}),
         });
         if (!res.ok)
         {
             toasts.error("Failed to update nickname");
-            console.log("Nickname could not updated");
             return ;
         }
-        localStorage.setItem("nickname", newNickname);
-        loadProfileCard();
-        window.alert("Successfully changed nickname");
+        localStorage.setItem("nickname", newUsername);
+        loadProfileCard(); // We use this to refresh values on the view.
         toasts.success("Nickname updated");
     }
     catch(error)

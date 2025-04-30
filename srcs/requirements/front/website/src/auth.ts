@@ -20,8 +20,6 @@ export async function isUserAuth():Promise<boolean> {
         console.log("User infos = ", user);
         console.log("User is LOGGED");
         checkLocalStorage(user);
-
-
         initLogoutButton();
         return (true);
     }

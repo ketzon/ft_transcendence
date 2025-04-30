@@ -3,11 +3,11 @@ You are on master branch. If you have a feature in development, use: git checkou
 To make it work with backend API:
 
 if you use the docker front on http://localhost:8080 :
-    - edit /requirements/back/srcs/app.js , uncomment line 25 and comment http://localhost:5173 line
+- edit /requirements/back/srcs/app.js , uncomment line 25 and comment http://localhost:5173 line
 
 if you use "npm run dev" in the front directory to use Vite :
-    - it should work by default.
+- it should work by default.
 
 If you want to access private views (need authentification) :
-    - Login seems buggy so don't use it , instead register and you will be logged.
-    - You can bypass by using return true in "isAuth" function.
+- Login seems buggy so don't use it , instead register and you will be logged.
+- You can bypass by using return true in "isAuth" function.

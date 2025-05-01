@@ -43,7 +43,6 @@ export async function router(): Promise<void> {
     const changingArea = document.getElementById("changingArea");
     const isAuth: boolean = await isUserAuth()// Test if user is logged to protect access to views (just testing).
 
-    console.log(isAuth);
     if (!changingArea)
     {
         console.log("Could not find changingArea");

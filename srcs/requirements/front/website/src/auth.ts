@@ -1,8 +1,7 @@
 import { router } from "./router";
+import { printResponse } from "./utils";
 
 export async function isUserAuth():Promise<boolean> {
-    // initLogoutButton(); //tmp
-    // return true; // tmp
     try
     {
         const res = await fetch("http://localhost:3000/user/profil", {
@@ -10,15 +9,16 @@ export async function isUserAuth():Promise<boolean> {
             headers: {},
             credentials: "include"
         });
+        const user = await res.json();
 
         if (!res.ok)
         {
             console.log("User is NOT LOGGED");
+            printResponse("/profil", user);
             return (false);
         }
-        const user = await res.json();
-        console.log("User infos = ", user);
-        console.log("User is LOGGED");
+        console.log("USER IS LOGGED");
+        printResponse("/profil", user);
         checkLocalStorage(user);
         initLogoutButton();
         return (true);
@@ -69,22 +69,24 @@ export async function initLogoutButton(): Promise<void> {
                 headers: {},
                 credentials: "include" // Rajouter pour le vrai call.
             });
+            const user = await res.json();
 
             if (!res.ok)
             {
+                printResponse("/logout", user);
                 console.error("API Returned with 500 status code, error");
                 return ;
             }
+            printResponse("/logout", user);
+            localStorage.clear(); //Clear all infos from the client that was stored in localStorage.
+            navbarElem?.removeChild(logoutBtn);
+            window.history.pushState(null, "", "/");
+            router();
         }
         catch(error)
         {
             console.error("Logout API call failed");
             return ;
         }
-
-        localStorage.clear(); //Clear all infos from the client that was stored in localStorage.
-        navbarElem?.removeChild(logoutBtn);
-        window.history.pushState(null, "", "/");
-        router();
     })
 }

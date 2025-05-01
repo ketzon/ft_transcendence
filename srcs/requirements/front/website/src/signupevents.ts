@@ -1,4 +1,6 @@
 import { router } from "./router.ts";
+import { printResponse } from "./utils.js";
+import { toasts } from "./toasts.js";
 
 interface formValues {
     username: string,
@@ -80,35 +82,28 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
             credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
             body: JSON.stringify(data),
         });
+        const responseData = await res.json();
 
         if (!res.ok)
         {
-            const errorData = await res.json();
-
-            console.error("Message erreur du back : ", errorData.message);
-            errElement.innerText = errorData.message;
+            toasts.error("Register failed");
+            printResponse("/signup", responseData);
+            errElement.innerText = responseData.message;
             return ;
         }
-
-        const responseData = await res.json();
-
-        console.log("Message success du back : ", responseData.message);
-        console.log(responseData);
-        errElement.innerText = "SUCCESSFULL REGISTER";
-        // errElement.innerText = responseData.message;
-
+        toasts.success("Register successfull");
+        printResponse("/signup", responseData);
+        errElement.innerText = responseData.message;
         setTimeout(() => {
             // window.history.pushState(null, "", "/twofa"); On peut direct rediriger vers le 2fa ?
             window.history.pushState(null, "", "/login");
             router();
         }, 1500);
     }
-
     catch(error)
     {
+        toasts.error("Register failed");
         console.error("Erreur du fetch : ", error);
-        if (errElement)
-            errElement.innerText = "Unexpected Error";
     }
 }
 

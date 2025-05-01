@@ -1,36 +1,5 @@
 import { router } from "./router";
 
-async function getQrCode(): Promise<void> {
-    const qrCodeImg = document.getElementById("qr-code-img") as HTMLImageElement;
-
-    if (qrCodeImg)
-        {
-            console.log("Found QRCODE IMG : ", qrCodeImg);
-            //Ici normalement on appelle une route du back qui nous renvoi le qr code genere.
-            qrCodeImg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
-        }
-
-    //Partie a tester avec la route du back.
-
-    // try
-    // {
-    //     const res = await fetch("/api/2fa/setup", {
-    //         method: "POST",
-    //         credentials: "include"
-    //     });
-    //     const data = res.json();
-
-    //     if (qrCodeImg)
-    //     {
-    //         qrCodeImg.src = data.qrDataUrl; // Recuperer le lien du qrcode.
-    //     }
-    // }
-    // catch (err)
-    // {
-    //     console.error("Erreur chargement du QR Code");
-    // }
-}
-
 async function sendCode(form:HTMLFormElement): Promise<void> {
     console.log("2FA FORM | Code will be sent to back");
 
@@ -109,6 +78,5 @@ export function init2fa(): void {
     if (mailDiv)
         mailDiv.innerText = "2FA Code has been sent to : " + "dummy@gmail.com"; // Replace with real email.
 
-    getQrCode(); // Remove si on utilise pas de qr-code
     verifyCode();
 }

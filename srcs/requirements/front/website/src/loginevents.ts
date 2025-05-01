@@ -1,4 +1,6 @@
 import { router } from "./router.ts";
+import { toasts } from "./toasts.js";
+import { printResponse } from "./utils.js";
 
 interface signinformValues {
     email: string,
@@ -74,29 +76,23 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
             credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
             body: JSON.stringify(data),
         });
+        const responseData = await res.json();
 
         if (!res.ok)
         {
-            const errorData = await res.json();
-
-            console.error("Message erreur du back : ", errorData.message);
-            errElement.innerText = errorData.message;
+            toasts.error("Signin failed");
+            printResponse("/signin", responseData);
+            errElement.innerText = responseData.message;
             return ;
         }
-
-        const responseData = await res.json();
-
-        console.log("Message success du back : ", responseData.message);
-        console.log(responseData);
-        errElement.innerText = "SUCCESSFULL LOGIN";
-        // errElement.innerText = responseData.message;
-
+        toasts.success("Signin successfull");
+        printResponse("/signin", responseData);
+        errElement.innerText = responseData.message;
         setTimeout(() => {
             window.history.pushState(null, "", "/twofa");
             router();
         }, 1500);
     }
-
     catch(error)
     {
         console.error("Erreur du fetch : ", error);

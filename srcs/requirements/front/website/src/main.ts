@@ -1,10 +1,8 @@
 import { router } from "./router.ts";
-import { isUserAuth } from "./auth.ts";
 
 // On utilise l'event delegation pour catch tout les events click , meme ceux qui seront injectes plus tard.
 function listenAllClicks(): void {
     let body = document.querySelector("body");
-    console.log(body);
 
     if (!body)
     {
@@ -27,6 +25,5 @@ function listenAllClicks(): void {
     })
 }
 
-isUserAuth();
 listenAllClicks();
 router();

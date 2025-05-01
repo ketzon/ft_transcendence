@@ -1,4 +1,5 @@
 import { toasts } from "../toasts";
+import { printResponse } from "../utils";
 
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
@@ -33,14 +34,15 @@ async function updatePassword(newPassword: string): Promise<void> {
             body: JSON.stringify({newPassword}),
             credentials: "include"
         });
+        const resMsg = await res.json();
+
         if (!res.ok)
         {
-            const resMsg = await res.json();
-
             console.log(resMsg);
             toasts.error("Failed to update password");
             return;
         }
+        printResponse("/modifyPassword", resMsg);
         toasts.success("Password updated");
     }
     catch(error)
@@ -78,11 +80,15 @@ async function updateNickname(newUsername: string): Promise<void> {
             credentials: "include", // Permet de recevoir le cookie d'auth, sera utilise systematiquement dans chaque request apres.
             body: JSON.stringify({newUsername}),
         });
+        const resMsg = await res.json();
+
         if (!res.ok)
         {
+            printResponse("/customUsername", resMsg);
             toasts.error("Failed to update nickname");
             return ;
         }
+        printResponse("/customUsername", resMsg);
         localStorage.setItem("nickname", newUsername);
         loadProfileCard(); // We use this to refresh values on the view.
         toasts.success("Nickname updated");

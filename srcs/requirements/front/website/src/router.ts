@@ -92,7 +92,6 @@ export async function router(): Promise<void> {
                 redirectTo("/");
                 return;
             }
-
             changingArea.innerHTML = dashboardView();
             initializeDashboard();
             stopPong();//reset pong
@@ -109,7 +108,6 @@ export async function router(): Promise<void> {
                 redirectTo("/");
                 return;
             }
-
             changingArea.innerHTML = pongView();
             initPong();
             break ;
@@ -120,9 +118,15 @@ export async function router(): Promise<void> {
             break ;
 
         case routes.settings:
+            if (isAuth === false)
+            {
+                redirectTo("/");
+                return;
+            }
             changingArea.innerHTML = settingsView();
             initSettings();
             break;
+            
         default:
             break ;
     }

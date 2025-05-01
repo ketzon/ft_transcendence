@@ -13,7 +13,7 @@ function listenAllClicks(): void {
     body.addEventListener("click", (e) => {
         const target = e.target;
 
-        console.log("Click event Target = " + target);
+        // console.log("Click event Target = " + target);
         if (target instanceof HTMLAnchorElement)
         {
             const href = target.getAttribute("href");

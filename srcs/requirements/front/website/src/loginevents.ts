@@ -109,7 +109,6 @@ export function loginEvents(): void {
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        console.log("LOGIN BUTTON CLICKED");
 
         //On recup les donnees des inputs du form.
         const inputsValues: signinformValues = getFormValues();

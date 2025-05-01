@@ -130,7 +130,6 @@ export function signupEvents(): void {
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        console.log("SIGNUP BUTTON CLICKED");
 
         //On recupere les donnees des inputs du form.
         const inputsValues: formValues = getFormValues();

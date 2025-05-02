@@ -1,6 +1,5 @@
 import { toasts } from "../toasts";
-import { printResponse } from "../utils";
-
+import { printResponse, resetInput, isEmptyString } from "../utils";
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -16,13 +15,6 @@ function loadProfileCard(): void {
         activeEmail.textContent = localStorage.getItem("email") as string;
         newNicknamePlaceholder.placeholder = localStorage.getItem("nickname") as string;
     }
-}
-
-function resetInput(inputId: string): void {
-    const input = document.getElementById(inputId) as HTMLInputElement;
-
-    if (input)
-        input.value = "";
 }
 
 async function updatePassword(newPassword: string): Promise<void> {
@@ -49,7 +41,6 @@ async function updatePassword(newPassword: string): Promise<void> {
     {
         toasts.error("Failed to update password");
     }
-    resetInput("update-password-value");
 }
 
 //Init the password form
@@ -63,7 +54,11 @@ function initPasswordForm(): void {
             event.preventDefault();
 
             //isValidPassword() //We can add a front password checking here.
-            updatePassword(passwordValue.value);
+            if (isEmptyString(passwordValue.value))
+                toasts.error("Invalid new password");
+            else
+                updatePassword(passwordValue.value);
+            resetInput("update-password-value");
         })
     }
 }
@@ -97,7 +92,6 @@ async function updateNickname(newUsername: string): Promise<void> {
     {
         console.error("Error with API when trying to update nickname");
     }
-    resetInput("update-nickname-value");
 }
 
 //Init the nickname form.
@@ -111,7 +105,11 @@ function initNicknameForm(): void {
             event.preventDefault();
 
             // isValidNickname(nicknameValue.value); //Verification en front que la value est pas null, ou maxlen ect..
-            updateNickname(nicknameValue.value);
+            if (isEmptyString(nicknameValue.value))
+                toasts.error("Invalid new nickname");
+            else
+                updateNickname(nicknameValue.value);
+            resetInput("update-nickname-value");
         })
     }
 }

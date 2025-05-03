@@ -20,7 +20,7 @@ function gameLoop(gameId: GameElements): void {
     if (mute) {
         stopAllAudio();
     }
-    checkWinner(gameId); 
+    checkWinner(gameId);
     setAnimationFrameId(requestAnimationFrame(() => gameLoop(gameId)));
 }
 

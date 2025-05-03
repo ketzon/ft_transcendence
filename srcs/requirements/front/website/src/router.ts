@@ -64,8 +64,8 @@ export async function router(): Promise<void> {
                 return;
             }
             changingArea.innerHTML = loginView();
-            stopPong();
             loginEvents();
+            stopPong();
             break;
 
         case routes.login:
@@ -101,8 +101,8 @@ export async function router(): Promise<void> {
 
         case routes.tournaments:
             changingArea.innerHTML = tournamentsView();
-            stopGame();
             initializeTournaments();
+            stopGame();
             break ;
 
         case routes.play:
@@ -128,8 +128,8 @@ export async function router(): Promise<void> {
                 return;
             }
             changingArea.innerHTML = settingsView();
-            stopGame();
             initSettings();
+            stopGame();
             break;
 
         default:

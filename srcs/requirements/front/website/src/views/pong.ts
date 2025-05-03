@@ -28,22 +28,9 @@ export function pongView(): string {
       <div class="flex gap-4 mt-4">
         <button id="button-pause" class="text-white bg-red-400 rounded p-1 ">start</button>
         <button id="button-reset" class="text-white  bg-red-400 rounded p-1 ">reset</button>
-        <button id="button-ball" class="text-white  bg-red-400 rounded p-1 ">mute</button> 
+        <button id="button-ball" class="text-white  bg-red-400 rounded p-1 ">mute</button>
         <button id="button-basic" class="text-white  bg-red-400 rounded p-1 ">features-mode</button>
       </div>
-
-
-    <!-- tout les liens -->
-       <div class="flex justify-between">
-         <div class="fixed bottom-4 right-4">
-         <a href="../../images/pong-infos2.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
-         「 pong infos black 」
-         </a>
-        <div class="fixed bottom-4 left-4">
-         <a href="../../images/pong-infos.png" target="_blank" class="text-gray-400 font-bold p-4" rel="pong-infos">
-         「 pong infos white 」
-         </a>
-        </div>
 </div>
 `
 

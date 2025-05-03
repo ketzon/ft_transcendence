@@ -43,6 +43,15 @@ async function updatePassword(newPassword: string): Promise<void> {
     }
 }
 
+//Function to check that the new password respect our conditions. We can add new rules here.
+function isValidPassword(newPassword: string): boolean {
+    if (isEmptyString(newPassword))
+    {
+        toasts.error("Invalid new password (empty)");
+        return (false);
+    }
+}
+
 //Init the password form
 function initPasswordForm(): void {
     const passwordForm = document.getElementById("update-password-form") as HTMLFormElement;
@@ -53,10 +62,7 @@ function initPasswordForm(): void {
         passwordForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            //isValidPassword() //We can add a front password checking here.
-            if (isEmptyString(passwordValue.value))
-                toasts.error("Invalid new password");
-            else
+            if (isValidPassword(passwordValue.value))
                 updatePassword(passwordValue.value);
             resetInput("update-password-value");
         })
@@ -94,6 +100,16 @@ async function updateNickname(newUsername: string): Promise<void> {
     }
 }
 
+//Function to check that the new nickname respect our conditions. We can add new rules here.
+function isValidNickname(newNickname: string): boolean {
+    if (isEmptyString(newNickname))
+    {
+        toasts.error("Invalid new nickname (empty)");
+        return (false);
+    }
+    return (true);
+}
+
 //Init the nickname form.
 function initNicknameForm(): void {
     const updateNicknameForm = document.getElementById("update-nickname-form") as HTMLElement;
@@ -104,10 +120,7 @@ function initNicknameForm(): void {
         updateNicknameForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            // isValidNickname(nicknameValue.value); //Verification en front que la value est pas null, ou maxlen ect..
-            if (isEmptyString(nicknameValue.value))
-                toasts.error("Invalid new nickname");
-            else
+            if (isValidNickname(nicknameValue.value))
                 updateNickname(nicknameValue.value);
             resetInput("update-nickname-value");
         })

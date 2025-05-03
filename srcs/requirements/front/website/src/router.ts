@@ -3,7 +3,7 @@ import { initializeDashboard } from "./dashboardEvents.ts";
 import { tournamentsView } from "./views/tournaments.ts";
 import { initializeTournaments } from "./tournamentsEvents.ts";
 
-import { initPong, stopGame, stopPong } from "./ponggame.ts";
+import { initGame, stopGame, setGameMode } from "./ponggame.ts";
 import { pongView } from "./views/pong.ts";
 
 
@@ -12,6 +12,7 @@ import { initSettings, settingsView } from "./views/settings.ts";
 import { signupView, signupEvents } from "./views/signup.ts";
 import { loginView, loginEvents } from "./views/login.ts";
 import { twofaView, init2fa } from "./views/2fa.ts";
+import { stopPong } from "./pong/core/gameloop.js";
 
 
 
@@ -63,6 +64,7 @@ export async function router(): Promise<void> {
                 return;
             }
             changingArea.innerHTML = loginView();
+            stopPong();
             loginEvents();
             break;
 
@@ -94,11 +96,12 @@ export async function router(): Promise<void> {
             }
             changingArea.innerHTML = dashboardView();
             initializeDashboard();
-            stopPong();//reset pong
+            stopGame();//reset pong
             break ;
 
         case routes.tournaments:
             changingArea.innerHTML = tournamentsView();
+            stopGame();
             initializeTournaments();
             break ;
 
@@ -109,7 +112,8 @@ export async function router(): Promise<void> {
                 return;
             }
             changingArea.innerHTML = pongView();
-            initPong();
+            setGameMode(true);
+            initGame();
             break ;
 
         case routes.twofa:
@@ -124,6 +128,7 @@ export async function router(): Promise<void> {
                 return;
             }
             changingArea.innerHTML = settingsView();
+            stopGame();
             initSettings();
             break;
 

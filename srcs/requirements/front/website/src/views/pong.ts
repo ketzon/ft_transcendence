@@ -28,7 +28,7 @@ export function pongView(): string {
       <div class="flex gap-4 mt-4">
         <button id="button-pause" class="text-white bg-red-400 rounded p-1 ">start</button>
         <button id="button-reset" class="text-white  bg-red-400 rounded p-1 ">reset</button>
-        <button id="button-ball" class="text-white  bg-red-400 rounded p-1 ">ball-color</button> 
+        <button id="button-ball" class="text-white  bg-red-400 rounded p-1 ">mute</button> 
         <button id="button-basic" class="text-white  bg-red-400 rounded p-1 ">features-mode</button>
       </div>
 

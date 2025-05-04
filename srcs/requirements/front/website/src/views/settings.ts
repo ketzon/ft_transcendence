@@ -256,7 +256,7 @@ export function settingsView(): string {
                                         <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                     </div>
                                 </form>
-                                <div id="password-checklist" class="hidden mt-4 w-fit m-auto py-5 px-7 rounded-2xl bg-violet-300">
+                                <div id="password-checklist" class="hidden my-4 w-fit m-auto py-5 px-7 rounded-2xl bg-violet-300">
                                     <h3 class="text-[16px] mb-2.5 text-violet-500">Password should be</h3>
                                     <ul id="checklist">
                                         <li id="min-len-item" class="text-white text-[14px]">

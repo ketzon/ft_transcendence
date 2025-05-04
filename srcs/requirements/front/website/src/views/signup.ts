@@ -1,6 +1,7 @@
 import { router } from "../router.ts";
 import { printResponse } from "../utils.ts";
 import { toasts } from "../toasts.ts";
+import { handleChecklist, isValidPassword } from "../passwordValidation.js";
 
 interface formValues {
     username: string,
@@ -13,7 +14,7 @@ interface formValues {
 function resetErrors(): void {
     const usernameInput = document.getElementById("username-input");
     const emailInput = document.getElementById("email-input");
-    const passwordInput = document.getElementById("password-input");
+    const passwordInput = document.getElementById("update-password-value");
     const repeatPasswordInput = document.getElementById("repeat-password-input");
     const errElement = document.getElementById("error-message");
 
@@ -52,9 +53,9 @@ function verifyInputs(data: formValues) {
         emailInput?.parentElement?.classList.add("incorrect");
     }
 
-    if (data.password === "" || data.password == null)
+    if (data.password === "" || data.password == null || !isValidPassword(data.password))
     {
-        const passwordInput = document.getElementById("password-input");
+        const passwordInput = document.getElementById("update-password-value");
 
         errors.push("Password is required");
         passwordInput?.parentElement?.classList.add("incorrect");
@@ -110,7 +111,7 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
 function getFormValues(): formValues {
     const usernameInput = document.getElementById("username-input") as HTMLInputElement;
     const emailInput = document.getElementById("email-input") as HTMLInputElement;
-    const passwordInput = document.getElementById("password-input") as HTMLInputElement;
+    const passwordInput = document.getElementById("update-password-value") as HTMLInputElement;
     const repeatPasswordInput = document.getElementById("repeat-password-input") as HTMLInputElement;
 
     let data: formValues = {
@@ -126,8 +127,8 @@ export function signupEvents(): void {
     const form = document.getElementById("signup-form");
     const errElement = document.getElementById("error-message") as HTMLElement;
 
+    handleChecklist();
     resetErrors();
-
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -174,10 +175,35 @@ export function signupView(): string {
                                 </label>
                             </div>
                             <div class="w-full flex flex-row-reverse justify-center">
-                                <input type="password" name="password" id="password-input" placeholder="Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-r-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer">
+                                <input type="password" name="password" id="update-password-value" placeholder="Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-r-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer">
                                 <label for="password-input" class="bg-[var(--accent-color)] h-12 w-12 flex justify-center shrink-0 items-center fill-white text-white text-2xl font-medium rounded-l-lg peer-focus:bg-[var(--text-color)]">
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/></svg>
                                 </label>
+                            </div>
+                            <div id="password-checklist" class="hidden my-4 w-fit m-auto py-5 px-7 rounded-2xl bg-violet-300">
+                                <h3 class="text-[16px] mb-2.5 text-violet-500">Password should be</h3>
+                                <ul id="checklist">
+                                    <li id="min-len-item" class="text-white text-[14px]">
+                                        <i class="text-[12px] fa-solid fa-xmark"></i>
+                                    At least 8 character long
+                                    </li>
+                                    <li id="number-item" class="text-white text-[14px]">
+                                        <i class="text-[12px] fa-solid fa-xmark"></i>
+                                        At least 1 number
+                                    </li>
+                                    <li id="lowercase-item" class="text-white text-[14px]">
+                                        <i class="text-[12px] fa-solid fa-xmark"></i>
+                                        At least 1 lowercase letter
+                                    </li>
+                                    <li id="uppercase-item" class="text-white text-[14px]">
+                                        <i class="text-[12px] fa-solid fa-xmark"></i>
+                                        At least 1 uppercase letter
+                                    </li>
+                                    <li id="special-char-item" class="text-white text-[14px]">
+                                        <i class="text-[12px] fa-solid fa-xmark"></i>
+                                        At least 1 special character
+                                    </li>
+                                </ul>
                             </div>
                             <div class="w-full flex flex-row-reverse justify-center">
                                 <input type="password" name="repeatpassword" id="repeat-password-input" placeholder="Repeat Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-r-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer">

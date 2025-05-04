@@ -15,3 +15,7 @@
 .incorrect input {
     @apply border-[#f06272];
 }
+
+.checked {
+    @apply opacity-50;
+}

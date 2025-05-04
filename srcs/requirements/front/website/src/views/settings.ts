@@ -1,5 +1,6 @@
 import { toasts } from "../toasts";
 import { printResponse, resetInput, isEmptyString } from "../utils";
+import { handleChecklist, isValidPassword } from "../passwordValidation";
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -43,26 +44,20 @@ async function updatePassword(newPassword: string): Promise<void> {
     }
 }
 
-//Function to check that the new password respect our conditions. We can add new rules here.
-function isValidPassword(newPassword: string): boolean {
-    if (isEmptyString(newPassword))
-    {
-        toasts.error("Invalid new password (empty)");
-        return (false);
-    }
-}
-
 //Init the password form
 function initPasswordForm(): void {
     const passwordForm = document.getElementById("update-password-form") as HTMLFormElement;
     const passwordValue = document.getElementById("update-password-value") as HTMLInputElement;
 
+    handleChecklist();
     if (passwordForm)
     {
         passwordForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
-            if (isValidPassword(passwordValue.value))
+            if (!isValidPassword(passwordValue.value))
+                toasts.error("New password does not meet requirements");
+            else
                 updatePassword(passwordValue.value);
             resetInput("update-password-value");
         })
@@ -253,13 +248,40 @@ export function settingsView(): string {
                                     <button id="update-nickname-btn" type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                 </div>
                             </form>
-                            <form id="update-password-form" class="flex items-center gap-10">
-                                <label for="update-password" class="w-full">Change Password</label>
-                                <div class="w-full flex justify-center">
-                                    <input type="password" name="update-password" id="update-password-value" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
-                                    <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
+                            <div id="password-box" class="relative">
+                                <form id="update-password-form" class="flex items-center gap-10">
+                                    <label for="update-password" class="w-full">Change Password</label>
+                                    <div class="w-full flex justify-center">
+                                        <input type="password" name="update-password" id="update-password-value" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
+                                        <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
+                                    </div>
+                                </form>
+                                <div id="password-checklist" class="hidden mt-4 w-fit m-auto py-5 px-7 rounded-2xl bg-violet-300">
+                                    <h3 class="text-[16px] mb-2.5 text-violet-500">Password should be</h3>
+                                    <ul id="checklist">
+                                        <li id="min-len-item" class="text-white text-[14px]">
+                                            <i class="text-[12px] fa-solid fa-xmark"></i>
+                                            At least 8 character long
+                                        </li>
+                                        <li id="number-item" class="text-white text-[14px]">
+                                            <i class="text-[12px] fa-solid fa-xmark"></i>
+                                            At least 1 number
+                                        </li>
+                                        <li id="lowercase-item" class="text-white text-[14px]">
+                                            <i class="text-[12px] fa-solid fa-xmark"></i>
+                                            At least 1 lowercase letter
+                                        </li>
+                                        <li id="uppercase-item" class="text-white text-[14px]">
+                                            <i class="text-[12px] fa-solid fa-xmark"></i>
+                                            At least 1 uppercase letter
+                                        </li>
+                                        <li id="special-char-item" class="text-white text-[14px]">
+                                            <i class="text-[12px] fa-solid fa-xmark"></i>
+                                            At least 1 special character
+                                        </li>
+                                    </ul>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -23,7 +23,8 @@ const fastify = Fastify({
 
 await fastify.register(fastifyCors, {
     // origin: "http://localhost:8080", //Use this if you want to allow requests to API using docker nginx instead of Vite
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: true, // equivalent a la wildcard * , toutes les origins sont accept
     credentials: true
   });
 

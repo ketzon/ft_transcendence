@@ -126,37 +126,39 @@ function initNicknameForm(): void {
     }
 }
 
-// async function updateAvatar(formData: FormData): Promise<void> {
-//     try
-//     {
-//         const res = await fetch("https://reqres.in/api/users", {
-//             method: "POST",
-//             body: formData,
-//             // credentials: "include"
-//         });
-//         if (!res.ok)
-//         {
-//             toasts.error("Failed to update avatar");
-//             window.prompt("Could not update avatar, try later..");
-//             loadProfileCard();
-//             return ;
-//         }
-//         //Here we should get the return value of the call to update the localStorage.
-//         const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
-//         const newAvatar = URL.createObjectURL(avatarInput.files[0]);
-//         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
+async function updateAvatar(formData: FormData): Promise<void> {
+    try
+    {
+        const res = await fetch("http://localhost:3000/user/customAvatar", {
+            // headers: {'Content-Type': 'multipart/form-data'},
+            method: "POST",
+            body: formData,
+            credentials: "include"
+        });
+        if (!res.ok)
+        {
+            const resMsg = await res.json();
+            console.log(resMsg);
 
-//         console.log("Upload Successfull");
-//         toasts.success("Updated avatar");
-//         localStorage.setItem("avatar", newAvatar);
-//         submitBtn.classList.add("hidden");
-//         loadProfileCard();
-//     }
-//     catch(error)
-//     {
-//         console.error("ERROR REACH UPLOAD AVATAR ENDPOINT");
-//     }
-// }
+            toasts.error("Failed to update avatar");
+            loadProfileCard();
+            return ;
+        }
+        //Here we should get the return value of the call to update the localStorage.
+        const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
+        const newAvatar = URL.createObjectURL(avatarInput.files[0]);
+        const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
+
+        toasts.success("Updated avatar");
+        localStorage.setItem("avatar", newAvatar);
+        submitBtn.classList.add("hidden");
+        loadProfileCard();
+    }
+    catch(error)
+    {
+        console.error("ERROR REACH UPLOAD AVATAR ENDPOINT");
+    }
+}
 
 //Function that will listen to the submit button and call API to update in DB(need to edit this when we connect backend).
 function handleSubmitAvatar(): void {
@@ -176,7 +178,7 @@ function handleSubmitAvatar(): void {
                 console.log(formData.get("avatarFile"));
 
                 //Call API to really upload file in DB. Atm it just use object URL to store it in localStorage.
-                // updateAvatar(formData);
+                updateAvatar(formData);
 
                 const newAvatar = URL.createObjectURL(avatarInput.files[0]);
                 localStorage.setItem("avatar", newAvatar);

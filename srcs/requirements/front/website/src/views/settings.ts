@@ -19,12 +19,15 @@ function loadProfileCard(): void {
 }
 
 async function updatePassword(newPassword: string): Promise<void> {
+    const   currentPassword = document.getElementById("current-password-value") as HTMLInputElement;
+    const   password = currentPassword.value;
+
     try
     {
         const res = await fetch("http://localhost:3000/user/modifyPassword", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({newPassword}),
+            body: JSON.stringify({password, newPassword}),
             credentials: "include"
         });
         const resMsg = await res.json();
@@ -32,7 +35,7 @@ async function updatePassword(newPassword: string): Promise<void> {
         if (!res.ok)
         {
             console.log(resMsg);
-            toasts.error("Failed to update password");
+            toasts.error(resMsg.details);
             return;
         }
         printResponse("/modifyPassword", resMsg);
@@ -60,6 +63,7 @@ function initPasswordForm(): void {
             else
                 updatePassword(passwordValue.value);
             resetInput("update-password-value");
+            resetInput("current-password-value");
         })
     }
 }
@@ -248,10 +252,11 @@ export function settingsView(): string {
                                     <button id="update-nickname-btn" type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                 </div>
                             </form>
-                            <div id="password-box" class="relative">
-                                <form id="update-password-form" class="flex items-center gap-10">
-                                    <label for="update-password" class="w-full">Change Password</label>
-                                    <div class="w-full flex justify-center">
+                            <div id="password-box" class="relative flex flex-col items-center">
+                                <p class="w-fit m-auto mb-8">Change Password</p>
+                                <form id="update-password-form">
+                                    <input type="password" name="current-password" id="current-password-value" placeholder="Current Password" class="mr-30 bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
+                                    <div class="w-full flex justify-center mt-1">
                                         <input type="password" name="update-password" id="update-password-value" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
                                         <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                     </div>

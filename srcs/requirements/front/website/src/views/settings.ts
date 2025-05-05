@@ -174,8 +174,8 @@ function handleSubmitAvatar(): void {
 
             if (avatarInput && avatarInput.files)
             {
-                formData.append("avatarFile", avatarInput.files[0]);
-                console.log(formData.get("avatarFile"));
+                formData.append("newAvatar", avatarInput.files[0]);
+                console.log(formData.get("newAvatar"));
 
                 //Call API to really upload file in DB. Atm it just use object URL to store it in localStorage.
                 updateAvatar(formData);

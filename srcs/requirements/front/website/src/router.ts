@@ -5,14 +5,17 @@ import { initializeTournaments } from "./tournamentsEvents.ts";
 
 import { initGame, stopGame, setGameMode } from "./ponggame.ts";
 import { pongView } from "./views/pong.ts";
-
+import { stopPong } from "./pong/core/gameloop.js";
 
 import { isUserAuth } from "./auth.ts";
 import { initSettings, settingsView } from "./views/settings.ts";
 import { signupView, signupEvents } from "./views/signup.ts";
 import { loginView, loginEvents } from "./views/login.ts";
 import { twofaView, init2fa } from "./views/2fa.ts";
-import { stopPong } from "./pong/core/gameloop.js";
+
+import { combatView } from "./views/combat";
+import { initVersusFight } from "./versus/initGame";
+import { stopVersusGame } from "./versus/cleanUp.js";
 
 
 
@@ -22,6 +25,7 @@ const routes = {
     dashboard : "/dashboard",
     tournaments : "/tournaments",
     play : "/play",
+    versus: "/versus",
     login : "/login",
     signup : "/signup",
     twofa: "/twofa",
@@ -52,6 +56,12 @@ export async function router(): Promise<void> {
 
     console.log("Current path = " + location.pathname);
     switch (location.pathname) {
+
+        case routes.versus:
+            stopVersusGame();
+            changingArea.innerHTML = combatView();
+            initVersusFight();
+            break ;
 
         case routes.indexhtml:
             redirectTo("/");

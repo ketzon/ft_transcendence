@@ -1,7 +1,7 @@
 export let canvas: HTMLCanvasElement | null;
 export let c: CanvasRenderingContext2D | null;
 
-export let timer = 10;
+export const roundTime = 10;
 export const gravity = 0.7; //Set the gravity , ++ will make players fall faster from a jump
 export const keys = {
     a: {pressed: false},
@@ -12,7 +12,7 @@ export const keys = {
     ArrowUp: {pressed: false}
 };
 
-export function loadConstants(): void {
+export function initConstants(): void {
     canvas = document.querySelector("canvas");
     c = canvas?.getContext("2d"); // Canvas context
 }

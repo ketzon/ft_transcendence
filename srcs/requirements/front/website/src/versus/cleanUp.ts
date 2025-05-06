@@ -1,4 +1,5 @@
-import { animationId, timerId } from "./initGame";
+import { animationId } from "./initGame";
+import { timerId } from "./timer";
 import { handleKeyPress, handleKeyRelease } from "./keyHandling";
 
 function stopKeyListeners(): void {

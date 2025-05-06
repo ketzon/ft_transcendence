@@ -1,6 +1,6 @@
-import { canvas, c, gravity } from "./constants";
+import { canvas, c, gravity } from "../constants";
 
-export class Sprite {
+export class Figther {
     constructor({ position, velocity, color, offset}) {
          this.position = position;
          this.velocity = velocity;
@@ -43,7 +43,7 @@ export class Sprite {
         this.position.x += this.velocity.x;
 
         // Check if we are not falling under the map, if so we set velocity to 0.
-        if ((this.position.y + this.height) + this.velocity.y >= canvas.height)
+        if ((this.position.y + this.height) + this.velocity.y >= canvas.height - 96)
         {
             this.velocity.y = 0;
         }

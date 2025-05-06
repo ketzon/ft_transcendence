@@ -1,87 +1,34 @@
 import { canvas, c, keys } from "./constants";
-import { Sprite } from "./SpriteClass";
-import { loadConstants } from "./constants";
+import { Sprite } from "./classes/SpriteClass";
+import { Figther } from "./classes/FigtherClass";
+import { initConstants } from "./constants";
 import { handleKeys } from "./keyHandling";
-import { clearTimer } from "./cleanUp";
+import { clearTimer, stopVersusGame } from "./cleanUp";
 
+import { initTimer, decreaseTimer } from "./timer";
+import { determineWinner } from "./utils";
+import { rectangularCollision } from "./utils";
+
+//Variables used to stop the requestAnimation
 export let animationId: number;
-export let timerId: number;
 
-export let player: Sprite; // Player1
-export let enemy: Sprite; // Player 2
+//Variables that will hold players
+export let player: Figther; // Player1
+export let enemy: Figther; // Player 2
 
-let timer; // Duration of a round.
-
-function initPlayers(): void {
-    player = new Sprite({
-        position: {x: 0, y: 0},
-        velocity: {x: 0, y: 0},
-        color: "red",
-        offset: {x: 0, y: 0}
-    })
-
-    enemy = new Sprite({
-        position: {x: 400, y: 100},
-        velocity: {x: 0, y: 0},
-        color: "blue",
-        offset: {x: -50, y: 0}
-    })
-}
-
-//Detect if rectangle1's attackBox is hitting rectangle2.
-function rectangularCollision({rectangle1, rectangle2}: {rectangle1: Sprite, rectangle2: Sprite}): boolean {
-    if (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&
-        rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
-        rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
-    {
-        return (true);
-    }
-    return (false);
-}
-
-function determineWinner({player, enemy}: {player : Sprite, enemy: Sprite}) {
-    const gameResultElem = document.getElementById("displayText");
-
-    clearTimer();
-    if (!gameResultElem)
-    {
-        console.log("ERROR TO PRINT VERSUS RESULT");
-        return;
-    }
-
-    gameResultElem.style.display = "flex";
-    if (player.health === enemy.health)
-        gameResultElem.innerHTML = "TIE";
-    else if (player.health > enemy.health)
-        gameResultElem.innerHTML = "Player 1 Wins";
-    else if (enemy.health > player.health)
-        gameResultElem.innerHTML = "Player 2 Wins";
-}
-
-function decreaseTimer(): void {
-    if (timer > 0)
-    {
-        timerId = setTimeout(decreaseTimer, 1000); // Every secondes we remove 1 to the timer.
-        timer--;
-
-        const timerElem = document.getElementById("timer");
-
-        if (timerElem)
-            timerElem.innerHTML = timer.toString();
-    }
-
-    if (timer === 0)
-    {
-        determineWinner({player, enemy});
-    }
-}
+//Variables that will hold the sprites
+export let background: Sprite;
+export let shop: Sprite;
 
 // This is the main gameloop
 function animate(): void {
     animationId = window.requestAnimationFrame(animate);
     c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
+
+    background.update();
+    shop.update();
+
     player.update();
     enemy.update();
 
@@ -123,20 +70,53 @@ function animate(): void {
     }
 }
 
+function initPlayers(): void {
+    player = new Figther({
+        position: {x: 0, y: 0},
+        velocity: {x: 0, y: 0},
+        color: "red",
+        offset: {x: 0, y: 0}
+    })
+
+    enemy = new Figther({
+        position: {x: 400, y: 100},
+        velocity: {x: 0, y: 0},
+        color: "blue",
+        offset: {x: -50, y: 0}
+    })
+}
+
 function initCanvas(): void {
     canvas.width = 1024;
     canvas.height = 576;
     c.fillRect(0, 0, canvas.width, canvas.height); // fill the canvas with color (default black);
 }
 
+function initSprites(): void {
+    background = new Sprite({
+        position: {x: 0, y: 0},
+        imageSrc: "assets/versus/background.png",
+        scale: 1,
+        framesMax: 1
+    })
+
+    shop = new Sprite({
+        position: {x: 600, y: 128},
+        imageSrc: "assets/versus/shop.png",
+        scale: 2.75,
+        framesMax: 6
+    })
+}
+
 export function initVersusFight(): void {
-    loadConstants();
-    timer = 10;
+    initConstants();
     initCanvas();
     initPlayers();
+    initSprites();
+    initTimer();
 
-    player.draw();
-    enemy.draw();
+    // player.draw();
+    // enemy.draw();
 
     animate();
     handleKeys();

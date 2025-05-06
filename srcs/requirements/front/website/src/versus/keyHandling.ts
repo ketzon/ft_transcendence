@@ -2,6 +2,7 @@ import { keys } from "./constants";
 import { player, enemy } from "./initGame";
 
 export function handleKeyPress(event: KeyboardEvent): void {
+    // console.log(event.key);
     switch (event.key)
     {
         //Player keys

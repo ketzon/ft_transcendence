@@ -15,6 +15,7 @@ export class Sprite {
          };
          this.color = color;
          this.isAtacking;
+         this.health = 100;
     }
 
     draw() {
@@ -75,4 +76,5 @@ export class Sprite {
     };
     color: string // Player color.
     isAtacking: boolean; // Value changing when player hits attack key.
+    health: number; // Player HP.
 }

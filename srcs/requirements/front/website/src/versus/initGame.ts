@@ -33,18 +33,31 @@ function animate(): void {
     // enemy.update();
 
     //Player movement
-    player.image = player.sprites.idle.image; //Resets to idle sprite on everyloop
-
     player.velocity.x = 0; // Resets velocity , if a key is pressed it will change it , if no player will not move because of reset.
     if (keys.a.pressed && player.lastKey === "a")
     {
         player.velocity.x = -5;
-        player.image = player.sprites.run.image; //We change the sprite to the run
+        player.switchSprite("run"); //We change the sprite to the run
     }
     else if (keys.d.pressed && player.lastKey === "d")
     {
         player.velocity.x = 5;
-        player.image = player.sprites.run.image; //We change the sprite to the run
+        player.switchSprite("run");  //We change the sprite to the run
+    }
+    else
+    {
+        player.switchSprite("idle") //Resets to idle sprite.
+    }
+
+        //Player jumping
+    if (player.velocity.y < 0)
+    {
+        player.switchSprite("jump");
+    }
+        // If velocity is > 0 it means gravity is pushing us down in a fall status
+    if (player.velocity.y > 0)
+    {
+        player.switchSprite("fall");
     }
 
     //Enemy movement
@@ -96,7 +109,14 @@ function initPlayers(): void {
             run: {
                 imageSrc : "assets/versus/samuraiMack/Run.png",
                 framesMax: 8,
-                image: new Image()
+            },
+            jump: {
+                imageSrc : "assets/versus/samuraiMack/Jump.png",
+                framesMax: 2,
+            },
+            fall: {
+                imageSrc: "assets/versus/samuraiMack/Fall.png",
+                framesMax: 2,
             }
         }
     })

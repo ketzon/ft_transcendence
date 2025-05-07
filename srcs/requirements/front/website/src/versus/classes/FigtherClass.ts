@@ -33,7 +33,7 @@ export class Figther extends Sprite {
          // This will create a image file for our different states.
          for (const sprite in this.sprites)
         {
-            sprites[sprite].image = new Image();
+            sprites[sprite].image = new Image(); // This create a new variable Img in the object
             sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
     }
@@ -54,6 +54,7 @@ export class Figther extends Sprite {
         if ((this.position.y + this.height) + this.velocity.y >= canvas.height - 96)
         {
             this.velocity.y = 0;
+            this.position.y = 330; // this is to force position on the ground to prevent a switching sprite glitch between fall/idle
         }
         // If player is not on the ground we will add gravity to make him fall.
         else
@@ -68,6 +69,45 @@ export class Figther extends Sprite {
         setTimeout(() => {
             this.isAtacking = false;
         }, 100);
+    }
+
+    //This makes easier to swap between different sprites and set the right framesMax of the sprite.
+    switchSprite(sprite) {
+        switch (sprite)
+        {
+            case "idle":
+                if (this.image !== this.sprites.idle.image)
+                {
+                    this.image = this.sprites.idle.image;
+                    this.framesMax = this.sprites.idle.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "run":
+                if (this.image !== this.sprites.run.image)
+                {
+                    this.image = this.sprites.run.image;
+                    this.framesMax = this.sprites.run.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "jump":
+                if (this.image !== this.sprites.jump.image)
+                {
+                    this.image = this.sprites.jump.image;
+                    this.framesMax = this.sprites.jump.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "fall":
+                if (this.image !== this.sprites.fall.image)
+                {
+                    this.image = this.sprites.fall.image;
+                    this.framesMax = this.sprites.fall.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+        }
     }
 
     // Class attributes

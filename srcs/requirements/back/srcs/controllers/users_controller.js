@@ -58,10 +58,10 @@ const signin = async(req, reply) => {
 		const user = await userService.getUserByEmail(email)
 		const isPasswordValid = await userService.comparePass(password, user);
 		if (!isPasswordValid) {
-			throw new Error({message: "Invalid password"})
+			throw new Error("Invalid password")
 		}
 		const twoFactAuth = await userService.sendTwoFactAuth(user.id, email)
-		return reply.status(200).send({message: "Code authentification sent to:", user: user})
+		return reply.status(200).send({message: "Code authentification sent to:", user: username})
 	}
 	catch(error) {
 		return reply.status(500).send({message: "Internal error", details: error.message})

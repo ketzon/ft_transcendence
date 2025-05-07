@@ -30,7 +30,7 @@ function animate(): void {
     shop.update();
 
     player.update();
-    // enemy.update();
+    enemy.update();
 
     //Player movement
     player.velocity.x = 0; // Resets velocity , if a key is pressed it will change it , if no player will not move because of reset.
@@ -55,7 +55,7 @@ function animate(): void {
         player.switchSprite("jump");
     }
         // If velocity is > 0 it means gravity is pushing us down in a fall status
-    if (player.velocity.y > 0)
+    else if (player.velocity.y > 0)
     {
         player.switchSprite("fall");
     }
@@ -63,9 +63,28 @@ function animate(): void {
     //Enemy movement
     enemy.velocity.x = 0;
     if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft")
+    {
         enemy.velocity.x = -5;
+        enemy.switchSprite("run");
+    }
     else if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight")
+    {
         enemy.velocity.x = 5;
+        enemy.switchSprite("run");
+    }
+    else
+        enemy.switchSprite("idle") //Resets to idle sprite.
+
+        //Enemy jumping
+    if (enemy.velocity.y < 0)
+    {
+        enemy.switchSprite("jump");
+    }
+        // If velocity is > 0 it means gravity is pushing us down in a fall status
+    else if (enemy.velocity.y > 0)
+    {
+        enemy.switchSprite("fall");
+    }
 
     //We check if player1 is attacking and if it hits the player2(enemy).
     if (rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAtacking)
@@ -129,8 +148,33 @@ function initPlayers(): void {
         position: {x: 400, y: 100},
         velocity: {x: 0, y: 0},
         color: "blue",
-        offset: {x: -50, y: 0},
-        // imageSrc: "assets/versus/samuraiMack/Idle.png",
+        // offset: {x: -50, y: 0},
+        imageSrc: "assets/versus/kenji/Idle.png",
+        framesMax: 4,
+        scale: 2.5,
+        offset: {x: 215, y: 167},
+        sprites : {
+            idle: {
+                imageSrc : "assets/versus/kenji/Idle.png",
+                framesMax: 4
+            },
+            run: {
+                imageSrc : "assets/versus/kenji/Run.png",
+                framesMax: 8,
+            },
+            jump: {
+                imageSrc : "assets/versus/kenji/Jump.png",
+                framesMax: 2,
+            },
+            fall: {
+                imageSrc: "assets/versus/kenji/Fall.png",
+                framesMax: 2,
+            },
+            attack1: {
+                imageSrc: "assets/versus/kenji/Attack1.png",
+                framesMax: 4,
+            },
+        }
     })
 }
 

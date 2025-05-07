@@ -41,6 +41,7 @@ export function handleKeyPress(event: KeyboardEvent): void {
 
         case "ArrowDown":
             enemy.attack();
+            break ;
     }
 }
 

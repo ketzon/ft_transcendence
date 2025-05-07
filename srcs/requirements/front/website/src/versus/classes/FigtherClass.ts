@@ -65,6 +65,7 @@ export class Figther extends Sprite {
 
     //Player will attack on keyboard event, then to reset we use setTimeout so the attack duration is limited.
     attack() {
+        this.switchSprite("attack1");
         this.isAtacking = true;
         setTimeout(() => {
             this.isAtacking = false;
@@ -73,6 +74,13 @@ export class Figther extends Sprite {
 
     //This makes easier to swap between different sprites and set the right framesMax of the sprite.
     switchSprite(sprite) {
+
+        // We use this so other sprites do not overwrite the attack
+        // Then they can overwrite it when the animaion is complete, it make the attack animation stop
+        if (this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1)
+        {
+            return;
+        }
         switch (sprite)
         {
             case "idle":
@@ -104,6 +112,14 @@ export class Figther extends Sprite {
                 {
                     this.image = this.sprites.fall.image;
                     this.framesMax = this.sprites.fall.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "attack1":
+                if (this.image !== this.sprites.attack1.image)
+                {
+                    this.image = this.sprites.attack1.image;
+                    this.framesMax = this.sprites.attack1.framesMax;
                     this.framesCurrent = 0;
                 }
                 break;

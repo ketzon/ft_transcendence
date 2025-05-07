@@ -117,7 +117,11 @@ function initPlayers(): void {
             fall: {
                 imageSrc: "assets/versus/samuraiMack/Fall.png",
                 framesMax: 2,
-            }
+            },
+            attack1: {
+                imageSrc: "assets/versus/samuraiMack/Attack1.png",
+                framesMax: 6,
+            },
         }
     })
 

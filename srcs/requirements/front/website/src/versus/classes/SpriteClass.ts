@@ -1,7 +1,7 @@
 import { canvas, c, gravity } from "../constants";
 
 export class Sprite {
-    constructor({ position, imageSrc, scale = 1, framesMax = 1 }) {
+    constructor({ position, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}}) {
          this.position = position;
          this.height = 150;
          this.width = 50;
@@ -12,6 +12,7 @@ export class Sprite {
          this.framesCurrent = 0;
          this.framesElapsed = 0;
          this.framesHold = 10;
+         this.offset = offset;
     }
 
     draw() {
@@ -21,15 +22,14 @@ export class Sprite {
             0, // Crop location y
             this.image.width / this.framesMax, // Crop end x
             this.image.height, // Crop end y
-            this.position.x, // Position x in the canvas
-            this.position.y, // Position y in tha canvas
+            this.position.x - this.offset.x, // Position x in the canvas
+            this.position.y - this.offset.y, // Position y in tha canvas
             (this.image.width / this.framesMax) * this.scale, // Used to make mage img bigger or smaller.
             this.image.height * this.scale
         );
     }
 
-    update() {
-        this.draw();
+    animateFrame() {
         this.framesElapsed++; //Every loop we draw frame, this keep track how much we draw.
 
         //We will switch frame every time in gets hold enough time
@@ -44,6 +44,11 @@ export class Sprite {
         }
     }
 
+    update() {
+        this.draw();
+        this.animateFrame();
+    }
+
     // Class attributes
     position: {x: number, y: number} // This will be de spawn position.
     height: number; // Default height of a player.
@@ -54,4 +59,5 @@ export class Sprite {
     framesCurrent: number; // If a img have multiple frames, this will tell at which frame we actually are.
     framesElapsed: number;
     framesHold: number; // How long a frame is hold , how long it stays on canvas.
+    offset: {x: number, y: number}; // This is used to offset the sprite because some images have padding.
 }

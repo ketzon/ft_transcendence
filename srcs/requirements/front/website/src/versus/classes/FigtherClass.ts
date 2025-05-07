@@ -1,8 +1,16 @@
 import { canvas, c, gravity } from "../constants";
+import { Sprite } from "./SpriteClass";
 
-export class Figther {
-    constructor({ position, velocity, color, offset}) {
-         this.position = position;
+// Fighter herite de Sprite (methodes et attributs), fighter overwrite les attributs / methodes si elles sont redefinies ici.
+export class Figther extends Sprite {
+    constructor({ position, velocity, color, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, sprites}) {
+         super({ //super calls the constructor of the parent (here its Sprite)
+            position,
+            imageSrc,
+            scale,
+            framesMax,
+            offset,
+         })
          this.velocity = velocity;
          this.height = 150;
          this.width = 50;
@@ -16,23 +24,23 @@ export class Figther {
          this.color = color;
          this.isAtacking;
          this.health = 100;
-    }
 
-    draw() {
-        //Drawing the player box.
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+         this.framesCurrent = 0;
+         this.framesElapsed = 0;
+         this.framesHold = 10;
 
-        //Drawing the player's attack box if he is attacking.
-        if (this.isAtacking)
+         this.sprites = sprites;
+         // This will create a image file for our different states.
+         for (const sprite in this.sprites)
         {
-            c.fillStyle = "green";
-            c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+            sprites[sprite].image = new Image();
+            sprites[sprite].image.src = sprites[sprite].imageSrc;
         }
     }
 
     update() {
         this.draw();
+        this.animateFrame();
 
         // This makes the attack box follow the player x & y position and apply offset for attackbox direction.
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
@@ -63,7 +71,6 @@ export class Figther {
     }
 
     // Class attributes
-    position: {x: number, y: number} // This will be de spawn position.
     velocity: {x: number, y: number} // This is what will be changed when we press key.
     height: number; // Default height of a player.
     width: number; // Default width of a player.
@@ -77,4 +84,5 @@ export class Figther {
     color: string // Player color.
     isAtacking: boolean; // Value changing when player hits attack key.
     health: number; // Player HP.
+    sprites; // We will store sprites img and framesMax of our different imgs.
 }

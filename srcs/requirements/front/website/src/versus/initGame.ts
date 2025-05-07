@@ -30,14 +30,22 @@ function animate(): void {
     shop.update();
 
     player.update();
-    enemy.update();
+    // enemy.update();
 
     //Player movement
+    player.image = player.sprites.idle.image; //Resets to idle sprite on everyloop
+
     player.velocity.x = 0; // Resets velocity , if a key is pressed it will change it , if no player will not move because of reset.
     if (keys.a.pressed && player.lastKey === "a")
+    {
         player.velocity.x = -5;
+        player.image = player.sprites.run.image; //We change the sprite to the run
+    }
     else if (keys.d.pressed && player.lastKey === "d")
+    {
         player.velocity.x = 5;
+        player.image = player.sprites.run.image; //We change the sprite to the run
+    }
 
     //Enemy movement
     enemy.velocity.x = 0;
@@ -75,14 +83,30 @@ function initPlayers(): void {
         position: {x: 0, y: 0},
         velocity: {x: 0, y: 0},
         color: "red",
-        offset: {x: 0, y: 0}
+        // offset: {x: 0, y: 0},
+        imageSrc: "assets/versus/samuraiMack/Idle.png",
+        framesMax: 8,
+        scale: 2.5,
+        offset: {x: 215, y: 157},
+        sprites : {
+            idle: {
+                imageSrc : "assets/versus/samuraiMack/Idle.png",
+                framesMax: 8
+            },
+            run: {
+                imageSrc : "assets/versus/samuraiMack/Run.png",
+                framesMax: 8,
+                image: new Image()
+            }
+        }
     })
 
     enemy = new Figther({
         position: {x: 400, y: 100},
         velocity: {x: 0, y: 0},
         color: "blue",
-        offset: {x: -50, y: 0}
+        offset: {x: -50, y: 0},
+        // imageSrc: "assets/versus/samuraiMack/Idle.png",
     })
 }
 

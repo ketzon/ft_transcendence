@@ -88,6 +88,7 @@ export function resetGame(gameId: GameElements): void {
     resetScore(gameId);
     resetAllsounds();
     setIsBasic(true);
+    if (gameId.basicButton === null) return; //fix temporaire
     gameId.basicButton.textContent = "features-mode";
     gameId.ball.style.backgroundColor = "white";
     setPause(true);

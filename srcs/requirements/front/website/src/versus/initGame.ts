@@ -49,7 +49,7 @@ function animate(): void {
         player.switchSprite("idle") //Resets to idle sprite.
     }
 
-        //Player jumping
+    //Player jumping
     if (player.velocity.y < 0)
     {
         player.switchSprite("jump");
@@ -75,7 +75,7 @@ function animate(): void {
     else
         enemy.switchSprite("idle") //Resets to idle sprite.
 
-        //Enemy jumping
+    //Enemy jumping
     if (enemy.velocity.y < 0)
     {
         enemy.switchSprite("jump");
@@ -87,7 +87,7 @@ function animate(): void {
     }
 
     //We check if player1 is attacking and if it hits the player2(enemy).
-    if (rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAtacking)
+    if (rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAtacking && player.framesCurrent === 4)
     {
         console.log("Player 1 HIT Player 2");
         player.isAtacking = false; // This is used so it act as only 1 hit has landed.
@@ -95,12 +95,24 @@ function animate(): void {
         document.getElementById("enemyHealth").style.width = enemy.health + "%";
     }
     //We check if player2 is attacking and if it hits the player1(enemy).
-    if (rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAtacking)
+    if (rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAtacking && enemy.framesCurrent === 2)
     {
         console.log("Player 2 HIT Player 1");
         enemy.isAtacking = false; // This is used so it act as only 1 hit has landed.
         player.health -= 20;
         document.getElementById("playerHealth").style.width = player.health + "%"; // Makes the visual change on health bars.
+    }
+
+    // if player misses attack
+    if (player.isAtacking && player.framesCurrent === 4)
+    {
+        player.isAtacking = false;
+    }
+
+    // if enemy misses attack
+    if (enemy.isAtacking && enemy.framesCurrent === 2)
+    {
+        enemy.isAtacking = false;
     }
 
     //Check if we have a ending condition
@@ -141,6 +153,14 @@ function initPlayers(): void {
                 imageSrc: "assets/versus/samuraiMack/Attack1.png",
                 framesMax: 6,
             },
+        },
+        attackBox: {
+            offset: {
+                x: 100,
+                y: 50
+            },
+            width: 160,
+            height: 50
         }
     })
 
@@ -174,6 +194,14 @@ function initPlayers(): void {
                 imageSrc: "assets/versus/kenji/Attack1.png",
                 framesMax: 4,
             },
+        },
+        attackBox: {
+            offset: {
+                x: -170,
+                y: 50
+            },
+            width: 170,
+            height: 50
         }
     })
 }
@@ -206,9 +234,6 @@ export function initVersusFight(): void {
     initPlayers();
     initSprites();
     initTimer();
-
-    // player.draw();
-    // enemy.draw();
 
     animate();
     handleKeys();

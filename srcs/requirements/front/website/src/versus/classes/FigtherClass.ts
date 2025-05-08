@@ -3,7 +3,7 @@ import { Sprite } from "./SpriteClass";
 
 // Fighter herite de Sprite (methodes et attributs), fighter overwrite les attributs / methodes si elles sont redefinies ici.
 export class Figther extends Sprite {
-    constructor({ position, velocity, color, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, sprites}) {
+    constructor({ position, velocity, color, imageSrc, scale = 1, framesMax = 1, offset = {x: 0, y: 0}, sprites, attackBox = { offset: {}, width: undefined, height: undefined}}) {
          super({ //super calls the constructor of the parent (here its Sprite)
             position,
             imageSrc,
@@ -17,9 +17,9 @@ export class Figther extends Sprite {
          this.lastKey;
          this.attackBox = {
             position: {x: this.position.x, y: this.position.y},
-            offset: offset,
-            width: 100,
-            height: 50
+            offset: attackBox.offset,
+            width: attackBox.width,
+            height: attackBox.height
          };
          this.color = color;
          this.isAtacking;
@@ -44,7 +44,11 @@ export class Figther extends Sprite {
 
         // This makes the attack box follow the player x & y position and apply offset for attackbox direction.
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-        this.attackBox.position.y = this.position.y;
+        this.attackBox.position.y = this.position.y + this.attackBox.offset.y;
+
+        // This will draw the attackBox and player hitbox
+        // c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height);
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height);
 
         // Draw the movements.
         this.position.y += this.velocity.y;
@@ -67,9 +71,6 @@ export class Figther extends Sprite {
     attack() {
         this.switchSprite("attack1");
         this.isAtacking = true;
-        setTimeout(() => {
-            this.isAtacking = false;
-        }, 100);
     }
 
     //This makes easier to swap between different sprites and set the right framesMax of the sprite.

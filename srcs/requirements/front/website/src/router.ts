@@ -5,6 +5,8 @@ import { initializeTournaments } from "./tournamentsEvents.ts";
 
 import { initGame, stopGame, setGameMode } from "./ponggame.ts";
 import { pongView } from "./views/pong.ts";
+import { selectView } from "./views/select.ts";
+import { execSelect} from "./selectgames.ts";
 
 
 import { isUserAuth } from "./auth.ts";
@@ -37,13 +39,14 @@ function redirectTo(view: string) {
     window.history.pushState(null, "", view);
     router();
 }
-
+export let changingArea:HTMLElement;
 //On injecte le contenu selon le path sur lequel on se trouve.
 export async function router(): Promise<void> {
     //On injecte dans changingArea pour garder la navbar sur la gauche dans le body.
-    const changingArea = document.getElementById("changingArea");
-    const isAuth: boolean = await isUserAuth()// Test if user is logged to protect access to views (just testing).
+    changingArea = document.getElementById("changingArea");
+    let isAuth: boolean = await isUserAuth()// Test if user is logged to protect access to views (just testing).
 
+    isAuth = true;
     if (!changingArea)
     {
         console.log("Could not find changingArea");
@@ -111,9 +114,11 @@ export async function router(): Promise<void> {
                 redirectTo("/");
                 return;
             }
-            changingArea.innerHTML = pongView();
-            setGameMode(true);
-            initGame();
+            // changingArea.innerHTML = pongView();
+            changingArea.innerHTML = selectView();
+            execSelect();
+            // setGameMode(true);
+            // initGame();
             break ;
 
         case routes.twofa:

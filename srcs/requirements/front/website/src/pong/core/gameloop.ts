@@ -27,6 +27,7 @@ function gameLoop(gameId: GameElements): void {
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
     gameId.player1.textContent = localStorage.getItem('nickname');
+    gameId.player2.textContent = localStorage.getItem('Player2');
 }
 
 

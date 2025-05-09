@@ -31,11 +31,11 @@ export function checkWinner(gameId: GameElements): void {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        changeWinnerMsg(gameId,"player1");
+        changeWinnerMsg(gameId, gameId.player1.textContent);
     } else if (gameState.scoreRight >= WIN_SCORE) {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        changeWinnerMsg(gameId,"player2");
+        changeWinnerMsg(gameId, gameId.player2.textContent);
     }
 }

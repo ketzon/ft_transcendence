@@ -6,7 +6,7 @@ export function pongView(): string {
     <!-- player profile -->
     <div id="player-profile" class="text-violet-400 flex mt-4 mb-4 font-bold place-content-between w-[800px]">
         <div id="player1" class="text-violet-400">player1😈</div>
-        <div id="player2" >player2💀</div>
+        <div id="player2" class="text-violet-400">player2💀</div>
     </div>
 
     <!-- elements du jeu -->

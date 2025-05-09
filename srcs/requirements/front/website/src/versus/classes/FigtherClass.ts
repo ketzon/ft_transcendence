@@ -55,7 +55,8 @@ export class Figther extends Sprite {
 
         // Draw the movements.
         this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
+        if ((this.position.x + this.velocity.x) + this.width < canvas.width && this.position.x + this.velocity.x > 0)
+            this.position.x += this.velocity.x;
 
         // Check if we are not falling under the map, if so we set velocity to 0.
         if ((this.position.y + this.height) + this.velocity.y >= canvas.height - 96)

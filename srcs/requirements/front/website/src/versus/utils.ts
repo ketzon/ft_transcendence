@@ -5,8 +5,11 @@ import { stopVersusGame } from "./cleanUp";
 export function determineWinner({player, enemy}: {player : Figther, enemy: Figther}) {
     const gameResultElem = document.getElementById("displayText");
 
-    clearTimer();
-    // stopVersusGame();
+    // We use timeout so death sprite can fully loop
+    setTimeout(() => {
+        stopVersusGame();
+    }, 2000);
+
     if (!gameResultElem)
     {
         console.log("ERROR TO PRINT VERSUS RESULT");

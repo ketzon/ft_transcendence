@@ -37,7 +37,6 @@ export function execSelect(): void {
     // })
 }
 
-// Ajouter cette fonction à votre code
 function customPrompt(message: string): Promise<string> {
     return new Promise((resolve) => {
         // print message du prompt

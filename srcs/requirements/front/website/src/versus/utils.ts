@@ -1,10 +1,16 @@
 import { Figther } from "./classes/FigtherClass";
 import { clearTimer } from "./cleanUp";
 import { stopVersusGame } from "./cleanUp";
+import { roundEnded, setRoundEnded } from "./constants";
 
 export function determineWinner({player, enemy}: {player : Figther, enemy: Figther}) {
     const gameResultElem = document.getElementById("displayText");
 
+    // Since stopVersusGame is called after 2sec the game will still loop and determineWinner will keep getting called,
+    // so to prevent cleaning multiple times.
+    if (roundEnded)
+        return;
+    setRoundEnded(true);
     // We use timeout so death sprite can fully loop
     setTimeout(() => {
         stopVersusGame();

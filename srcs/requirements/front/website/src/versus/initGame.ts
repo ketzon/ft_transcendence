@@ -29,6 +29,10 @@ function animate(): void {
     background.update();
     shop.update();
 
+    //Add this if we want to make the players more visible.
+    c.fillStyle = "rgba(255, 255, 255, 0.2)";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+
     player.update();
     enemy.update();
 

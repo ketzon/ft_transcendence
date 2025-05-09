@@ -9,6 +9,8 @@ import { initTimer, decreaseTimer } from "./timer";
 import { determineWinner } from "./utils";
 import { rectangularCollision } from "./utils";
 
+import gsap from "gsap";
+
 //Variables used to stop the requestAnimation
 export let animationId: number;
 
@@ -95,14 +97,16 @@ function animate(): void {
     {
         enemy.takeHit();
         player.isAtacking = false; // This is used so it act as only 1 hit has landed.
-        document.getElementById("enemyHealth").style.width = enemy.health + "%";
+        // document.getElementById("enemyHealth").style.width = enemy.health + "%";
+        gsap.to("#enemyHealth", {width: enemy.health + "%"});
     }
     //We check if player2 is attacking and if it hits the player1(enemy).
     if (rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAtacking && enemy.framesCurrent === 2)
     {
         player.takeHit();
         enemy.isAtacking = false; // This is used so it act as only 1 hit has landed.
-        document.getElementById("playerHealth").style.width = player.health + "%"; // Makes the visual change on health bars.
+        // document.getElementById("playerHealth").style.width = player.health + "%"; // Makes the visual change on health bars.
+        gsap.to("#playerHealth", {width: player.health + "%"});
     }
 
     // if player misses attack

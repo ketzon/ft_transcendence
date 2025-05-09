@@ -1,6 +1,15 @@
 import { initGame, setGameMode } from "./ponggame";
 import { changingArea } from "./router";
 import { pongView } from "./views/pong";
+import { tournamentsView } from "./views/tournaments";
+import { bracketView } from "./views/bracket";
+
+
+
+export let player1: string
+export let player2: string
+export let player3: string
+export let player4: string
 
 export function execSelect(): void {
     let pong1v1 = document.getElementById("pong-1v1");
@@ -16,25 +25,32 @@ export function execSelect(): void {
     });
 
     pongTournament.addEventListener("click", async () => {
-        const playerCountStr = await customPrompt("How many players?");
-        const playerCount = parseInt(playerCountStr) || 4;
         const players: string[] = [];
 
-        for (let i = 1; i <= playerCount; i++) {
-            const playerName = await customPrompt(`Enter name for Player ${i}:`);
+        for (let i = 2; i <= 4; i++) { //tournament for 4 person
+            let playerName = await customPrompt(`Enter name for Player ${i}:`);
+            if (playerName === "") {
+                playerName = "player" + `${i}` + "👻" 
+            }
             players.push(playerName);
         }
-
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
-        changingArea.innerHTML = pongView();
+        player1 = localStorage.getItem('nickname')
+        player2 = players[0];
+        player3 = players[1];
+        player4 = players[2];
+        showBracket();
+    });
+}
+
+function showBracket(): void {
+    changingArea.innerHTML = bracketView();
+   let start = document.getElementById("start-game");
+   start.addEventListener("click", () => {
+       changingArea.innerHTML = pongView();
         setGameMode(true);
         initGame();
-    });
-
-    //ajouter quand j'ai le mode versus
-    // versusButton.addEventListener("click", () => {
-    //     versusView()
-    // })
+   })
 }
 
 function customPrompt(message: string): Promise<string> {

@@ -1,5 +1,6 @@
 import { Figther } from "./classes/FigtherClass";
 import { clearTimer } from "./cleanUp";
+import { stopVersusGame } from "./cleanUp";
 
 export function determineWinner({player, enemy}: {player : Figther, enemy: Figther}) {
     const gameResultElem = document.getElementById("displayText");

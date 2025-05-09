@@ -29,6 +29,8 @@ export class Figther extends Sprite {
          this.framesElapsed = 0;
          this.framesHold = 10;
 
+         this.dead = false;
+
          this.sprites = sprites;
          // This will create a image file for our different states.
          for (const sprite in this.sprites)
@@ -40,7 +42,8 @@ export class Figther extends Sprite {
 
     update() {
         this.draw();
-        this.animateFrame();
+        if (!this.dead)
+            this.animateFrame();
 
         // This makes the attack box follow the player x & y position and apply offset for attackbox direction.
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
@@ -67,6 +70,16 @@ export class Figther extends Sprite {
         }
     }
 
+    //React to getting hit
+    takeHit() {
+        this.health -= 20;
+
+        if (this.health <= 0)
+            this.switchSprite("death");
+        else
+            this.switchSprite("takeHit");
+    }
+
     //Player will attack on keyboard event, then to reset we use setTimeout so the attack duration is limited.
     attack() {
         this.switchSprite("attack1");
@@ -76,12 +89,21 @@ export class Figther extends Sprite {
     //This makes easier to swap between different sprites and set the right framesMax of the sprite.
     switchSprite(sprite) {
 
-        // We use this so other sprites do not overwrite the attack
+        // We use this so other sprites do not overwrite the attack, get hit, or death sprites
         // Then they can overwrite it when the animaion is complete, it make the attack animation stop
         if (this.image === this.sprites.attack1.image && this.framesCurrent < this.sprites.attack1.framesMax - 1)
+            return;
+
+        if (this.image === this.sprites.takeHit.image && this.framesCurrent < this.sprites.takeHit.framesMax - 1)
+            return;
+
+        if (this.image === this.sprites.death.image)
         {
+            if (this.framesCurrent === this.sprites.death.framesMax - 1)
+                this.dead = true;
             return;
         }
+
         switch (sprite)
         {
             case "idle":
@@ -124,6 +146,22 @@ export class Figther extends Sprite {
                     this.framesCurrent = 0;
                 }
                 break;
+            case "takeHit":
+                if (this.image !== this.sprites.takeHit.image)
+                {
+                    this.image = this.sprites.takeHit.image;
+                    this.framesMax = this.sprites.takeHit.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
+            case "death":
+                if (this.image !== this.sprites.death.image)
+                {
+                    this.image = this.sprites.death.image;
+                    this.framesMax = this.sprites.death.framesMax;
+                    this.framesCurrent = 0;
+                }
+                break;
         }
     }
 
@@ -142,4 +180,5 @@ export class Figther extends Sprite {
     isAtacking: boolean; // Value changing when player hits attack key.
     health: number; // Player HP.
     sprites; // We will store sprites img and framesMax of our different imgs.
+    dead: boolean; // player dead or not.
 }

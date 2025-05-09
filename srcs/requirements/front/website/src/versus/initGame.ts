@@ -89,17 +89,15 @@ function animate(): void {
     //We check if player1 is attacking and if it hits the player2(enemy).
     if (rectangularCollision({rectangle1: player, rectangle2: enemy}) && player.isAtacking && player.framesCurrent === 4)
     {
-        console.log("Player 1 HIT Player 2");
+        enemy.takeHit();
         player.isAtacking = false; // This is used so it act as only 1 hit has landed.
-        enemy.health -= 20;
         document.getElementById("enemyHealth").style.width = enemy.health + "%";
     }
     //We check if player2 is attacking and if it hits the player1(enemy).
     if (rectangularCollision({rectangle1: enemy, rectangle2: player}) && enemy.isAtacking && enemy.framesCurrent === 2)
     {
-        console.log("Player 2 HIT Player 1");
+        player.takeHit();
         enemy.isAtacking = false; // This is used so it act as only 1 hit has landed.
-        player.health -= 20;
         document.getElementById("playerHealth").style.width = player.health + "%"; // Makes the visual change on health bars.
     }
 
@@ -153,6 +151,14 @@ function initPlayers(): void {
                 imageSrc: "assets/versus/samuraiMack/Attack1.png",
                 framesMax: 6,
             },
+            takeHit: {
+                imageSrc: "assets/versus/samuraiMack/Take Hit - white silhouette.png",
+                framesMax: 4,
+            },
+            death: {
+                imageSrc: "assets/versus/samuraiMack/Death.png",
+                framesMax: 6,
+            }
         },
         attackBox: {
             offset: {
@@ -194,6 +200,14 @@ function initPlayers(): void {
                 imageSrc: "assets/versus/kenji/Attack1.png",
                 framesMax: 4,
             },
+            takeHit: {
+                imageSrc: "assets/versus/kenji/Take hit.png",
+                framesMax: 3,
+            },
+            death: {
+                imageSrc: "assets/versus/kenji/Death.png",
+                framesMax: 7,
+            }
         },
         attackBox: {
             offset: {

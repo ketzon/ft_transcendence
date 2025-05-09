@@ -3,28 +3,34 @@ import { player, enemy } from "./initGame";
 
 export function handleKeyPress(event: KeyboardEvent): void {
     // console.log(event.key);
-    switch (event.key)
+    //Player keys
+    if (!player.dead)
     {
-        //Player keys
-        case "a":
-            keys.a.pressed = true;
-            player.lastKey = "a";
-            break;
+        switch (event.key)
+        {
+            case "a":
+                keys.a.pressed = true;
+                player.lastKey = "a";
+                break;
 
-        case "d":
-            keys.d.pressed = true;
-            player.lastKey = "d";
-            break;
+            case "d":
+                keys.d.pressed = true;
+                player.lastKey = "d";
+                break;
 
-        case "w":
-            player.velocity.y = -20;
-            break;
+            case "w":
+                player.velocity.y = -20;
+                break;
 
-        case " ": // Spacebar
-            player.attack();
-            break
-
-        //Enemy keys
+            case " ": // Spacebar
+                player.attack();
+                break;
+        }
+    }
+    //Enemy keys
+    if (!enemy.dead)
+    {
+        switch (event.key) {
         case "ArrowLeft":
             keys.ArrowLeft.pressed = true;
             enemy.lastKey = "ArrowLeft";
@@ -42,6 +48,7 @@ export function handleKeyPress(event: KeyboardEvent): void {
         case "ArrowDown":
             enemy.attack();
             break ;
+        }
     }
 }
 

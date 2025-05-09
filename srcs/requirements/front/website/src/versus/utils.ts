@@ -3,6 +3,12 @@ import { clearTimer } from "./cleanUp";
 import { stopVersusGame } from "./cleanUp";
 import { roundEnded, setRoundEnded } from "./constants";
 
+export let stopGameTimeoutId: number | undefined;
+
+export function resetGameTimeoutId():void {
+    stopGameTimeoutId = undefined;
+}
+
 export function determineWinner({player, enemy}: {player : Figther, enemy: Figther}) {
     const gameResultElem = document.getElementById("displayText");
 
@@ -12,7 +18,7 @@ export function determineWinner({player, enemy}: {player : Figther, enemy: Figth
         return;
     setRoundEnded(true);
     // We use timeout so death sprite can fully loop
-    setTimeout(() => {
+   stopGameTimeoutId = setTimeout(() => {
         stopVersusGame();
     }, 2000);
 

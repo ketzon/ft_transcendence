@@ -10,6 +10,7 @@ import { determineWinner } from "./utils";
 import { rectangularCollision } from "./utils";
 
 import gsap from "gsap";
+import { stopGameTimeoutId, resetGameTimeoutId } from "./utils";
 
 //Variables used to stop the requestAnimation
 export let animationId: number;
@@ -251,6 +252,13 @@ function initSprites(): void {
 }
 
 export function initVersusFight(): void {
+    //Use this to prevent the previous game stop to stop the new one.
+    if (stopGameTimeoutId !== undefined)
+    {
+        clearTimeout(stopGameTimeoutId);
+        resetGameTimeoutId();
+    }
+
     initConstants();
     initCanvas();
     initPlayers();

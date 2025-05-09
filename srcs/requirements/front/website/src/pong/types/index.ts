@@ -13,6 +13,8 @@ export type GameElements = {
   winnerMsg: HTMLElement;
   muteGame: HTMLElement;
   basicButton: HTMLElement;
+  player1: HTMLElement;
+  player2: HTMLElement;
 }
 
 export type GameSounds = {

@@ -14,5 +14,7 @@ export function getElements(): GameElements {
         winnerMsg: document.getElementById("winner-message") as HTMLElement,
         muteGame: document.getElementById("button-ball") as HTMLElement,
         basicButton: document.getElementById("button-basic") as HTMLElement,
+        player1: document.getElementById("player1") as HTMLElement,
+        player2: document.getElementById("player2") as HTMLElement,
     };
 }

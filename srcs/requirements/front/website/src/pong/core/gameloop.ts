@@ -24,6 +24,11 @@ function gameLoop(gameId: GameElements): void {
     setAnimationFrameId(requestAnimationFrame(() => gameLoop(gameId)));
 }
 
+function updateUi(gameId: GameElements) : void {
+    gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
+    gameId.player1.textContent = localStorage.getItem('nickname');
+}
+
 
 export function initPong(): void {
     setupKeyPress();
@@ -32,7 +37,7 @@ export function initPong(): void {
         setAnimationFrameId(-1);
     }
     let gameId = getElements();
-    gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
+    updateUi(gameId);
     listenStatus(gameId);
     if (!gameSounds) {
         setGameSounds(initSounds());

@@ -77,21 +77,18 @@ export function execSelect(): void {
     });
 }
 
+//fonction test a update
 export function updateBracket(winner: string, player1: string, player2: string): void {
     let bracketId = getBracketElements();
     
-    // Déterminer quel match vient de se terminer
     if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
         (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
-        // C'était le premier match
         bracketId.finalist1Name.textContent = winner;
     } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
                (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
-        // C'était le deuxième match
         bracketId.finalist2Name.textContent = winner;
     } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
                (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
-        // C'était le match final
         alert(`${winner} has won the tournament!`);
     }
 }
@@ -109,23 +106,19 @@ export function showBracket(): void {
 
 function customPrompt(message: string): Promise<string> {
     return new Promise((resolve) => {
-        // print message du prompt
         const promptTitle = document.getElementById('prompt-title');
         if (promptTitle) {
             promptTitle.textContent = message;
         }
-        // on affiche la modal avec remove hidden
         const promptModal = document.getElementById('custom-prompt');
         if (promptModal) {
             promptModal.classList.remove('hidden');
         }
-        // focus imput
         const promptInput = document.getElementById('prompt-input') as HTMLInputElement;
         if (promptInput) {
             promptInput.value = '';
             promptInput.focus();
         }
-        // resous la promesse et cache le prompt (remet en hidden)
         const submitAndClose = () => {
             const value = promptInput ? promptInput.value || '' : '';
             if (promptModal) {
@@ -133,12 +126,10 @@ function customPrompt(message: string): Promise<string> {
             }
             resolve(value);
         };
-        // event submit
         const submitButton = document.getElementById('prompt-submit');
         if (submitButton) {
             submitButton.onclick = submitAndClose;
         }
-        // on peut utilise enter pour send
         if (promptInput) {
             promptInput.onkeydown = (e) => {
                 if (e.key === 'Enter') {

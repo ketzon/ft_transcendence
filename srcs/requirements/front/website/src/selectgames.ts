@@ -3,7 +3,41 @@ import { changingArea } from "./router";
 import { pongView } from "./views/pong";
 import { tournamentsView } from "./views/tournaments";
 import { bracketView } from "./views/bracket";
+import { gameState } from "./pong/core/gamestate";
+import { getElements } from "./pong/components/elements";
+import { pongScore } from "./pong/core/gameloop";
 
+export type BracketElements = {
+  player1Name: HTMLElement;
+  player1Score: HTMLElement;
+  player2Name: HTMLElement;
+  player2Score: HTMLElement;
+  player3Name: HTMLElement;
+  player3Score: HTMLElement;
+  player4Name: HTMLElement;
+  player4Score: HTMLElement;
+  finalist1Name: HTMLElement;
+  finalist1Score: HTMLElement;
+  finalist2Name: HTMLElement;
+  finalist2Score: HTMLElement;
+}
+
+export function getBracketElements(): BracketElements {
+    return {
+        player1Name: document.getElementById("player1-name") as HTMLElement,
+        player1Score: document.getElementById("player1-score") as HTMLElement,
+        player2Name: document.getElementById("player2-name") as HTMLElement,
+        player2Score: document.getElementById("player2-score") as HTMLElement,
+        player3Name: document.getElementById("player3-name") as HTMLElement,
+        player3Score: document.getElementById("player3-score") as HTMLElement,
+        player4Name: document.getElementById("player4-name") as HTMLElement,
+        player4Score: document.getElementById("player4-score") as HTMLElement,
+        finalist1Name: document.getElementById("finalist1-name") as HTMLElement,
+        finalist1Score: document.getElementById("finalist1-score") as HTMLElement,
+        finalist2Name: document.getElementById("finalist2-name") as HTMLElement,
+        finalist2Score: document.getElementById("finalist2-score") as HTMLElement,
+    };
+}
 
 
 export let player1: string
@@ -21,7 +55,7 @@ export function execSelect(): void {
         localStorage.setItem("Player2", player2);
         changingArea.innerHTML = pongView();
         setGameMode(true);
-        initGame();
+        initGame(false);
     });
 
     pongTournament.addEventListener("click", async () => {
@@ -43,13 +77,33 @@ export function execSelect(): void {
     });
 }
 
-function showBracket(): void {
+export function updateBracket(winner: string, player1: string, player2: string): void {
+    let bracketId = getBracketElements();
+    
+    // Déterminer quel match vient de se terminer
+    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
+        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
+        // C'était le premier match
+        bracketId.finalist1Name.textContent = winner;
+    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
+               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
+        // C'était le deuxième match
+        bracketId.finalist2Name.textContent = winner;
+    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
+               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
+        // C'était le match final
+        alert(`${winner} has won the tournament!`);
+    }
+}
+
+export function showBracket(): void {
     changingArea.innerHTML = bracketView();
+    let bracketId:BracketElements = getBracketElements();
    let start = document.getElementById("start-game");
    start.addEventListener("click", () => {
        changingArea.innerHTML = pongView();
         setGameMode(true);
-        initGame();
+        initGame(true);
    })
 }
 

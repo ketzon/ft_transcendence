@@ -116,8 +116,6 @@ export async function router(): Promise<void> {
             // changingArea.innerHTML = pongView();
             changingArea.innerHTML = selectView();
             execSelect();
-            // setGameMode(true);
-            // initGame();
             break ;
 
         case routes.twofa:

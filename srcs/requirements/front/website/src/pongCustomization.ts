@@ -8,9 +8,12 @@ function setCustomSettings(): void {
         return ;
 
     const formData = new FormData(customSettingsForm);
-
-    console.log(formData.get("score"));
-    console.log(formData.get("paddle-speed"));
+    let newSettings = {
+        winScore: formData.get("score"),
+        paddleSpeed: formData.get("paddle-speed"),
+        featuresMode: formData.get("features")
+    }
+    console.log(newSettings);
 }
 
 function setGameSettings(): void {
@@ -132,6 +135,19 @@ export function gameSettingsView(): string {
                                     </label>
                                 </div>
                             </fieldset>
+                            <fieldset class="my-3">
+                                <legend class="text-center font-semibold py-1 mb-2">Features Mode</legend>
+                                <div class="py-2 flex justify-center gap-10">
+                                    <label>
+                                        <input class="hidden peer" type="radio" name="features" value="OFF" checked/>
+                                        <span class="cursor-pointer px-10 py-1 border-2 rounded-md border-indigo-400 text-indigo-400 peer-checked:bg-indigo-400 peer-checked:text-white">OFF</span>
+                                    </label>
+                                    <label>
+                                        <input class="hidden peer" type="radio" name="features" value="ON"/>
+                                        <span class="cursor-pointer px-10 py-1 border-2 rounded-md border-indigo-400 text-indigo-400 peer-checked:bg-indigo-400 peer-checked:text-white">ON</span>
+                                    </label>
+                                </div>
+                            </fieldset>
                         </form>
                     </div>
                 </div>
@@ -145,7 +161,7 @@ export function gameSettingsView(): string {
                 </div>
             </div>
         </div>
-        <button class="border-2" type="button" id="play-btn">PLAY</button>
+        <button class="border-2 px-5 rounded-md bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">PLAY</button>
     </div>
 `
 }

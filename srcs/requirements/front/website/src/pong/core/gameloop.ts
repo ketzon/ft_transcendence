@@ -90,13 +90,11 @@ export const pongScore = {
     tempLeft: 0
 }
 
-let bracketId;
+let bracketId: BracketElements;
 
 function checkTournament(): void {
     console.log("debug")
     if (tournamentMode) {
-    console.log(`check scoreLeft after checkTournament ${gameState.scoreLeft}`)
-    console.log(`check scoreRight after checkTournament ${gameState.scoreRight}`)
         if(pongScore.tempLeft >= WIN_SCORE || pongScore.tempRight >= WIN_SCORE){
             showBracket();
             bracketId = getBracketElements();
@@ -135,8 +133,6 @@ export function resetGame(gameId: GameElements): void {
         clearTimeout(colorChangeTimer);
         setColorChangeTimer(undefined);
     }
-    console.log(`check scoreLeft before checkTournament ${gameState.scoreLeft}`)
-    console.log(`check scoreRight before checkTournament ${gameState.scoreRight}`)
     pongScore.tempLeft = gameState.scoreLeft;
     pongScore.tempRight = gameState.scoreRight;
     gameState.scoreRight = 0

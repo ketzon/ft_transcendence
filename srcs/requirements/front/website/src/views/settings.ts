@@ -1,6 +1,7 @@
 import { toasts } from "../toasts";
 import { printResponse, resetInput, isEmptyString } from "../utils";
 import { handleChecklist, isValidPassword } from "../passwordValidation";
+import { updateI18nTranslations } from '../i18next';
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -221,6 +222,8 @@ function initAvatarUpload(): void {
 
 //Init the whole page , user infos and update forms.
 export function initSettings(): void {
+
+    updateI18nTranslations(); //traduction automatique
     loadProfileCard();
     initNicknameForm();
     initPasswordForm();
@@ -231,14 +234,14 @@ export function settingsView(): string {
         return /*html*/`
             <div id="settingsArea" class="h-full w-full flex justify-center items-center">
                 <div id="settings-card" class="h-10/12 w-11/12 bg-violet-100 flex flex-col items-center">
-                    <h1 class="w-full text-center p-4 text-2xl bg-violet-300">Account Settings</h1>
+                    <h1 class="i18n w-full text-center p-4 text-2xl bg-violet-300">Account Settings</h1>
                     <div class="flex h-full w-full">
                         <div id="profile-card" class="flex flex-col w-2/5 items-center justify-center">
                             <img id="active-avatar" src="" alt="User active avatar" class="cursor-pointer hover:opacity-80 w-50 h-50 my-5 border-2 border-dashed rounded-2xl">
                             <form id="upload-avatar-form" class="flex items-center gap-10">
                                     <div class="w-full flex justify-center">
                                         <input type="file" name="update-avatar" id="update-avatar" accept="image/*" class="hidden bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
-                                        <button id="submit-avatar-btn" type="submit" class="hidden mb-4 hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-l-lg rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
+                                        <button id="submit-avatar-btn" type="submit" class="i18n hidden mb-4 hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-l-lg rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                     </div>
                             </form>
                             <ul>
@@ -248,19 +251,19 @@ export function settingsView(): string {
                         </div>
                         <div id="update-profile" class="flex flex-col h-full w-3/5 bg-violet-200 items-center justify-evenly">
                             <form id="update-nickname-form" class="flex items-center gap-10">
-                                <label for="update-username" class="w-full">Change Nickname</label>
+                                <label for="update-username" class="i18n w-full">Change Nickname</label>
                                 <div class="w-full flex justify-center">
                                     <input type="text" name="update-nickname" id="update-nickname-value" placeholder="New Nickname" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
-                                    <button id="update-nickname-btn" type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
+                                    <button id="update-nickname-btn" type="submit" class="i18n hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                 </div>
                             </form>
                             <div id="password-box" class="relative flex flex-col items-center">
-                                <p class="w-fit m-auto mb-8">Change Password</p>
+                                <p class="i18n w-fit m-auto mb-8">Change Password</p>
                                 <form id="update-password-form">
                                     <input type="password" name="current-password" id="current-password-value" placeholder="Current Password" class="mr-30 bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
                                     <div class="w-full flex justify-center mt-1">
                                         <input type="password" name="update-password" id="update-password-value" placeholder="New Password" class="bg-[var(--base-color)] grow-1 min-w-0 h-12 p-4 rounded-l-lg border-2 border-l-0 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer" required>
-                                        <button type="submit" class="hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
+                                        <button type="submit" class="i18n hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-2xl p-2 px-5 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)]">Update</button>
                                     </div>
                                 </form>
                                 <div id="password-checklist" class="hidden my-4 w-fit m-auto py-5 px-7 rounded-2xl bg-violet-300">

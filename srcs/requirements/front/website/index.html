@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Pongu.sh</title>
+        <title >Pongu.sh</title>
         <meta charset="utf-8">
-        <!-- <link rel="stylesheet" href="src/style.css"> -->
-        <link rel="icon" href="data:,">
+        <link rel="icon" type="image/png" href="images/japanese.png" />
         <link rel="stylesheet" href="src/style_tailwind.css">
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
         <!-- Font Awesome -->
-         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
-
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
         <script type="module" src="src/main.js" defer></script>
     </head>
     <body class="h-screen">
         <div id="main-box" class="h-full flex items-center">
-            <nav id="navbar-box" class="h-full bg-violet-200 flex flex-col justify-around gap-8 px-5">
-              <div class="flex flex-col gap-5">
-                <a class="nav-link border-black border text-center p-7" href="/dashboard">HOME</a>
-                <a class="nav-link border-black border text-center p-7" href="/play">PLAY</a>
-                <a class="nav-link border-black border text-center p-7" href="/settings">SETTINGS</a>
-                <a class="nav-link border-black border text-center p-7" href="/tournaments">TOURNAMENTS</a>
-              </div>
+            <nav id="navbar-box" class="h-full w-56 bg-purple-100 flex flex-col shadow-md">
+                <div class="py-6 text-center border-b border-purple-200">
+                    <h1 class=" text-2xl font-bold text-purple-800">pongu.sh</h1>
+                </div>
+                
+                <div class="flex-grow p-4 flex flex-col space-y-3">
+                    <a class="i18n flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/dashboard">
+                        <span>HOME</span>
+                    </a>
+                    <a class="i18n flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/play">
+                        <span>PLAY</span>
+                    </a>
+                    <a class="i18n flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/settings">
+                        <span>SETTINGS</span>
+                    </a>
+                    <a class="i18n flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/tournaments">
+                        <span>TOURNAMENTS</span>
+                    </a>
+                </div>
+                
+                <div id="selector" class="hidden p-4 border-t border-purple-200 space-y-3">
+                    <div class="bg-white p-3 rounded-lg border border-purple-200">
+                        <label for="language-selector" class="block text-sm font-medium text-purple-900 mb-1">
+                        </label>
+                        <select id="language-selector" class="w-full p-2 border border-purple-200 rounded text-purple-900 text-sm">
+                            <option value="fr">Français</option>
+                            <option value="en" selected>English</option>
+                            <option value="ja">日本語</option>
+                        </select>
+                    </div>
+                </div>
             </nav>
+            
             <div id="changingArea" class="h-full w-full bg-[#fdf8e1]">
             </div>
         </div>

@@ -45,6 +45,8 @@ function checkLocalStorage(user)
 export async function initLogoutButton(): Promise<void> {
 
     let logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
+    let selectLanguage = document.getElementById("selector") as HTMLButtonElement;
+    selectLanguage.style.display = 'block';//add bouton pour select language
 
     if (logoutBtn)
         return ;
@@ -52,7 +54,7 @@ export async function initLogoutButton(): Promise<void> {
     logoutBtn = document.createElement("button");
     logoutBtn.id = "logout-btn";
     logoutBtn.type = "button";
-    logoutBtn.className = "border-black border text-center p-7 cursor-pointer";
+    logoutBtn.className = "i18n w-full flex items-center justify-center p-3 bg-red-50 text-red-500 border border-red-100 rounded-lg hover:bg-red-100 transition-all";
     logoutBtn.innerText = "LOGOUT";
 
     const navbarElem = document.getElementById("navbar-box");

@@ -27,7 +27,8 @@ function setChecked(itemId: string): void {
     if (listItemElem)
     {
         listItemElem.classList.add("opacity-50");
-        listItemElem.firstElementChild.className = "fa-solid fa-check";
+        if (listItemElem.firstElementChild)
+            listItemElem.firstElementChild.className = "fa-solid fa-check";
     }
 }
 
@@ -36,7 +37,8 @@ function setUnchecked(itemId: string):void {
     if (listItemElem)
         {
             listItemElem.classList.remove("opacity-50");
-            listItemElem.firstElementChild.className = "fa-solid fa-xmark";
+            if (listItemElem.firstElementChild)
+                listItemElem.firstElementChild.className = "fa-solid fa-xmark";
         }
 }
 

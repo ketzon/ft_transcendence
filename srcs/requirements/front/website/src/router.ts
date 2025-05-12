@@ -1,25 +1,25 @@
-import { dashboardView } from "./views/dashboard.ts";
-import { initializeDashboard } from "./dashboardEvents.ts";
-import { tournamentsView } from "./views/tournaments.ts";
-import { initializeTournaments } from "./tournamentsEvents.ts";
+import { dashboardView } from "./views/dashboard";
+import { initializeDashboard } from "./dashboardEvents";
+import { tournamentsView } from "./views/tournaments";
+import { initializeTournaments } from "./tournamentsEvents";
 
-import { initGame, stopGame, setGameMode } from "./ponggame.ts";
-import { pongView } from "./views/pong.ts";
-import { selectView } from "./views/select.ts";
-import { execSelect} from "./selectgames.ts";
+import { initGame, stopGame, setGameMode } from "./ponggame";
+import { pongView } from "./views/pong";
+import { selectView } from "./views/select";
+import { execSelect} from "./selectgames";
 
 
-import { isUserAuth } from "./auth.ts";
-import { initSettings, settingsView } from "./views/settings.ts";
-import { signupView, signupEvents } from "./views/signup.ts";
-import { loginView, loginEvents } from "./views/login.ts";
-import { twofaView, init2fa } from "./views/2fa.ts";
+import { isUserAuth } from "./auth";
+import { initSettings, settingsView } from "./views/settings";
+import { signupView, signupEvents } from "./views/signup";
+import { loginView, loginEvents } from "./views/login";
+import { twofaView, init2fa } from "./views/2fa";
 
 import { combatView } from "./views/combat";
 import { initVersusFight } from "./versus/initGame";
 import { stopVersusGame } from "./versus/cleanUp.js";
 
-import { gameSettingsView, initGameSettings } from "./test.js";
+import { gameSettingsView, initGameSettings } from "./pongCustomization.js";
 
 
 const routes = {
@@ -45,7 +45,7 @@ function redirectTo(view: string) {
     window.history.pushState(null, "", view);
     router();
 }
-export let changingArea:HTMLElement;
+export let changingArea: HTMLElement | null;
 //On injecte le contenu selon le path sur lequel on se trouve.
 export async function router(): Promise<void> {
     //On injecte dans changingArea pour garder la navbar sur la gauche dans le body.
@@ -83,7 +83,7 @@ export async function router(): Promise<void> {
             }
             changingArea.innerHTML = loginView();
             loginEvents();
-            stopPong();
+            // stopPong();
             break;
 
         case routes.login:

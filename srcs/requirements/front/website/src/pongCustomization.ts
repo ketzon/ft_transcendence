@@ -71,8 +71,8 @@ function showCustomSettings(): void {
 
 export function gameSettingsView(): string {
     return /*html*/ `
-    <div class="flex justify-center items-center h-full"> <!-- Wrapper !-->
-        <div class="flex flex-col w-11/12  bg-white rounded-2xl"> <!-- Main box !-->
+    <div class="flex justify-center items-center h-full gap-2"> <!-- Wrapper !-->
+        <div class="flex flex-col  bg-white rounded-2xl"> <!-- Main box !-->
             <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
                 <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Game Settings</h2>
                 <div class="m-3">
@@ -154,14 +154,17 @@ export function gameSettingsView(): string {
             </div>
             <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
                 <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
-                <div class="flex justify-center gap-5">
-                    <div class="rounded-md my-5 h-50 w-80 bg-amber-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
-                    <div class="rounded-md my-5 h-50 w-80 bg-green-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
-                    <div class="rounded-md my-5 h-50 w-80 bg-red-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
+                <div class="flex justify-center gap-5 mx-10">
+                    <div class="rounded-md my-5 h-50 w-60 bg-amber-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
+                    <div class="rounded-md my-5 h-50 w-60 bg-green-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
+                    <div class="rounded-md my-5 h-50 w-60 bg-red-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
                 </div>
             </div>
         </div>
-        <button class="border-2 px-5 rounded-md bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">PLAY</button>
+        <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">DUE</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">TOURNAMENT</button>
+        </div>
     </div>
 `
 }

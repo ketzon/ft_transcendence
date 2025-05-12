@@ -19,6 +19,7 @@ import { combatView } from "./views/combat";
 import { initVersusFight } from "./versus/initGame";
 import { stopVersusGame } from "./versus/cleanUp.js";
 
+import { gameSettingsView, initGameSettings } from "./test.js";
 
 
 const routes = {
@@ -31,7 +32,8 @@ const routes = {
     login : "/login",
     signup : "/signup",
     twofa: "/twofa",
-    settings: "/settings"
+    settings: "/settings",
+    pongSettings: "/pongSettings"
 }
 
 // Gestion des boutons forward et backward
@@ -59,6 +61,10 @@ export async function router(): Promise<void> {
     console.log("Current path = " + location.pathname);
     switch (location.pathname) {
 
+        case routes.pongSettings:
+            changingArea.innerHTML = gameSettingsView();
+            initGameSettings();
+            break ;
         case routes.versus:
             stopVersusGame();
             changingArea.innerHTML = combatView();

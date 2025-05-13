@@ -1,6 +1,8 @@
+import { setTournamentMode } from "./pong/core/gamestate"
 import { initPong, stopPong, setMode } from './pong/core/gameloop';
 
-export function initGame(): void {
+export function initGame(value:boolean): void {
+  setTournamentMode(value);
   initPong();
 }
 

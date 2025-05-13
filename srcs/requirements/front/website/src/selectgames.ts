@@ -3,7 +3,42 @@ import { changingArea } from "./router";
 import { pongView } from "./views/pong";
 import { tournamentsView } from "./views/tournaments";
 import { bracketView } from "./views/bracket";
+import { gameState } from "./pong/core/gamestate";
+import { getElements } from "./pong/components/elements";
+import { pongScore } from "./pong/core/gameloop";
+import { combatView} from "./views/combat";
 
+export type BracketElements = {
+  player1Name: HTMLElement;
+  player1Score: HTMLElement;
+  player2Name: HTMLElement;
+  player2Score: HTMLElement;
+  player3Name: HTMLElement;
+  player3Score: HTMLElement;
+  player4Name: HTMLElement;
+  player4Score: HTMLElement;
+  finalist1Name: HTMLElement;
+  finalist1Score: HTMLElement;
+  finalist2Name: HTMLElement;
+  finalist2Score: HTMLElement;
+}
+
+export function getBracketElements(): BracketElements {
+    return {
+        player1Name: document.getElementById("player1-name") as HTMLElement,
+        player1Score: document.getElementById("player1-score") as HTMLElement,
+        player2Name: document.getElementById("player2-name") as HTMLElement,
+        player2Score: document.getElementById("player2-score") as HTMLElement,
+        player3Name: document.getElementById("player3-name") as HTMLElement,
+        player3Score: document.getElementById("player3-score") as HTMLElement,
+        player4Name: document.getElementById("player4-name") as HTMLElement,
+        player4Score: document.getElementById("player4-score") as HTMLElement,
+        finalist1Name: document.getElementById("finalist1-name") as HTMLElement,
+        finalist1Score: document.getElementById("finalist1-score") as HTMLElement,
+        finalist2Name: document.getElementById("finalist2-name") as HTMLElement,
+        finalist2Score: document.getElementById("finalist2-score") as HTMLElement,
+    };
+}
 
 
 export let player1: string
@@ -14,14 +49,20 @@ export let player4: string
 export function execSelect(): void {
     let pong1v1 = document.getElementById("pong-1v1");
     let pongTournament = document.getElementById("pong-tournament");
-    // let versusButton = document.getElementById("button-pong")
+    // let versusButton = document.getElementById("button-versus");
+
+
+    // versusButton.addEventListener("click", ()=> {
+        // changingArea.innerHTML = combatView();
+        // code pour le versus ICI
+    // });
 
     pong1v1.addEventListener("click", async () => {
         const player2 = await customPrompt("Enter Player 2 username:");
         localStorage.setItem("Player2", player2);
         changingArea.innerHTML = pongView();
         setGameMode(true);
-        initGame();
+        initGame(false);
     });
 
     pongTournament.addEventListener("click", async () => {
@@ -43,35 +84,48 @@ export function execSelect(): void {
     });
 }
 
-function showBracket(): void {
+//fonction test a update
+export function updateBracket(winner: string, player1: string, player2: string): void {
+    let bracketId = getBracketElements();
+    
+    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
+        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
+        bracketId.finalist1Name.textContent = winner;
+    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
+               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
+        bracketId.finalist2Name.textContent = winner;
+    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
+               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
+        alert(`${winner} has won the tournament!`);
+    }
+}
+
+export function showBracket(): void {
     changingArea.innerHTML = bracketView();
+    let bracketId:BracketElements = getBracketElements();
    let start = document.getElementById("start-game");
    start.addEventListener("click", () => {
        changingArea.innerHTML = pongView();
         setGameMode(true);
-        initGame();
+        initGame(true);
    })
 }
 
 function customPrompt(message: string): Promise<string> {
     return new Promise((resolve) => {
-        // print message du prompt
         const promptTitle = document.getElementById('prompt-title');
         if (promptTitle) {
             promptTitle.textContent = message;
         }
-        // on affiche la modal avec remove hidden
         const promptModal = document.getElementById('custom-prompt');
         if (promptModal) {
             promptModal.classList.remove('hidden');
         }
-        // focus imput
         const promptInput = document.getElementById('prompt-input') as HTMLInputElement;
         if (promptInput) {
             promptInput.value = '';
             promptInput.focus();
         }
-        // resous la promesse et cache le prompt (remet en hidden)
         const submitAndClose = () => {
             const value = promptInput ? promptInput.value || '' : '';
             if (promptModal) {
@@ -79,12 +133,10 @@ function customPrompt(message: string): Promise<string> {
             }
             resolve(value);
         };
-        // event submit
         const submitButton = document.getElementById('prompt-submit');
         if (submitButton) {
             submitButton.onclick = submitAndClose;
         }
-        // on peut utilise enter pour send
         if (promptInput) {
             promptInput.onkeydown = (e) => {
                 if (e.key === 'Enter') {

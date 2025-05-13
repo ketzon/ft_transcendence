@@ -5,4 +5,4 @@ export const PADDLE_HEIGHT = 80;
 export const PADDLE_WIDTH = 10;
 export const PADDLE_SPEED = 8;
 export const MARGIN = 10;
-export const WIN_SCORE = 10;
+export const WIN_SCORE = 2;

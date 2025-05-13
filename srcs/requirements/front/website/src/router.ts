@@ -123,11 +123,8 @@ export async function router(): Promise<void> {
                 redirectTo("/");
                 return;
             }
-            // changingArea.innerHTML = pongView();
             changingArea.innerHTML = selectView();
             execSelect();
-            // setGameMode(true);
-            // initGame();
             break ;
 
         case routes.twofa:

@@ -1,4 +1,5 @@
 import { GameState, Keys } from '../types';
+import { WIN_SCORE } from '../utils/constants';
 
 // variable state game
 export let isBasic: boolean = true;
@@ -7,6 +8,11 @@ export let isResetting: boolean = false;
 export let isScoring: boolean = false;
 export let colorChangeTimer: number | undefined;
 export let animationFrameId: number = -1;
+export let tournamentMode: boolean = false
+
+export function setTournamentMode(value: boolean): void {
+  tournamentMode = value;
+}
 
 export function setIsResetting(value: boolean): void {
   isResetting = value;

@@ -15,14 +15,12 @@ export function resetScore(gameId: GameElements):void {
 
 export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void {
     if (gameId.winnerMsg) {
-        if (winnerName) {
          setTimeout(() => {
             gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
          }, 3000);
         gameId.winnerMsg.textContent = `Victory goes to ${winnerName}! 👑🥳`;
         resetGame(gameId);
         gameId.pauseGame.textContent = "start";
-        }
     }
 }
 
@@ -36,6 +34,6 @@ export function checkWinner(gameId: GameElements): void {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        changeWinnerMsg(gameId, gameId.player2.textContent);
+        changeWinnerMsg(gameId, gameId?.player2.textContent);
     }
 }

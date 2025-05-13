@@ -7,9 +7,12 @@ import { WIN_SCORE } from '../utils/constants';
 import { resetScore } from '../components/score';
 import { resetPaddles } from '../components/paddle';
 import { getElements } from '../components/elements';
-import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId  } from './gamestate';
+import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId  } from './gamestate';
 import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mute} from '../utils/audio';
 import { listenStatus } from '../events';
+import { changingArea } from "../../router";
+import { bracketView } from '../../views/bracket';
+import { getBracketElements, showBracket } from  "../../selectgames"
 
 //main loop
 function gameLoop(gameId: GameElements): void {
@@ -26,12 +29,15 @@ function gameLoop(gameId: GameElements): void {
 
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
-    gameId.player1.textContent = localStorage.getItem('nickname');
-    gameId.player2.textContent = localStorage.getItem('Player2');
+    if (!tournamentMode) {
+        gameId.player1.textContent = localStorage.getItem('nickname');
+        gameId.player2.textContent = localStorage.getItem('Player2');
+    }
 }
 
 
 export function initPong(): void {
+    console.log(tournamentMode);
     setupKeyPress();
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
@@ -79,12 +85,56 @@ export function changePause(gameId: GameElements): void{
 }
 
 
+export const pongScore = {
+    tempRight: 0,
+    tempLeft: 0
+}
+
+let bracketId: BracketElements;
+
+function checkTournament(): void {
+    console.log("debug")
+    if (tournamentMode) {
+        if(pongScore.tempLeft >= WIN_SCORE || pongScore.tempRight >= WIN_SCORE){
+            showBracket();
+            bracketId = getBracketElements();
+            if (pongScore.tempLeft >= WIN_SCORE) {
+                console.log("debug")
+                updateBracket(bracketId.player1Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+            } else if (pongScore.tempRight >= WIN_SCORE)  {
+                updateBracket(bracketId.player2Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+            }
+        }
+    }
+}
+
+export function updateBracket(winner: string, player1: string, player2: string): void {
+    
+    // Déterminer quel match vient de se terminer
+    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
+        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
+        // C'était le premier match
+        bracketId.finalist1Name.textContent = winner;
+    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
+               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
+        // C'était le deuxième match
+        bracketId.finalist2Name.textContent = winner;
+    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
+               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
+        // C'était le match final
+        alert(`${winner} has won the tournament!`);
+    }
+}
+
+
 //reset le jeu
 export function resetGame(gameId: GameElements): void {
     if (colorChangeTimer !== undefined) {
         clearTimeout(colorChangeTimer);
         setColorChangeTimer(undefined);
     }
+    pongScore.tempLeft = gameState.scoreLeft;
+    pongScore.tempRight = gameState.scoreRight;
     gameState.scoreRight = 0
     gameState.scoreLeft = 0
     gameState.paddleRightY = 160;
@@ -99,6 +149,8 @@ export function resetGame(gameId: GameElements): void {
     gameId.ball.style.backgroundColor = "white";
     setPause(true);
     gameId.pauseGame.textContent = "start";
+    console.log("avant check tournament");
+    checkTournament();
 }
 
 export function setBasicMode(gameId: GameElements):void {

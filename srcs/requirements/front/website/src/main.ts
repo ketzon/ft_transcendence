@@ -1,6 +1,11 @@
-import { router } from "./router.ts";
+import { router } from "./router";
+import { initI18n } from './i18next';
 
-// On utilise l'event delegation pour catch tout les events click , meme ceux qui seront injectes plus tard.
+//init i18n apres le chargement du DOM pour recup original data
+document.addEventListener('DOMContentLoaded', () => {
+  initI18n();
+});
+
 function listenAllClicks(): void {
     let body = document.querySelector("body");
 

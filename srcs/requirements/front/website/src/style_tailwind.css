@@ -19,3 +19,19 @@
 .checked {
     @apply opacity-50;
 }
+
+.bg-map-classic {
+    @apply bg-[url('../../assets/pong/pong_classic_map.png')];
+  }
+
+.bg-map-tennis {
+    @apply bg-[url('../../assets/pong/pong_tennis_map.png')];
+  }
+
+.bg-map-hell {
+    @apply bg-[url('../../assets/pong/pong_hell_map.png')];
+}
+
+.bg-map-ice {
+    @apply bg-[url('../../assets/pong/pong_ice_map.png')];
+}

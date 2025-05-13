@@ -8,6 +8,13 @@ import { pongView } from "./views/pong";
 import { setGameMode } from "./ponggame";
 import { stopPong } from "./pong/core/gameloop";
 
+let pongMaps = {
+    classic: "bg-map-classic",
+    tennis: "bg-map-tennis",
+    hell: "bg-map-hell",
+    ice: "bg-map-ice"
+}
+
 function setCustomSettings(): void {
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
 
@@ -25,6 +32,8 @@ function setCustomSettings(): void {
     setPaddleSpeed(newSettings.paddleSpeed);
     if (newSettings.featuresMode === true)
         setGameMode(false);
+
+
 }
 
 function setGameSettings(): void {
@@ -57,7 +66,7 @@ function handlePlayBtn(): void {
 
         if (changingArea)
         {
-            changingArea.innerHTML = pongView();
+            changingArea.innerHTML = pongView(pongMaps.classic);
             initGame();
         }
     })

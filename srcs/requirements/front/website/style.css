@@ -103,3 +103,7 @@ nav {
     border-radius: 20px;
     background: linear-gradient(#FFEFBA, #FFFFFF);;
 }
+
+.font-space {
+  font-family: 'Space Grotesk', sans-serif;
+}

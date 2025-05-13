@@ -1,6 +1,13 @@
 let toggleSettings: HTMLFormElement;
 let settingsPopup: HTMLDivElement;
 
+import { setWinningScore, setPaddleSpeed } from "./pong/utils/constants";
+import { changingArea } from "./router";
+import { initGame } from "./ponggame";
+import { pongView } from "./views/pong";
+import { setGameMode } from "./ponggame";
+import { stopPong } from "./pong/core/gameloop";
+
 function setCustomSettings(): void {
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
 
@@ -9,11 +16,15 @@ function setCustomSettings(): void {
 
     const formData = new FormData(customSettingsForm);
     let newSettings = {
-        winScore: formData.get("score"),
-        paddleSpeed: formData.get("paddle-speed"),
-        featuresMode: formData.get("features")
+        winScore: Number(formData.get("score")),
+        paddleSpeed: Number(formData.get("paddle-speed")),
+        featuresMode: Boolean(formData.get("features"))
     }
     console.log(newSettings);
+    setWinningScore(newSettings.winScore);
+    setPaddleSpeed(newSettings.paddleSpeed);
+    if (newSettings.featuresMode === true)
+        setGameMode(false);
 }
 
 function setGameSettings(): void {
@@ -43,10 +54,18 @@ function handlePlayBtn(): void {
     playBtn.addEventListener("click", () => {
         setGameSettings();
         //When game settings are changed we can now move to the game/tournament setup.
+
+        if (changingArea)
+        {
+            changingArea.innerHTML = pongView();
+            initGame();
+        }
     })
 }
 
 export function initGameSettings(): void {
+    stopPong();
+
     showCustomSettings();
     handlePlayBtn();
 }
@@ -139,7 +158,7 @@ export function gameSettingsView(): string {
                                 <legend class="text-center font-semibold py-1 mb-2">Features Mode</legend>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
-                                        <input class="hidden peer" type="radio" name="features" value="OFF" checked/>
+                                        <input class="hidden peer" type="radio" name="features" value="" checked/>
                                         <span class="cursor-pointer px-10 py-1 border-2 rounded-md border-indigo-400 text-indigo-400 peer-checked:bg-indigo-400 peer-checked:text-white">OFF</span>
                                     </label>
                                     <label>
@@ -162,7 +181,7 @@ export function gameSettingsView(): string {
             </div>
         </div>
         <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">DUE</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">DUEL</button>
             <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">TOURNAMENT</button>
         </div>
     </div>

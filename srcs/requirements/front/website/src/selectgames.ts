@@ -48,7 +48,14 @@ export let player4: string
 export function execSelect(): void {
     let pong1v1 = document.getElementById("pong-1v1");
     let pongTournament = document.getElementById("pong-tournament");
-    // let versusButton = document.getElementById("button-pong")
+    //-------------------POUR LE VERSUS-----------------------------//
+    // let versusButton = document.getElementById("boutton-versus");
+
+
+    // versusButton.addEventListener("click", ()=> {
+    //     changingArea.innerHTML = versusView();
+    // });
+    // ------------------------------------------------------------//
 
     pong1v1.addEventListener("click", async () => {
         const player2 = await customPrompt("Enter Player 2 username:");

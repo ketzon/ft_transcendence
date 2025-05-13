@@ -7,6 +7,7 @@ const resources = {
       "HOME": "ACCUEIL",
       "PLAY": "JOUER",
       "SETTINGS": "PARAMÈTRES",
+      "TOURNAMENTS": "TOURNOIS",
       "LOGOUT": "DÉCONNEXION",
       "Account Settings": "Paramètres du compte",
       "Change Nickname": "Changer de pseudo",

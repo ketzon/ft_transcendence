@@ -51,12 +51,21 @@ export async function initLogoutButton(): Promise<void> {
     if (logoutBtn)
         return ;
 
+    //basic boutton logout
     logoutBtn = document.createElement("button");
     logoutBtn.id = "logout-btn";
     logoutBtn.type = "button";
-    logoutBtn.className = "i18n w-full flex items-center justify-center p-3 bg-red-50 text-red-500 border border-red-100 rounded-lg hover:bg-red-100 transition-all";
-    logoutBtn.innerText = "LOGOUT";
-
+    logoutBtn.className = "w-full flex items-center justify-center p-3 bg-red-50 text-red-500 border border-red-100 rounded-lg hover:bg-red-100 transition-all";
+    // ajoute font awesome icon
+    const logoutIcon = document.createElement("i");
+    logoutIcon.className = "fas fa-sign-out-alt mr-2"; 
+    const logoutText = document.createElement("span");
+    logoutText.className = "i18n"; 
+    logoutText.textContent = "LOGOUT"; 
+    logoutText.setAttribute('data-original-text', 'LOGOUT'); // pour i18n
+    //insere balise dans logout btn
+    logoutBtn.appendChild(logoutIcon);
+    logoutBtn.appendChild(logoutText);
     const navbarElem = document.getElementById("navbar-box");
     navbarElem?.appendChild(logoutBtn);
 

@@ -17,15 +17,15 @@ export function dashboardView(): string {
                 <div class="grid grid-cols-3 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-700">Total Matches</h3>
-                        <p class="text-3xl font-bold text-[#8672FF] mt-2">42</p>
+                        <p id="total-matches" class="text-3xl font-bold text-[#8672FF] mt-2">0</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-700">Win Rate</h3>
-                        <p class="text-3xl font-bold text-[#8672FF] mt-2">75%</p>
+                        <p id="win-rate" class="text-3xl font-bold text-[#8672FF] mt-2">0%</p>
                     </div>
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-700">Total Wins</h3>
-                        <p class="text-3xl font-bold text-[#8672FF] mt-2">32</p>
+                        <p id="total-wins" class="text-3xl font-bold text-[#8672FF] mt-2">0</p>
                     </div>
                 </div>
                 

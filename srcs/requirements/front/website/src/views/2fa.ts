@@ -67,7 +67,7 @@ function verifyCode(): void {
 
             event.preventDefault();
             if (isValidInput(form) === true )
-                sendCode(form);
+            sendCode(form);
         })
     }
 }

@@ -94,72 +94,22 @@ function showGameDetails(game: Game) {
     });
 }
 
-// Function to generate mock game history
-function getMockGameHistory(): Game[] {
-    const players = [
-        { id: 1, username: 'IOK', avatar: 'https://robohash.org/IOK?set=set4' },
-        { id: 2, username: 'Screaky', avatar: 'https://robohash.org/Screaky?set=set4' },
-        { id: 3, username: 'Æther', avatar: 'https://robohash.org/Aether?set=set4' },
-        { id: 4, username: 'ketzon', avatar: 'https://robohash.org/ketzon?set=set4' },
-        { id: 5, username: 'Anna', avatar: 'https://robohash.org/Anna?set=set4' }
-    ];
-    const games: Game[] = [];
-    const today = new Date();
+async function getGameHistory(): Promise<Game[]> {
+  try {
+    const res = await fetch('/api/stats/user/1'); // adapte l’ID ou utilise une variable plus tard
+    if (!res.ok) throw new Error('Erreur HTTP');
 
-    // For the last 10 days
-    for (let i = 0; i < 10; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
+    const data = await res.json();
 
-        // Generate between 0 and 5 games for each day
-        const gamesPerDay = Math.floor(Math.random() * 6);
-
-        for (let j = 0; j < gamesPerDay; j++) {
-            const hours = 9 + Math.floor(Math.random() * 15);
-            const minutes = Math.floor(Math.random() * 60);
-            date.setHours(hours, minutes);
-
-            // Select two different random players
-            const player1Index = Math.floor(Math.random() * players.length);
-            let player2Index;
-            do {
-                player2Index = Math.floor(Math.random() * players.length);
-            } while (player2Index === player1Index);
-
-            // Generate random score (0-10)
-            const score1 = Math.floor(Math.random() * 11);
-            const score2 = Math.floor(Math.random() * 11);
-
-            // Determine result
-            let result: 'Win' | 'Loss';
-            result = score1 > score2 ? 'Win' : 'Loss';
-
-            games.push({
-                date: formatDateFR(date),
-                player1: players[player1Index],
-                player2: players[player2Index],
-                score: `${score1}-${score2}`,
-                result: result,
-                gameStats: generateRandomStats()
-            });
-        }
-    }
-
-    // Sort games by date and time
-    games.sort((a, b) => {
-        const [dateA, timeA] = a.date.split(' ');
-        const [dateB, timeB] = b.date.split(' ');
-
-        const [dayA, monthA, yearA] = dateA.split('/');
-        const [dayB, monthB, yearB] = dateB.split('/');
-        const fullDateA = new Date(`${yearA}-${monthA}-${dayA}T${timeA}`);
-        const fullDateB = new Date(`${yearB}-${monthB}-${dayB}T${timeB}`);
-
-        return fullDateB.getTime() - fullDateA.getTime();
-    });
-
-    return games;
+    // Adapte cette ligne selon la structure réelle de la réponse backend
+    return data.games;
+  } catch (err) {
+    console.error('Erreur lors de la récupération de l’historique :', err);
+    return [];
+  }
 }
+
+
 
 // Function to create performance graph
 function createPerformanceGraph(games: Game[]) {
@@ -249,8 +199,8 @@ function createPerformanceGraph(games: Game[]) {
 }
 
 // Function to update game history table
-function updateGameHistory() {
-    const games = getMockGameHistory();
+async function updateGameHistory() {
+    const games = await getGameHistory();
     const tableBody = document.querySelector('#history-content table tbody');
 
     if (!tableBody) {
@@ -291,6 +241,14 @@ function updateGameHistory() {
 
     // Update performance graph
     createPerformanceGraph(games);
+    const totalGames = games.length;
+    const totalWins = games.filter(g => g.result === 'Win').length;
+    const winRate = totalGames > 0 ? Math.round((totalWins / totalGames) * 100) : 0;
+
+    // Mise à jour du DOM
+    document.getElementById('total-matches')!.textContent = totalGames.toString();
+    document.getElementById('total-wins')!.textContent = totalWins.toString();
+    document.getElementById('win-rate')!.textContent = `${winRate}%`;
 }
 
 export function initializeDashboard() {
@@ -339,6 +297,8 @@ export function initializeDashboard() {
         updateGameHistory();
     } else {
         // Otherwise, initialize just the graph with data
-        createPerformanceGraph(getMockGameHistory());
+         getGameHistory().then((games) => { //getGameHistory() is async, then permet d'agir quand la promesse est resolue
+        createPerformanceGraph(games);
+    });
     }
 }

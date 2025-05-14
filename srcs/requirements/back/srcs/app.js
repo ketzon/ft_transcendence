@@ -11,6 +11,9 @@ import registerUserRoute from "./routes/userRoutes.js"
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 
+//Stats 
+import InesStatsRoutes from './routes/InesStatsRoutes.js';
+
 
 const fastify = Fastify({
     logger: {
@@ -47,3 +50,7 @@ fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {
 	}
 	console.log(`Computer is transcending on : http://localhost:${PORT}`)
 })
+
+
+//Stats
+await fastify.register(InesStatsRoutes);

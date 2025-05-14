@@ -7,13 +7,7 @@ import { initGame } from "./ponggame";
 import { pongView } from "./views/pong";
 import { setGameMode } from "./ponggame";
 import { stopPong } from "./pong/core/gameloop";
-
-let pongMaps = {
-    classic: "bg-map-classic",
-    tennis: "bg-map-tennis",
-    hell: "bg-map-hell",
-    ice: "bg-map-ice"
-}
+import { setPongBackground } from "./views/pong";
 
 function setCustomSettings(): void {
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
@@ -55,6 +49,18 @@ function setGameSettings(): void {
     }
 }
 
+function setChoosenBackground(): void {
+    const mapSelectionForm = document.getElementById("mapSelection") as HTMLFormElement | null;
+
+    if (!mapSelectionForm)
+        return ;
+    const formData = new FormData(mapSelectionForm);
+    const choosenMap = formData.get("map")?.toString();
+
+    if (choosenMap)
+        setPongBackground(choosenMap);
+}
+
 function handlePlayBtn(): void {
     const playBtn = document.getElementById("play-btn");
 
@@ -62,11 +68,12 @@ function handlePlayBtn(): void {
         return ;
     playBtn.addEventListener("click", () => {
         setGameSettings();
+        setChoosenBackground();
         //When game settings are changed we can now move to the game/tournament setup.
 
         if (changingArea)
         {
-            changingArea.innerHTML = pongView(pongMaps.classic);
+            changingArea.innerHTML = pongView();
             initGame(false);
         }
     })
@@ -182,36 +189,36 @@ export function gameSettingsView(): string {
             </div>
             <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
                 <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
-                <div class="flex flex-wrap justify-center gap-5 mx-10">
-                    <label class="cursor-pointer my-5">
-                        <input class="hidden peer" type="radio" name="map" value="bg-map-classic" checked/>
-                        <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
-                            <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_classic_map.png" alt="pong_classic_map">
-                            <div class="bg-indigo-200 font-semibold text-center py-2">Classic</div>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer my-5">
-                        <input class="hidden peer" type="radio" name="map" value="bg-map-tennis"/>
-                        <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
-                            <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_tennis_map.png" alt="pong_classic_map">
-                            <div class="bg-indigo-200 font-semibold text-center py-2">Tennis</div>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer my-5">
-                        <input class="hidden peer" type="radio" name="map" value="bg-map-hell"/>
-                        <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
-                            <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_hell_map.png" alt="pong_classic_map">
-                            <div class="bg-indigo-200 font-semibold text-center py-2">Hell</div>
-                        </div>
-                    </label>
-                    <label class="cursor-pointer my-5">
-                        <input class="hidden peer" type="radio" name="map" value="bg-map-ice"/>
-                        <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
-                            <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_ice_map.png" alt="pong_classic_map">
-                            <div class="bg-indigo-200 font-semibold text-center py-2">Ice</div>
-                        </div>
-                    </label>
-                </div>
+                    <form id="mapSelection" class="flex flex-wrap justify-center gap-5 mx-10">
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-classic" checked/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_classic_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Classic</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-tennis"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_tennis_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Tennis</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-hell"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_hell_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Hell</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-ice"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_ice_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Ice</div>
+                            </div>
+                        </label>
+                    </form>
             </div>
         </div>
         <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">

@@ -67,7 +67,7 @@ function handlePlayBtn(): void {
         if (changingArea)
         {
             changingArea.innerHTML = pongView(pongMaps.classic);
-            initGame();
+            initGame(false);
         }
     })
 }

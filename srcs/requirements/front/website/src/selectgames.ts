@@ -7,6 +7,9 @@ import { gameState } from "./pong/core/gamestate";
 import { getElements } from "./pong/components/elements";
 import { pongScore } from "./pong/core/gameloop";
 import { combatView} from "./views/combat";
+import { setGameSettings, setChoosenBackground } from "./pongCustomization";
+import { selectView } from "./views/select";
+
 
 export type BracketElements = {
   player1Name: HTMLElement;
@@ -47,27 +50,33 @@ export let player3: string
 export let player4: string
 
 export function execSelect(): void {
-    let pong1v1 = document.getElementById("pong-1v1");
-    let pongTournament = document.getElementById("pong-tournament");
-    // let versusButton = document.getElementById("button-versus");
+    let pong1v1 = document.getElementById("play-1v1");
+    let pongTournament = document.getElementById("play-tournament");
 
-
-    // versusButton.addEventListener("click", ()=> {
-        // changingArea.innerHTML = combatView();
-        // code pour le versus ICI
-    // });
+    if (!pong1v1 || !pongTournament) return;
+    // setGameSettings();
+    // setChoosenBackground();
 
     pong1v1.addEventListener("click", async () => {
+        console.log("im in 1v1 mode")
+
+        setGameSettings();
+        setChoosenBackground();
+        changingArea.innerHTML = selectView();
         const player2 = await customPrompt("Enter Player 2 username:");
+        console.log("prompt working")
         localStorage.setItem("Player2", player2);
         changingArea.innerHTML = pongView();
-        setGameMode(true);
+        // setGameMode(true);
         initGame(false);
     });
 
     pongTournament.addEventListener("click", async () => {
+        console.log("im in tournament mode")
         const players: string[] = [];
-
+        setGameSettings();
+        setChoosenBackground();
+        changingArea.innerHTML = selectView();
         for (let i = 2; i <= 4; i++) { //tournament for 4 person
             let playerName = await customPrompt(`Enter name for Player ${i}:`);
             if (playerName === "") {
@@ -106,7 +115,6 @@ export function showBracket(): void {
    let start = document.getElementById("start-game");
    start.addEventListener("click", () => {
        changingArea.innerHTML = pongView();
-        setGameMode(true);
         initGame(true);
    })
 }

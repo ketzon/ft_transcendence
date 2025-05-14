@@ -8,13 +8,17 @@ import { pongView } from "./views/pong";
 import { setGameMode } from "./ponggame";
 import { stopPong } from "./pong/core/gameloop";
 import { setPongBackground } from "./views/pong";
+import { execSelect} from "./selectgames";
+import { selectView } from "./views/select";
 
 function setCustomSettings(): void {
+    console.log("im in custom settings");
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
 
     if (!customSettingsForm)
         return ;
 
+    console.log("custom settings working");
     const formData = new FormData(customSettingsForm);
     let newSettings = {
         winScore: Number(formData.get("score")),
@@ -26,15 +30,14 @@ function setCustomSettings(): void {
     setPaddleSpeed(newSettings.paddleSpeed);
     if (newSettings.featuresMode === true)
         setGameMode(false);
-
-
 }
 
-function setGameSettings(): void {
+export function setGameSettings(): void {
     if (!toggleSettings || !settingsPopup)
         return ;
 
     const selectedValue = new FormData(toggleSettings).get("custom_toggle");
+    console.log(selectedValue)
     if (selectedValue === "OFF")
     {
         console.log("Default settings will be used");
@@ -49,7 +52,7 @@ function setGameSettings(): void {
     }
 }
 
-function setChoosenBackground(): void {
+export function setChoosenBackground(): void {
     const mapSelectionForm = document.getElementById("mapSelection") as HTMLFormElement | null;
 
     if (!mapSelectionForm)
@@ -61,29 +64,12 @@ function setChoosenBackground(): void {
         setPongBackground(choosenMap);
 }
 
-function handlePlayBtn(): void {
-    const playBtn = document.getElementById("play-btn");
-
-    if (!playBtn)
-        return ;
-    playBtn.addEventListener("click", () => {
-        setGameSettings();
-        setChoosenBackground();
-        //When game settings are changed we can now move to the game/tournament setup.
-
-        if (changingArea)
-        {
-            changingArea.innerHTML = pongView();
-            initGame(false);
-        }
-    })
-}
 
 export function initGameSettings(): void {
     stopPong();
 
     showCustomSettings();
-    handlePlayBtn();
+    execSelect()
 }
 
 function showCustomSettings(): void {
@@ -93,6 +79,7 @@ function showCustomSettings(): void {
     toggleSettings?.addEventListener("change", () => {
         const selectedValue = new FormData(toggleSettings).get("custom_toggle");
 
+        console.log(selectedValue)
         if (selectedValue === "ON")
         {
             settingsPopup?.classList.remove("hidden");
@@ -113,7 +100,7 @@ export function gameSettingsView(): string {
                 <div class="m-3">
                     <form id="toggleCustomForm">
                         <fieldset>
-                            <legend class="text-center font-semibold my-2">Custom Settings</legend>
+                            <div class="text-center font-semibold my-2">Custom Settings</div>
                             <div class="flex flex-wrap justify-center my-2 gap-5">
                                 <label>
                                     <input class="hidden peer" type="radio" id="OFF" name="custom_toggle" value="OFF" checked/>
@@ -129,7 +116,7 @@ export function gameSettingsView(): string {
                     <div id="settingsPopup" class="hidden">
                         <form id="customSettingsForm">
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Score to win</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Score to win</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="score" value="5"/>
@@ -150,7 +137,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Paddle Speed</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Paddle Speed</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="paddle-speed" value="0.5"/>
@@ -171,7 +158,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Features Mode</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Features Mode</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="features" value="" checked/>
@@ -222,8 +209,8 @@ export function gameSettingsView(): string {
             </div>
         </div>
         <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">DUEL</button>
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">TOURNAMENT</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-1v1">DUEL</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-tournament">TOURNAMENT</button>
         </div>
     </div>
 `

@@ -32,6 +32,7 @@ export function setColorChangeTimer(value: number | undefined): void {
 
 export function setIsBasic(value: boolean): void {
     isBasic = value;
+    console.log(`mode feature: ${isBasic}`)
 }
 
 export function setAnimationFrameId(value: number) {

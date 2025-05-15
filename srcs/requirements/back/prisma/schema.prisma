@@ -16,7 +16,7 @@ model User {
   email     String    //@unique uncomment post dev
   username  String    //@unique uncomment post dev
   password  String
-  avatar    String    @default("./public/avatar.png")
+  avatar    String    @default("http://localhost:3000/public/avatar.png")
 
   otp        Int?
   otp_expire BigInt?

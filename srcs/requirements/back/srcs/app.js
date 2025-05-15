@@ -3,6 +3,7 @@ import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { __dirname } from './services/user_services.js';
+import fs from 'fs';
 
 //Tools
 import Fastify from "fastify"
@@ -33,10 +34,34 @@ await fastify.register(fastifyCors, {
   });
 await fastify.register(multipart);
 
-await fastify.register(fastifyStatic, {
-    root: path.join(__dirname, 'uploads'),
-    prefix: '/uploads/', // l’URL publique commencera par /uploads/
+const publicPath = path.join(__dirname, 'public');
+if (!fs.existsSync(publicPath)) {
+    fs.mkdirSync(publicPath, { recursive: true });
+  }
+
+fastify.register(async function (instance) {
+    instance.register(fastifyStatic, {
+      root: path.join(__dirname, 'uploads'),
+      prefix: '/uploads/',
+    });
   });
+
+  fastify.register(async function (instance) {
+    instance.register(fastifyStatic, {
+      root: path.join(__dirname, '../public'),
+      prefix: '/public/',
+    });
+  });
+
+// await fastify.register(fastifyStatic, {
+//     root: path.join(__dirname, 'uploads'),
+//     prefix: '/uploads/', // l’URL publique commencera par /uploads/
+//   });
+
+//   await fastify.register(fastifyStatic, {
+//     root: path.join(__dirname, 'public'),
+//     prefix: '/public/', // l’URL publique commencera par /uploads/
+//   });
 
 fastify.register(fastifyCookie);
 fastify.register(fastifyJwt, {

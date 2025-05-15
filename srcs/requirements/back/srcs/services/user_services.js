@@ -104,9 +104,14 @@ const updateAvatar = async (user, newAvatar) => {
 	const oldAvatar = user.avatar
     return new Promise ((resolve, reject) => {
         writeStream.on('finish', async () => {
-            if (oldAvatar !== "./public/avatar.png" && fs.existsSync(oldAvatar))
-                fs.unlinkSync(oldAvatar);
+            if (oldAvatar !== "http://localhost:3000/public/avatar.png")
+            {
+                const filename = oldAvatar.replace("http://localhost:3000/uploads/", "");
+                const oldFilePath = path.join(__dirname, "uploads", filename);
 
+                if (fs.existsSync(oldFilePath))
+                    fs.unlinkSync(oldFilePath);
+            }
             const userUpdated =  await prisma.user.update({
                 where: {id: user.id},
                 data: {avatar: publicPath}

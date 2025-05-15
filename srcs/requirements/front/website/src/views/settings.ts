@@ -13,8 +13,10 @@ function loadProfileCard(): void {
 
     if (activeAvatar && activeNickname && activeEmail && newNicknamePlaceholder)
     {
+        //Since the image URL stay the same, the browser wont refresh and use the image in cache
+        // so we use this to act like a force resfresh.
         const avatarUrl = localStorage.getItem("avatar") + `?ts=${Date.now()}`
-        console.log("new avatar url = ", avatarUrl);
+
         activeAvatar.src = avatarUrl as string;
         activeNickname.textContent = localStorage.getItem("nickname") as string;
         activeEmail.textContent = localStorage.getItem("email") as string;
@@ -150,9 +152,6 @@ async function updateAvatar(formData: FormData): Promise<void> {
         }
         const resMsg = await res.json();
         printResponse("/customAvatar", resMsg);
-
-        // const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
-        // const newAvatar = URL.createObjectURL(avatarInput.files[0]);
         localStorage.setItem("avatar", resMsg.user.avatar);
 
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;

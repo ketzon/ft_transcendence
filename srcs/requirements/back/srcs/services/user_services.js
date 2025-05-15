@@ -102,16 +102,19 @@ const updateAvatar = async (user, newAvatar) => {
 	newAvatar.file.pipe(writeStream);
 
 	const oldAvatar = user.avatar
-	writeStream.on('finish', async () => {
-		const userUpdated =  await prisma.user.update({
-			where: {id: user.id},
-			data: {avatar: publicPath}
-		})
-	})
-	if (oldAvatar !== "./public/avatar.png" && fs.existsSync(oldAvatar)) {
-		fs.unlinkSync(oldAvatar);
-	return userUpdated
-}
+    return new Promise ((resolve, reject) => {
+        writeStream.on('finish', async () => {
+            if (oldAvatar !== "./public/avatar.png" && fs.existsSync(oldAvatar))
+                fs.unlinkSync(oldAvatar);
+
+            const userUpdated =  await prisma.user.update({
+                where: {id: user.id},
+                data: {avatar: publicPath}
+            });
+            resolve (userUpdated);
+        });
+        writeStream.on("error", reject);
+	});
 }
 
 const updatePassword = async (user, newPassword) => {

@@ -12,7 +12,8 @@ import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mu
 import { listenStatus } from '../events';
 import { changingArea } from "../../router";
 import { bracketView } from '../../views/bracket';
-import { getBracketElements, showBracket } from  "../../selectgames"
+import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
+import { settingsView } from '../../views/settings';
 
 //main loop
 function gameLoop(gameId: GameElements): void {
@@ -29,9 +30,31 @@ function gameLoop(gameId: GameElements): void {
 
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
+    console.log("dans update ui")
     if (!tournamentMode) {
+        console.log("tournament mode off")
         gameId.player1.textContent = localStorage.getItem('nickname');
         gameId.player2.textContent = localStorage.getItem('Player2');
+    }
+    if(tournamentMode){
+        console.log("tournament mode on")
+        const tournamentPlayers = JSON.parse(localStorage.getItem("tournamentPlayers") || "[]");
+        console.log(tournamentPlayers);
+        console.log(stage);
+        switch (stage){
+            case 0:
+                gameId.player1.textContent = localStorage.getItem('nickname')
+                gameId.player2.textContent = tournamentPlayers[0];
+                break;
+            case 1:
+                gameId.player1.textContent = tournamentPlayers[1];
+                gameId.player2.textContent = tournamentPlayers[2];
+                break;
+            case 2:
+                gameId.player1.textContent = qualifiedPlayer.stage1
+                gameId.player2.textContent = qualifiedPlayer.stage2
+                break;
+        }
     }
 }
 
@@ -92,39 +115,73 @@ export const pongScore = {
 
 let bracketId: BracketElements;
 
+export let stage:number = 0;
 function checkTournament(): void {
-    console.log("debug")
+    console.log("je suis bien dans check tournament")
     if (tournamentMode) {
         if(pongScore.tempLeft >= WIN_SCORE || pongScore.tempRight >= WIN_SCORE){
             showBracket();
             bracketId = getBracketElements();
             if (pongScore.tempLeft >= WIN_SCORE) {
-                console.log("debug")
-                updateBracket(bracketId.player1Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+                getWinner("left", stage);
             } else if (pongScore.tempRight >= WIN_SCORE)  {
-                updateBracket(bracketId.player2Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+                getWinner("right", stage);
             }
+            stage++;
         }
     }
 }
 
-export function updateBracket(winner: string, player1: string, player2: string): void {
-    
-    // Déterminer quel match vient de se terminer
-    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
-        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
-        // C'était le premier match
-        bracketId.finalist1Name.textContent = winner;
-    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
-               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
-        // C'était le deuxième match
-        bracketId.finalist2Name.textContent = winner;
-    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
-               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
-        // C'était le match final
-        alert(`${winner} has won the tournament!`);
+export const qualifiedPlayer = {
+    stage1: "",
+    stage2: "",
+    winner: "",
+}
+
+function updateStage1(winner:string): void {
+    qualifiedPlayer.stage1 = winner;
+    bracketId.finalist1Name.textContent = winner;
+}
+
+function updateStage2(winner:string): void {
+    qualifiedPlayer.stage2 = winner;
+    bracketId.finalist1Name.textContent = qualifiedPlayer.stage1
+    bracketId.finalist2Name.textContent = winner;
+}
+
+function updateFinal(winner: string): void {
+    qualifiedPlayer.winner = winner;
+    alert(winner);
+    stopPong();
+    changingArea.innerHTML = settingsView();
+}
+
+function getWinner(pos:string, stage:number):  void {
+    switch (stage) {
+        case 0:
+            if(pos === "left"){
+                updateStage1(player1);
+        } else if(pos === "right") {
+                updateStage1(player2);
+        }
+            break;
+        case 1:
+            if (pos === "left") {
+            updateStage2(player3);
+        }else if(pos === "right") {
+            updateStage2(player4);
+        }
+            break;
+        case 2:
+            if (pos === "left") {
+            updateFinal(qualifiedPlayer.stage1);
+        }else if(pos === "right") {
+            updateFinal(qualifiedPlayer.stage2);
+        }
+            break;
     }
 }
+
 
 
 //reset le jeu

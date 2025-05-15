@@ -26,7 +26,8 @@ function setCustomSettings(): void {
         featuresMode: Boolean(formData.get("features"))
     }
     console.log(newSettings);
-    setWinningScore(newSettings.winScore);
+    // setWinningScore(newSettings.winScore);
+    setWinningScore(1);
     setPaddleSpeed(newSettings.paddleSpeed);
     if (newSettings.featuresMode === true)
         setGameMode(false);

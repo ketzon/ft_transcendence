@@ -59,11 +59,14 @@ export function execSelect(): void {
 
     pong1v1.addEventListener("click", async () => {
         console.log("im in 1v1 mode")
-
+        if(!changingArea) return;
         setGameSettings();
         setChoosenBackground();
         changingArea.innerHTML = selectView();
-        const player2 = await customPrompt("Enter Player 2 username:");
+        let player2 = await customPrompt("Enter Player 2 username:");
+        if (player2 === "") { 
+            player2 = "player2💀";
+        }
         console.log("prompt working")
         localStorage.setItem("Player2", player2);
         changingArea.innerHTML = pongView();
@@ -73,6 +76,7 @@ export function execSelect(): void {
 
     pongTournament.addEventListener("click", async () => {
         console.log("im in tournament mode")
+        if(!changingArea) return;
         const players: string[] = [];
         setGameSettings();
         setChoosenBackground();
@@ -93,25 +97,9 @@ export function execSelect(): void {
     });
 }
 
-//fonction test a update
-export function updateBracket(winner: string, player1: string, player2: string): void {
-    let bracketId = getBracketElements();
-    
-    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
-        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
-        bracketId.finalist1Name.textContent = winner;
-    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
-               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
-        bracketId.finalist2Name.textContent = winner;
-    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
-               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
-        alert(`${winner} has won the tournament!`);
-    }
-}
 
 export function showBracket(): void {
     changingArea.innerHTML = bracketView();
-    let bracketId:BracketElements = getBracketElements();
    let start = document.getElementById("start-game");
    start.addEventListener("click", () => {
        changingArea.innerHTML = pongView();

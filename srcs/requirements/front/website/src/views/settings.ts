@@ -152,7 +152,7 @@ async function updateAvatar(formData: FormData): Promise<void> {
         }
         const resMsg = await res.json();
         printResponse("/customAvatar", resMsg);
-        localStorage.setItem("avatar", resMsg.user.avatar);
+        localStorage.setItem("avatar", "http://localhost:3000/" + resMsg.user.avatar);
 
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
         submitBtn.classList.add("hidden");

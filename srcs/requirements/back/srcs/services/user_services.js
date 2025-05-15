@@ -92,26 +92,28 @@ const updateUsername = async (user, newUsername) => {
 }
 
 const updateAvatar = async (user, newAvatar) => {
-    const publicPath = `http://localhost:3000/uploads/avatar-${user.id}.jpg`;
+    const publicPath = `uploads/avatar-${user.id}.jpg`;
+
     const uploadDir = path.join(__dirname, 'uploads');
     if (!fs.existsSync(uploadDir))
         fs.mkdirSync(uploadDir, { recursive: true });
 
-	const avatarPath = path.join(uploadDir, `avatar-${user.id}.jpg`);
-	const writeStream = fs.createWriteStream(avatarPath);
-	newAvatar.file.pipe(writeStream);
-
 	const oldAvatar = user.avatar
+    if (oldAvatar !== "public/avatar.png")
+        {
+            const filename = oldAvatar.replace("uploads/", "");
+            const oldFilePath = path.join(__dirname, "uploads", filename);
+
+            if (fs.existsSync(oldFilePath))
+                fs.unlinkSync(oldFilePath);
+        }
+
+    const avatarPath = path.join(uploadDir, `avatar-${user.id}.jpg`);
+    const writeStream = fs.createWriteStream(avatarPath);
+    newAvatar.file.pipe(writeStream);
+
     return new Promise ((resolve, reject) => {
         writeStream.on('finish', async () => {
-            if (oldAvatar !== "http://localhost:3000/public/avatar.png")
-            {
-                const filename = oldAvatar.replace("http://localhost:3000/uploads/", "");
-                const oldFilePath = path.join(__dirname, "uploads", filename);
-
-                if (fs.existsSync(oldFilePath))
-                    fs.unlinkSync(oldFilePath);
-            }
             const userUpdated =  await prisma.user.update({
                 where: {id: user.id},
                 data: {avatar: publicPath}

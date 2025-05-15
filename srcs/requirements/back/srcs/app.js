@@ -34,11 +34,6 @@ await fastify.register(fastifyCors, {
   });
 await fastify.register(multipart);
 
-const publicPath = path.join(__dirname, 'public');
-if (!fs.existsSync(publicPath)) {
-    fs.mkdirSync(publicPath, { recursive: true });
-  }
-
 fastify.register(async function (instance) {
     instance.register(fastifyStatic, {
       root: path.join(__dirname, 'uploads'),
@@ -52,16 +47,6 @@ fastify.register(async function (instance) {
       prefix: '/public/',
     });
   });
-
-// await fastify.register(fastifyStatic, {
-//     root: path.join(__dirname, 'uploads'),
-//     prefix: '/uploads/', // l’URL publique commencera par /uploads/
-//   });
-
-//   await fastify.register(fastifyStatic, {
-//     root: path.join(__dirname, 'public'),
-//     prefix: '/public/', // l’URL publique commencera par /uploads/
-//   });
 
 fastify.register(fastifyCookie);
 fastify.register(fastifyJwt, {

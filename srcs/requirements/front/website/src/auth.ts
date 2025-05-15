@@ -37,7 +37,7 @@ function checkLocalStorage(user)
     // {
         localStorage.setItem("email", user.email);
         localStorage.setItem("nickname", user.username);
-        localStorage.setItem("avatar", user.avatar);
+        localStorage.setItem("avatar", "http://localhost:3000/" + user.avatar);
     // }
 }
 

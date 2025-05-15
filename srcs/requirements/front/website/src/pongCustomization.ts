@@ -113,7 +113,7 @@ export function gameSettingsView(): string {
                 <div class="m-3">
                     <form id="toggleCustomForm">
                         <fieldset>
-                            <legend class="text-center font-semibold my-2">Custom Settings</legend>
+                        <div class="text-center font-semibold my-2">Custom Settings</div>
                             <div class="flex flex-wrap justify-center my-2 gap-5">
                                 <label>
                                     <input class="hidden peer" type="radio" id="OFF" name="custom_toggle" value="OFF" checked/>
@@ -129,7 +129,7 @@ export function gameSettingsView(): string {
                     <div id="settingsPopup" class="hidden">
                         <form id="customSettingsForm">
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Score to win</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Score to win</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="score" value="5"/>
@@ -150,7 +150,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Paddle Speed</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Paddle Speed</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="paddle-speed" value="0.5"/>
@@ -171,7 +171,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Features Mode</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Features Mode</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="features" value="" checked/>

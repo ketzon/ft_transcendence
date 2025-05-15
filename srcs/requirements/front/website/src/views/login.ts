@@ -103,11 +103,11 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
 
 function googleButton():void {
     google.accounts.id.initialize({
-        client_id: "YOUR_GOOGLE_CLIENT_ID"
+        client_id: "275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com"
         // callback: handleCredentialResponse
       });
     google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large" })  // customization attributes;
-    google.accounts.id.prompt(); // also display the One Tap dialog
+    // google.accounts.id.prompt(); // also display the One Tap dialog
 }
 
 export function loginEvents(): void {

@@ -65,7 +65,7 @@ export function execSelect(): void {
         changingArea.innerHTML = selectView();
         let player2 = await customPrompt("Enter Player 2 username:");
         if (player2 === "") { 
-            player2 = "player2💀";
+            player2 = "player2👻";
         }
         console.log("prompt working")
         localStorage.setItem("Player2", player2);

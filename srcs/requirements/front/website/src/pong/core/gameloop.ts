@@ -11,9 +11,11 @@ import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId
 import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mute} from '../utils/audio';
 import { listenStatus } from '../events';
 import { changingArea } from "../../router";
+import { gameSettingsView } from "../../pongCustomization";
 import { bracketView } from '../../views/bracket';
 import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
 import { settingsView } from '../../views/settings';
+import { winnerView } from '../../views/winner';
 
 //main loop
 function gameLoop(gameId: GameElements): void {
@@ -151,9 +153,36 @@ function updateStage2(winner:string): void {
 
 function updateFinal(winner: string): void {
     qualifiedPlayer.winner = winner;
-    alert(winner);
     stopPong();
-    changingArea.innerHTML = settingsView();
+    stage = 0;
+    displayWinner(winner);
+}
+
+type WinnerElements = {
+    tournamentWinner: HTMLElement
+    leaveButton: HTMLElement
+    tournamentBackground: HTMLElement
+}
+
+export function getWinnerElements(): WinnerElements {
+    return {
+        tournamentBackground: document.getElementById("tournament-victory-background") as HTMLElement,
+        tournamentWinner: document.getElementById("tournament-winner") as HTMLElement,
+        leaveButton: document.getElementById("leave-pong-button") as HTMLElement,
+    };
+}
+
+
+function displayWinner(winner:string): void {
+    if(changingArea){
+        changingArea.innerHTML = winnerView();
+        let gameWinnerId = getWinnerElements();
+        gameWinnerId.tournamentWinner.textContent = winner;
+        gameWinnerId.leaveButton.addEventListener("click", () => {
+            changingArea.innerHTML = gameSettingsView();
+        })
+        
+    }
 }
 
 function getWinner(pos:string, stage:number):  void {

@@ -133,6 +133,7 @@ export function loginEvents(): void {
 
 export function loginView(): string {
     return /*html*/`
+   <script src="https://accounts.google.com/gsi/client" async defer></script>
    <div id="login-view" class="bg-violet-950">
                     <div class="wrapper h-screen w-[max(40%,600px)] bg-violet-200 flex flex-col justify-center items-center m-auto p-2.5 rounded-2xl">
                         <h1 class="i18n text-5xl text-[var(--text-color)] ">LOGIN</h1>
@@ -151,9 +152,16 @@ export function loginView(): string {
                                 </label>
                             </div>
                             <button type="submit" class="i18n bg-[var(--accent-color)] mt-2.5 px-16 py-3.5 text-white border-0 rounded-[1000px] font-semibold text-[length:inherit] ease-150 cursor-pointer hover:bg-[var(--text-color)] focus:outline-0 focus:bg-[var(--text-color)]">LOGIN</button>
+                        <div class="w-full flex flex-row-reverse justify-center">
+                          <div id="g_id_onload"
+                            data-client_id="275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com"
+                            data-callback="loginEvents">
+                          </div>
+                          <div class="g_id_signin" data-type="standard" data-theme="filled-black" data-size="medium"></div>
+                        </div>
                         </form>
                         <p class="i18n">New here ? <a href="/signup" class="i18n text-[var(--accent-color)]">Create an Account</a></p>
                     </div>
                 </div>
-`
+                `
 }

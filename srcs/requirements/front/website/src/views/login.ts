@@ -101,11 +101,21 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     }
 }
 
+function googleButton():void {
+    google.accounts.id.initialize({
+        client_id: "YOUR_GOOGLE_CLIENT_ID"
+        // callback: handleCredentialResponse
+      });
+    google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large" })  // customization attributes;
+    google.accounts.id.prompt(); // also display the One Tap dialog
+}
+
 export function loginEvents(): void {
     const form = document.getElementById("login-form");
     const errElement = document.getElementById("error-message") as HTMLElement;
 
     resetErrors();
+    googleButton();
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -152,13 +162,13 @@ export function loginView(): string {
                                 </label>
                             </div>
                             <button type="submit" class="i18n bg-[var(--accent-color)] mt-2.5 px-16 py-3.5 text-white border-0 rounded-[1000px] font-semibold text-[length:inherit] ease-150 cursor-pointer hover:bg-[var(--text-color)] focus:outline-0 focus:bg-[var(--text-color)]">LOGIN</button>
-                        <div class="w-full flex flex-row-reverse justify-center">
-                          <div id="g_id_onload"
-                            data-client_id="275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com"
-                            data-callback="loginEvents">
-                          </div>
-                          <div class="g_id_signin" data-type="standard" data-theme="filled-black" data-size="medium"></div>
-                        </div>
+                            <div class="w-full flex flex-row-reverse justify-center">
+                                <div id="g_id_onload"
+                                    data-client_id="275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com"
+                                    data-callback="loginEvents">
+                                </div>
+                                <div id="googleButton" class="g_id_sign" data-type="standard" data-theme="filled-black" data-size="medium"></div>
+                            </div>
                         </form>
                         <p class="i18n">New here ? <a href="/signup" class="i18n text-[var(--accent-color)]">Create an Account</a></p>
                     </div>

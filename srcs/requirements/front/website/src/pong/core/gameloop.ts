@@ -7,11 +7,11 @@ import { WIN_SCORE } from '../utils/constants';
 import { resetScore } from '../components/score';
 import { resetPaddles } from '../components/paddle';
 import { getElements } from '../components/elements';
-import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId  } from './gamestate';
+import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId, setTournamentMode  } from './gamestate';
 import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mute} from '../utils/audio';
 import { listenStatus } from '../events';
 import { changingArea } from "../../router";
-import { gameSettingsView } from "../../pongCustomization";
+import { gameSettingsView, initGameSettings } from "../../pongCustomization";
 import { bracketView } from '../../views/bracket';
 import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
 import { settingsView } from '../../views/settings';
@@ -79,7 +79,6 @@ export function initPong(): void {
 
 //reset game si leave PongView
 export function stopPong(): void {
-    setPause(true);
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
         setAnimationFrameId(-1);
@@ -118,6 +117,9 @@ export const pongScore = {
 let bracketId: BracketElements;
 
 export let stage:number = 0;
+export function setStage(value: number): void {
+    stage = value
+}
 function checkTournament(): void {
     console.log("je suis bien dans check tournament")
     if (tournamentMode) {
@@ -130,6 +132,7 @@ function checkTournament(): void {
                 getWinner("right", stage);
             }
             stage++;
+            console.log(`je suis stage ${stage}`)
         }
     }
 }
@@ -154,7 +157,6 @@ function updateStage2(winner:string): void {
 function updateFinal(winner: string): void {
     qualifiedPlayer.winner = winner;
     stopPong();
-    stage = 0;
     displayWinner(winner);
 }
 
@@ -180,6 +182,7 @@ function displayWinner(winner:string): void {
         gameWinnerId.tournamentWinner.textContent = winner;
         gameWinnerId.leaveButton.addEventListener("click", () => {
             changingArea.innerHTML = gameSettingsView();
+        initGameSettings();
         })
         
     }

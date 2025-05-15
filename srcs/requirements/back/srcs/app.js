@@ -14,6 +14,14 @@ import fastifyCookie from '@fastify/cookie';
 //Stats 
 import InesStatsRoutes from './routes/InesStatsRoutes.js';
 
+//Jeu
+import gameRoutes from './routes/gameRoutes.js';
+
+// Prisma
+import prisma from './config/prismaClient.js';
+
+
+
 
 const fastify = Fastify({
     logger: {
@@ -54,3 +62,9 @@ fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {
 
 //Stats
 await fastify.register(InesStatsRoutes);
+
+// Prisma
+fastify.decorate('prisma', prisma);
+
+//Jeu
+await fastify.register(gameRoutes);

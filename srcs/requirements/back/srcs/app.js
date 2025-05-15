@@ -1,4 +1,8 @@
 import fastifyCors from '@fastify/cors';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
+import { __dirname } from './services/user_services.js';
 
 //Tools
 import Fastify from "fastify"
@@ -26,6 +30,12 @@ await fastify.register(fastifyCors, {
     // origin: "http://localhost:5173",
     origin: true, // equivalent a la wildcard * , toutes les origins sont accept
     credentials: true
+  });
+await fastify.register(multipart);
+
+await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, 'uploads'),
+    prefix: '/uploads/', // l’URL publique commencera par /uploads/
   });
 
 fastify.register(fastifyCookie);

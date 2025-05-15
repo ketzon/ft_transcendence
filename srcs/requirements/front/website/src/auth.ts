@@ -33,12 +33,12 @@ export async function isUserAuth():Promise<boolean> {
 
 function checkLocalStorage(user)
 {
-    if (!localStorage.getItem("email") || !localStorage.getItem("nickname") || !localStorage.getItem("avatar"))
-    {
+    // if (!localStorage.getItem("email") || !localStorage.getItem("nickname") || !localStorage.getItem("avatar"))
+    // {
         localStorage.setItem("email", user.email);
         localStorage.setItem("nickname", user.username);
         localStorage.setItem("avatar", user.avatar);
-    }
+    // }
 }
 
 
@@ -58,10 +58,10 @@ export async function initLogoutButton(): Promise<void> {
     logoutBtn.className = "w-full flex items-center justify-center p-3 bg-red-50 text-red-500 border border-red-100 rounded-lg hover:bg-red-100 transition-all";
     // ajoute font awesome icon
     const logoutIcon = document.createElement("i");
-    logoutIcon.className = "fas fa-sign-out-alt mr-2"; 
+    logoutIcon.className = "fas fa-sign-out-alt mr-2";
     const logoutText = document.createElement("span");
-    logoutText.className = "i18n"; 
-    logoutText.textContent = "LOGOUT"; 
+    logoutText.className = "i18n";
+    logoutText.textContent = "LOGOUT";
     logoutText.setAttribute('data-original-text', 'LOGOUT'); // pour i18n
     //insere balise dans logout btn
     logoutBtn.appendChild(logoutIcon);

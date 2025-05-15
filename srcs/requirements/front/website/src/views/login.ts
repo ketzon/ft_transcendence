@@ -1,6 +1,6 @@
-import { router } from "../router.ts";
-import { toasts } from "../toasts.ts";
-import { printResponse } from "../utils.ts";
+import { router } from "../router";
+import { toasts } from "../toasts";
+import { printResponse } from "../utils";
 
 interface signinformValues {
     email: string,
@@ -151,6 +151,7 @@ export function loginView(): string {
                                 </label>
                             </div>
                             <button type="submit" class="i18n bg-[var(--accent-color)] mt-2.5 px-16 py-3.5 text-white border-0 rounded-[1000px] font-semibold text-[length:inherit] ease-150 cursor-pointer hover:bg-[var(--text-color)] focus:outline-0 focus:bg-[var(--text-color)]">LOGIN</button>
+                            <div></div>
                         </form>
                         <p class="i18n">New here ? <a href="/signup" class="i18n text-[var(--accent-color)]">Create an Account</a></p>
                     </div>

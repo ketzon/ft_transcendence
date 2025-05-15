@@ -146,12 +146,15 @@ async function updateAvatar(formData: FormData): Promise<void> {
             return ;
         }
         //Here we should get the return value of the call to update the localStorage.
-        const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
-        const newAvatar = URL.createObjectURL(avatarInput.files[0]);
+        const resMsg = await res.json();
+        console.log(resMsg);
+
+        // const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
+        // const newAvatar = URL.createObjectURL(avatarInput.files[0]);
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
 
+        // localStorage.setItem("avatar", newAvatar);
         toasts.success("Updated avatar");
-        localStorage.setItem("avatar", newAvatar);
         submitBtn.classList.add("hidden");
         loadProfileCard();
     }
@@ -180,12 +183,6 @@ function handleSubmitAvatar(): void {
 
                 //Call API to really upload file in DB. Atm it just use object URL to store it in localStorage.
                 updateAvatar(formData);
-
-                const newAvatar = URL.createObjectURL(avatarInput.files[0]);
-                localStorage.setItem("avatar", newAvatar);
-                submitBtn.classList.add("hidden");
-                toasts.success("Updated avatar");
-                loadProfileCard();
             }
         })
     }

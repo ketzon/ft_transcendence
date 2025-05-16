@@ -7,7 +7,7 @@ import { WIN_SCORE } from '../utils/constants';
 import { resetScore } from '../components/score';
 import { resetPaddles } from '../components/paddle';
 import { getElements } from '../components/elements';
-import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId, setTournamentMode  } from './gamestate';
+import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId, setTournamentMode, } from './gamestate';
 import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mute} from '../utils/audio';
 import { listenStatus } from '../events';
 import { changingArea } from "../../router";
@@ -62,8 +62,6 @@ function updateUi(gameId: GameElements) : void {
 
 
 export function initPong(): void {
-    console.log(tournamentMode);
-    setupKeyPress();
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
         setAnimationFrameId(-1);
@@ -120,6 +118,7 @@ export let stage:number = 0;
 export function setStage(value: number): void {
     stage = value
 }
+
 function checkTournament(): void {
     console.log("je suis bien dans check tournament")
     if (tournamentMode) {
@@ -181,6 +180,7 @@ function updateFinal(winner: string): void {
     qualifiedPlayer.winner = winner;
     stopPong();
     displayWinner(winner);
+
 }
 
 type WinnerElements = {
@@ -204,10 +204,10 @@ function displayWinner(winner:string): void {
         let gameWinnerId = getWinnerElements();
         gameWinnerId.tournamentWinner.textContent = winner;
         gameWinnerId.leaveButton.addEventListener("click", () => {
-            changingArea.innerHTML = gameSettingsView();
-        initGameSettings();
+            changingArea!.innerHTML = gameSettingsView();
+            initGameSettings();
         })
-        
+
     }
 }
 

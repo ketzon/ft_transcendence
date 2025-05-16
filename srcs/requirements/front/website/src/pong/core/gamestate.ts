@@ -10,6 +10,7 @@ export let colorChangeTimer: number | undefined;
 export let animationFrameId: number = -1;
 export let tournamentMode: boolean = false
 
+
 export function setTournamentMode(value: boolean): void {
   tournamentMode = value;
 }

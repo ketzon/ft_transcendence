@@ -32,7 +32,11 @@ await fastify.register(fastifyCors, {
     origin: true, // equivalent a la wildcard * , toutes les origins sont accept
     credentials: true
   });
-await fastify.register(multipart);
+await fastify.register(multipart, {
+    limits: {
+        fileSize: 5 * 1024 * 1024 // Ajoute une limite de taille de fichier que peux gerer le serveur
+    }
+});
 
 fastify.register(async function (instance) {
     instance.register(fastifyStatic, {

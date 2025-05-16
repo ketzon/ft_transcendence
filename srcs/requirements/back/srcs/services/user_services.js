@@ -9,6 +9,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import fs from 'fs';
+import sharp from 'sharp';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -97,6 +98,7 @@ const updateAvatar = async (user, newAvatar) => {
     const uploadDir = path.join(__dirname, 'uploads');
     if (!fs.existsSync(uploadDir))
         fs.mkdirSync(uploadDir, { recursive: true });
+    const avatarPath = path.join(uploadDir, `avatar-${user.id}.jpg`);
 
 	const oldAvatar = user.avatar
     if (oldAvatar !== "public/avatar.png")
@@ -108,20 +110,17 @@ const updateAvatar = async (user, newAvatar) => {
                 fs.unlinkSync(oldFilePath);
         }
 
-    const avatarPath = path.join(uploadDir, `avatar-${user.id}.jpg`);
-    const writeStream = fs.createWriteStream(avatarPath);
-    newAvatar.file.pipe(writeStream);
+    const fileBuffer = await newAvatar.toBuffer();
+    await sharp(fileBuffer)
+        .jpeg({quality: 80})
+        .toFile(avatarPath);
 
-    return new Promise ((resolve, reject) => {
-        writeStream.on('finish', async () => {
-            const userUpdated =  await prisma.user.update({
-                where: {id: user.id},
-                data: {avatar: publicPath}
-            });
-            resolve (userUpdated);
+    const userUpdated = await prisma.user.update({
+        where: { id: user.id },
+        data: { avatar: publicPath }
         });
-        writeStream.on("error", reject);
-	});
+
+    return (userUpdated);
 }
 
 const updatePassword = async (user, newPassword) => {

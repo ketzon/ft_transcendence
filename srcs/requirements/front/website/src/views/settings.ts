@@ -4,6 +4,7 @@ import { handleChecklist, isValidPassword } from "../passwordValidation";
 import { updateI18nTranslations } from '../i18next';
 import { isUserAuth } from "../auth";
 
+
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
     const activeAvatar = document.getElementById("active-avatar") as HTMLImageElement;

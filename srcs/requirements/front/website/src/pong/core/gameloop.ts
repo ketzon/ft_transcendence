@@ -62,6 +62,7 @@ function updateUi(gameId: GameElements) : void {
 
 
 export function initPong(): void {
+    setupKeyPress();
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
         setAnimationFrameId(-1);
@@ -255,7 +256,6 @@ export function resetGame(gameId: GameElements): void {
     resetPaddles(gameId);
     resetScore(gameId);
     resetAllsounds();
-    setIsBasic(true);
     if (gameId.basicButton === null) return; //fix temporaire
     gameId.basicButton.textContent = "features-mode";
     gameId.ball.style.backgroundColor = "white";

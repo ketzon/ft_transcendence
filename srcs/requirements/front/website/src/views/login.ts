@@ -1,6 +1,6 @@
-import { router } from "../router.ts";
-import { toasts } from "../toasts.ts";
-import { printResponse } from "../utils.ts";
+import { router } from "../router";
+import { toasts } from "../toasts";
+import { printResponse } from "../utils";
 
 interface signinformValues {
     email: string,

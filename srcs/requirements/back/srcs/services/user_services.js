@@ -1,15 +1,26 @@
 import prisma from "../config/prismaClient.js"
 import mailSender from "./mailSender.js"
 import bcrypt from "bcryptjs"; // JTW pluggin
-import crypto from "crypto"; // for 2FA 
+import crypto from "crypto"; // for 2FA
 
 import { customAlphabet } from "nanoid";
+
+import path from "path";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import fs from 'fs';
+import sharp from 'sharp';
+
+
+const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename);
+
 
 
 //Tools
 const generateRandomUsername = () => {
     const nanoid = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 8);
-    return "user_" + nanoid(); 
+    return "user_" + nanoid();
 }
 
 const comparePass = async (password, user) => {
@@ -65,10 +76,10 @@ const sendTwoFactAuth = async (id, email) => {
 		to: email,
 		text: `Authentification code for next 5 minutes: ${otp}`,
 	});
-	
+
 	await prisma.user.update({
 		where: {id: id},
-		data: {	otp: otp, 
+		data: {	otp: otp,
 			otp_expire: otp_expire,
 		}
 	})
@@ -82,20 +93,34 @@ const updateUsername = async (user, newUsername) => {
 }
 
 const updateAvatar = async (user, newAvatar) => {
-	const avatarPath = path.join(__dirname, 'uploads', `avatar-${user.id}.jpg`);
-	const writeStream = fs.createWriteStream(avatarPath);
-	newAvatar.pipe(writeStream);
+    const publicPath = `uploads/avatar-${user.id}.jpg`;
+
+    const uploadDir = path.join(__dirname, 'uploads');
+    if (!fs.existsSync(uploadDir))
+        fs.mkdirSync(uploadDir, { recursive: true });
+    const avatarPath = path.join(uploadDir, `avatar-${user.id}.jpg`);
+
 	const oldAvatar = user.avatar
-	writeStream.on('finish', async () => {
-		const userUpdated =  await prisma.user.update({
-			where: {id: user.id},
-			data: {avatar: avatarPath}
-		})
-	})
-	if (oldAvatar !== "./public/avatar.png" && fs.existsSync(oldAvatar)) {
-		fs.unlinkSync(oldAvatar);
-	return userUpdated
-}
+    if (oldAvatar !== "public/avatar.png")
+        {
+            const filename = oldAvatar.replace("uploads/", "");
+            const oldFilePath = path.join(__dirname, "uploads", filename);
+
+            if (fs.existsSync(oldFilePath))
+                fs.unlinkSync(oldFilePath);
+        }
+
+    const fileBuffer = await newAvatar.toBuffer();
+    await sharp(fileBuffer)
+        .jpeg({quality: 80})
+        .toFile(avatarPath);
+
+    const userUpdated = await prisma.user.update({
+        where: { id: user.id },
+        data: { avatar: publicPath }
+        });
+
+    return (userUpdated);
 }
 
 const updatePassword = async (user, newPassword) => {

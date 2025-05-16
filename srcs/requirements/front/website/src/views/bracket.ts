@@ -2,15 +2,15 @@ import {player1, player2, player3, player4} from "../selectgames"
 
 export function bracketView(): string {
     return /*html*/ `
-    <div class="flex justify-center items-center min-h-screen">
+    <div class="bg-[url(https://v9q2n5w7.delivery.rocketcdn.me/wp-content/uploads/2018/09/MV5BYWI3ZDU2MDgtYTBkYy00ZDFkLWIxZDYtODQxZjYxNDE1OTljL2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg)] bg-cover flex justify-center items-center min-h-screen">
         <div class="w-full max-w-2xl mx-auto">
             <!-- structure simple en grille -->
-            <h1 id="match-title" class="font-bold text-center mb-15"></h1>
+            <h1 id="match-title" class="text-white font-bold text-center mb-15"></h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- matches de gauche -->
                 <div class="space-y-6">
                     <!-- match 1 -->
-                    <div class="bg-white rounded border border-gray-300 p-4">
+                    <div id="match1-bg" class="bg-green-200 opacity-85 hover:opacity-95 rounded border border-violet-400 p-4">
                         <div class="flex justify-between items-center mb-2">
                             <span id="player1-name">${player1}</span>
                             <span id="match1-icon1" class="match-icon">⚔️</span>
@@ -22,7 +22,7 @@ export function bracketView(): string {
                     </div>
                    
                     <!-- match 2 -->
-                    <div class="bg-white rounded border border-gray-300 p-4">
+                    <div id="match2-bg" class="bg-white opacity-85 hover:opacity-95 rounded border border-violet-400 p-4">
                         <div class="flex justify-between items-center mb-2">
                             <span id="player3-name">${player3}</span>
                             <span id="match2-icon1" class="match-icon">⚔️</span>
@@ -36,7 +36,7 @@ export function bracketView(): string {
                
                 <!-- match final -->
                 <div class="flex items-center">
-                    <div class="bg-white rounded border border-gray-300 p-4 w-full">
+                    <div id="match3-bg" class="bg-white opacity-85 hover:opacity-95 rounded border border-violet-400 p-4 w-full">
                         <div class="flex justify-between items-center mb-2">
                             <span id="finalist1-name">Winner 1</span>
                             <span id="final-icon1" class="match-icon">🏆</span>
@@ -50,8 +50,8 @@ export function bracketView(): string {
             </div>
             <!-- bouton démarrer -->
             <div class="mt-8 text-center">
-                <button id="start-game" class="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-600 transition-colors">
-                    Start
+                <button id="start-game" class="border border-purple-700 bg-purple-300 text-white py-2 px-6 rounded hover:bg-red-300 transition-colors">
+                    START MATCH
                 </button>
             </div>
         </div>

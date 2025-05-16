@@ -147,6 +147,16 @@ function updateStage1(winner:string): void {
     qualifiedPlayer.stage1 = winner;
     bracketId.finalist1Name.textContent = winner;
     document.getElementById('match-title')!.textContent = `${player3} vs ${player4}`
+    const stage1 = document.getElementById('match1-bg');
+    if (stage1) {
+        stage1.classList.remove("bg-green-200");
+        stage1.classList.add("bg-white");
+    }
+    const stage2 = document.getElementById('match2-bg');
+    if (stage2) {
+        stage2.classList.remove("bg-white");
+        stage2.classList.add("bg-green-200");
+    }
 }
 
 function updateStage2(winner:string): void {
@@ -154,6 +164,16 @@ function updateStage2(winner:string): void {
     bracketId.finalist1Name.textContent = qualifiedPlayer.stage1
     bracketId.finalist2Name.textContent = winner;
     document.getElementById('match-title')!.textContent = `${qualifiedPlayer.stage1} vs ${qualifiedPlayer.stage2}`
+    const stage1 = document.getElementById('match1-bg');
+    if (stage1) {
+        stage1.classList.remove("bg-green-200");
+        stage1.classList.add("bg-white");
+    }
+    const stage3 = document.getElementById('match3-bg');
+    if (stage3) {
+        stage3.classList.remove("bg-white");
+        stage3.classList.add("bg-green-200");
+    }
 }
 
 function updateFinal(winner: string): void {

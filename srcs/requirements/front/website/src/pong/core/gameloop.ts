@@ -146,15 +146,18 @@ export const qualifiedPlayer = {
 function updateStage1(winner:string): void {
     qualifiedPlayer.stage1 = winner;
     bracketId.finalist1Name.textContent = winner;
+    document.getElementById('match-title')!.textContent = `${player3} vs ${player4}`
 }
 
 function updateStage2(winner:string): void {
     qualifiedPlayer.stage2 = winner;
     bracketId.finalist1Name.textContent = qualifiedPlayer.stage1
     bracketId.finalist2Name.textContent = winner;
+    document.getElementById('match-title')!.textContent = `${qualifiedPlayer.stage1} vs ${qualifiedPlayer.stage2}`
 }
 
 function updateFinal(winner: string): void {
+    document.getElementById('match-title')!.textContent = "";
     qualifiedPlayer.winner = winner;
     stopPong();
     displayWinner(winner);

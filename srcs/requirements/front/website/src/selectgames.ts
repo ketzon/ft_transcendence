@@ -54,8 +54,6 @@ export function execSelect(): void {
     let pongTournament = document.getElementById("play-tournament");
 
     if (!pong1v1 || !pongTournament) return;
-    // setGameSettings();
-    // setChoosenBackground();
 
     pong1v1.addEventListener("click", async () => {
         console.log("im in 1v1 mode")
@@ -99,12 +97,18 @@ export function execSelect(): void {
 
 
 export function showBracket(): void {
-    changingArea.innerHTML = bracketView();
-   let start = document.getElementById("start-game");
-   start.addEventListener("click", () => {
-       changingArea.innerHTML = pongView();
-        initGame(true);
-   })
+    if (changingArea){
+        changingArea.innerHTML = bracketView();
+        document.getElementById('match-title')!.textContent = `${player1} vs ${player2}`
+        let start = document.getElementById("start-game");
+        if (!start) return;
+        start.addEventListener("click", () => {
+            if(changingArea){
+            changingArea.innerHTML = pongView();
+            initGame(true);
+            }
+        })
+    }
 }
 
 function customPrompt(message: string): Promise<string> {

@@ -36,6 +36,18 @@ model Stats {
 
 }
 
+model Game {
+  id           Int      @id @default(autoincrement())
+  player1Id    Int
+  player2Id    Int
+  score1       Int
+  score2       Int
+  totalMoves   Int
+  avgMoveTime  String
+  duration     String
+  date         DateTime @default(now())
+}
+
 // model Friends {
 //   id      Int @id @default(autoincrement())
 

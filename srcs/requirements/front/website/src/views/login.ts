@@ -101,10 +101,44 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     }
 }
 
+
+function handleCredentialResponse(response) {
+    const errElement = document.getElementById("error-message") as HTMLElement;
+    const responsePayload = decodeJwtResponse(response.credential);
+    let data: signinformValues = {
+        email: responsePayload.email,
+        password: responsePayload.sub,
+    }
+    console.log("DATA TO BE SENT : ",data);
+
+    let errors = verifyInputs(data);
+
+    if (errors.length > 0)
+    {
+        if(errElement)
+        {
+            errElement.innerText = errors.join(". ");
+            console.log("FORM NOT VALID");
+        }
+    }
+    console.log("FORM IS VALID");
+    sendForm(data, errElement);
+}
+
+function decodeJwtResponse(token) {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
 function googleButton():void {
     google.accounts.id.initialize({
-        client_id: "275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com"
-        // callback: handleCredentialResponse
+        client_id: "275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com",
+        callback: handleCredentialResponse
       });
     google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large" })  // customization attributes;
     // google.accounts.id.prompt(); // also display the One Tap dialog

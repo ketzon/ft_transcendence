@@ -1,6 +1,9 @@
+import { background } from "./pong"
+
+
 export function selectView(): string {
   return /*html*/`
-    <div id="custom-prompt" class="bg-[url(https://v9q2n5w7.delivery.rocketcdn.me/wp-content/uploads/2018/09/MV5BYWI3ZDU2MDgtYTBkYy00ZDFkLWIxZDYtODQxZjYxNDE1OTljL2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg)] bg-cover min-h-screen flex justify-center items-center bg-opacity-50 hidden">
+    <div id="custom-prompt" class=" ${background} bg-no-repeat bg-center bg-contain bg-white/60 min-h-screen flex justify-center items-center bg-opacity-50 hidden">
       <div class="bg-white opacity-85 p-6 rounded-lg shadow-xl max-w-md w-full">
         <h3 id="prompt-title" class="text-xl font-bold text-purple-800 mb-4">Enter Username</h3>
         <input 

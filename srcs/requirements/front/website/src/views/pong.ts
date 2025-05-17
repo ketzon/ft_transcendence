@@ -1,4 +1,4 @@
-let background: string = "bg-map-classic";
+export let background: string = "bg-map-classic";
 
 export function setPongBackground(bgImg: string): void {
     background = bgImg;

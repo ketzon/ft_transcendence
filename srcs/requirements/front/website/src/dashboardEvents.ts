@@ -1,5 +1,5 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
-import { Game, Game } from './types/gameTypes';
+import { Game } from './types/gameTypes';
 
 function formatDateFR(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
@@ -19,22 +19,6 @@ function formatShortDateFR(date: Date): string {
         month: '2-digit'
     };
     return new Intl.DateTimeFormat('fr-FR', options).format(date);
-}
-
-// Function to generate random stats
-function generateRandomStats(): Game {
-    const player1Points = Math.floor(Math.random() * 11);
-    const player2Points = Math.floor(Math.random() * 11);
-    const totalMoves = Math.floor(Math.random() * 100) + 50;
-    const avgSeconds = (Math.random() * 2 + 0.5).toFixed(2); // Between 0.5 and 2.5 seconds
-
-    return {
-        gameDuration: `${Math.floor(Math.random() * 10) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-        score1: player1Points,
-        score2: player2Points,
-        totalMoves: totalMoves,
-        avgMoveTime: `${avgSeconds}s`
-    };
 }
 
 // Function to display game details modal
@@ -96,7 +80,7 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('/api/stats/user/1'); // adapte l’ID ou utilise une variable plus tard
+    const res = await fetch('http://localhost:3000/api/stats/user/1', { cache: 'no-store' }); // adapte l’ID ou utilise une variable plus tard
     if (!res.ok) throw new Error('Erreur HTTP');
 
     const data = await res.json();
@@ -239,6 +223,11 @@ async function updateGameHistory() {
         tableBody.appendChild(row);
     });
 
+    console.log("📊 Résultats des parties :", games.map(g => g.result));
+    console.log("📅 Dates des parties :", games.map(g => g.date));
+    console.log("👤 Joueurs des parties :", games.map(g => g.player1?.username || 'Unknown', g.player2?.username || 'Unknown'));
+    console.log("🏆 Scores des parties :", games.map(g => g.score));
+    console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
     // Update performance graph
     createPerformanceGraph(games);
     const totalGames = games.length;
@@ -298,7 +287,17 @@ export function initializeDashboard() {
     } else {
         // Otherwise, initialize just the graph with data
          getGameHistory().then((games) => { //getGameHistory() is async, then permet d'agir quand la promesse est resolue
-        createPerformanceGraph(games);
+fetch('http://localhost:3000/api/stats/user/1', {cache: 'no-store'})  // à adapter dynamiquement plus tard
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
+    document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
+    document.getElementById('total-wins')!.textContent = data.wins.toString();
+  })
+  .catch(err => {
+    console.error('❌ Erreur récupération stats :', err);
+  });
+            createPerformanceGraph(games);
     });
     }
 }

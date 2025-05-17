@@ -12,7 +12,7 @@ import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 
 //Stats 
-import InesStatsRoutes from './routes/InesStatsRoutes.js';
+import InesStatsRoutes from './routes/statsRoutes.js';
 
 //Jeu
 import gameRoutes from './routes/gameRoutes.js';
@@ -33,7 +33,7 @@ const fastify = Fastify({
 });
 
 
-// Prisma
+//On Attache Prisma
 fastify.decorate('prisma', prisma);  
 
 
@@ -54,7 +54,7 @@ fastify.register(fastifyJwt, {
 });
 
 
-//Les routes
+//On declare les routes qui utilisent prisma
 fastify.register(registerUserRoute, {prefix: "/user"});
 await fastify.register(InesStatsRoutes);  //Stats
 await fastify.register(gameRoutes);  //Jeu

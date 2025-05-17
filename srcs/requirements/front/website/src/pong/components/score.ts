@@ -25,15 +25,55 @@ export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void 
 }
 
 export function checkWinner(gameId: GameElements): void {
+  console.log("🧪 checkWinner appelé");
+  const player1Name = gameId.player1?.textContent || "Unknown";
+  const player2Name = gameId.player2?.textContent || "Unknown";
     if (gameState.scoreLeft >= WIN_SCORE) {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        changeWinnerMsg(gameId, gameId.player1.textContent);
+        // fetch('/api/games', { A REMETTRE, TEST EN COURS
+      fetch('http://localhost:3000/api/games', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        player2Id: 3,
+        score1: gameState.scoreLeft,
+        score2: gameState.scoreRight,
+        totalMoves: Math.floor(Math.random() * 50) + 30,
+        avgMoveTime: "1.4s",
+        duration: "7:00"
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log("✅ Partie enregistrée :", data))
+    .catch(err => console.error("❌ Erreur enregistrement :", err));
+
+    
+    changeWinnerMsg(gameId, player1Name);
     } else if (gameState.scoreRight >= WIN_SCORE) {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        changeWinnerMsg(gameId, gameId?.player2.textContent);
-    }
+        // fetch('/api/games', { A REMETTRE, TEST EN COURS
+      fetch('http://localhost:3000/api/games', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        player2Id: 3,
+        score1: gameState.scoreLeft,
+        score2: gameState.scoreRight,
+        totalMoves: Math.floor(Math.random() * 50) + 30,
+        avgMoveTime: "1.4s",
+        duration: "7:00"
+      })
+    })
+    .then(res => res.json())
+    .then(data => console.log("✅ Partie enregistrée :", data))
+    .catch(err => console.error("❌ Erreur enregistrement :", err));
+
+    changeWinnerMsg(gameId, player2Name);
+  }
 }

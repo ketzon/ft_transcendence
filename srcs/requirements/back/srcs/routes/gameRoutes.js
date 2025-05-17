@@ -19,7 +19,7 @@ async function gameRoutes(fastify, opts) {
         duration
       } = request.body;
 
-      const player1Id = 1; // temporairement on force player1Id (car pas de login actif)
+      const player1Id = 65; // rairement on force player1Id (car pas de login actif)
 
       // ✅ ici fastify.prisma est garanti
       const newGame = await this.prisma.game.create({

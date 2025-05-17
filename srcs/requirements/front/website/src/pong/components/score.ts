@@ -32,7 +32,7 @@ export function checkWinner(gameId: GameElements): void {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        // fetch('/api/games', { A REMETTRE, TEST EN COURS
+        // fetch('/api/games', { 
       fetch('http://localhost:3000/api/games', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ export function checkWinner(gameId: GameElements): void {
         confetti();
         setPause(true);
         gameSounds?.victorySound.play();
-        // fetch('/api/games', { A REMETTRE, TEST EN COURS
+        // fetch('/api/games', { 
       fetch('http://localhost:3000/api/games', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

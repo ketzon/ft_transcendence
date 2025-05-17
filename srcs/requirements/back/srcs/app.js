@@ -53,6 +53,31 @@ fastify.register(fastifyJwt, {
   }
 });
 
+//A SUPPRIMER MODIF TEMP TEST
+fastify.get('/api/debug/users', async (request, reply) => {
+  try {
+    const users = await fastify.prisma.user.findMany();
+
+    // Fonction récursive pour convertir tous les BigInt
+    const toSerializable = (obj) =>
+      JSON.parse(
+        JSON.stringify(obj, (key, value) =>
+          typeof value === 'bigint' ? Number(value) : value
+        )
+      );
+
+    const safeUsers = toSerializable(users);
+
+    console.log("🧪 Utilisateurs convertis :", safeUsers);
+    reply.send(safeUsers);
+  } catch (err) {
+    console.error("❌ Erreur récupération utilisateurs :", err);
+    reply.code(500).send({ error: "Erreur lors de la récupération des utilisateurs" });
+  }
+});
+
+// 
+
 
 //On declare les routes qui utilisent prisma
 fastify.register(registerUserRoute, {prefix: "/user"});

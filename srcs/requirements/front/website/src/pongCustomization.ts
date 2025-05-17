@@ -10,7 +10,7 @@ import { stopPong } from "./pong/core/gameloop";
 import { setPongBackground } from "./views/pong";
 import { execSelect} from "./selectgames";
 import { selectView } from "./views/select";
-import { setTournamentMode } from "./pong/core/gamestate";
+import { setPause, setTournamentMode } from "./pong/core/gamestate";
 import { setStage } from "./pong/core/gameloop";
 
 function setCustomSettings(): void {

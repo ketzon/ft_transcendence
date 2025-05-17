@@ -3,7 +3,7 @@ import { changingArea } from "./router";
 import { pongView } from "./views/pong";
 import { tournamentsView } from "./views/tournaments";
 import { bracketView } from "./views/bracket";
-import { gameState } from "./pong/core/gamestate";
+import { gameState, setPause } from "./pong/core/gamestate";
 import { getElements } from "./pong/components/elements";
 import { pongScore } from "./pong/core/gameloop";
 import { combatView} from "./views/combat";
@@ -67,6 +67,7 @@ export function execSelect(): void {
         }
         console.log("prompt working")
         localStorage.setItem("Player2", player2);
+        setPause(true);
         changingArea.innerHTML = pongView();
         // setGameMode(true);
         initGame(false);
@@ -78,6 +79,7 @@ export function execSelect(): void {
         const players: string[] = [];
         setGameSettings();
         setChoosenBackground();
+        setPause(true);
         changingArea.innerHTML = selectView();
         for (let i = 2; i <= 4; i++) { //tournament for 4 person
             let playerName = await customPrompt(`Enter name for Player ${i}:`);

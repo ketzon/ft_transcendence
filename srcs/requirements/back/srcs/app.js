@@ -53,6 +53,46 @@ fastify.register(fastifyJwt, {
   }
 });
 
+
+// //A SUPPRIMER MODIF TEMP TEST
+fastify.get('/api/debug/create-player2', async (request, reply) => {
+  const user = await fastify.prisma.user.create({
+    data: {
+      email: "alex@example.com",
+      username: "Alex",
+      password: "test",
+      avatar: "./public/avatar.png"
+    }
+  });
+  reply.send({ message: "User créé", user });
+});
+//A SUPPRIMER MODIF TEMP TEST
+fastify.get('/api/debug/games', async (request, reply) => {
+  try {
+    const games = await fastify.prisma.game.findMany();
+    reply.send(games);
+  } catch (err) {
+    console.error("❌ Erreur récupération parties :", err);
+    reply.code(500).send({ error: "Erreur récupération parties", details: err.message });
+  }
+});
+//A SUPPRIMER MODIF TEMP TEST
+fastify.get('/api/debug/create-test-user', async (request, reply) => {
+  try {
+    const user = await fastify.prisma.user.create({
+      data: {
+        email: "test@demo.com",
+        username: "Inès",
+        password: "test", // pas sécurisé évidemment
+        avatar: "./public/avatar.png"
+      }
+    });
+    reply.send({ message: "Utilisateur créé", user });
+  } catch (err) {
+    console.error("❌ Erreur création utilisateur :", err);
+    reply.code(500).send({ error: "Erreur création utilisateur", details: err.message });
+  }
+});
 //A SUPPRIMER MODIF TEMP TEST
 fastify.get('/api/debug/users', async (request, reply) => {
   try {

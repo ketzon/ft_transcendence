@@ -50,7 +50,7 @@ export function updateI18nTranslations(): void {
   const i18n = document.querySelectorAll('.i18n');
   i18n.forEach(id => {
     const originalText = id.getAttribute('data-original-text') || id.textContent?.trim();
-    console.log(id.textContent.trim())
+    // console.log(id.textContent.trim())
     if (originalText) {
       if (!id.getAttribute('data-original-text')) {
         id.setAttribute('data-original-text', originalText);
@@ -87,4 +87,3 @@ export function initI18n(): void {
       changeLanguage(target.value);
     });
 }
-

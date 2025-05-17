@@ -1,4 +1,9 @@
 import fastifyCors from '@fastify/cors';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
+import { __dirname } from './services/user_services.js';
+import fs from 'fs';
 
 //Tools
 import Fastify from "fastify"
@@ -26,6 +31,25 @@ await fastify.register(fastifyCors, {
     // origin: "http://localhost:5173",
     origin: true, // equivalent a la wildcard * , toutes les origins sont accept
     credentials: true
+  });
+await fastify.register(multipart, {
+    limits: {
+        fileSize: 5 * 1024 * 1024 // Ajoute une limite de taille de fichier que peux gerer le serveur
+    }
+});
+
+fastify.register(async function (instance) {
+    instance.register(fastifyStatic, {
+      root: path.join(__dirname, 'uploads'),
+      prefix: '/uploads/',
+    });
+  });
+
+  fastify.register(async function (instance) {
+    instance.register(fastifyStatic, {
+      root: path.join(__dirname, '../public'),
+      prefix: '/public/',
+    });
   });
 
 fastify.register(fastifyCookie);

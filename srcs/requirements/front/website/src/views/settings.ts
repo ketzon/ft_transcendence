@@ -2,6 +2,8 @@ import { toasts } from "../toasts";
 import { printResponse, resetInput, isEmptyString } from "../utils";
 import { handleChecklist, isValidPassword } from "../passwordValidation";
 import { updateI18nTranslations } from '../i18next';
+import { isUserAuth } from "../auth";
+
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -12,7 +14,11 @@ function loadProfileCard(): void {
 
     if (activeAvatar && activeNickname && activeEmail && newNicknamePlaceholder)
     {
-        activeAvatar.src = localStorage.getItem("avatar") as string;
+        //Since the image URL stay the same, the browser wont refresh and use the image in cache
+        // so we use this to act like a force resfresh.
+        const avatarUrl = localStorage.getItem("avatar") + `?ts=${Date.now()}`
+
+        activeAvatar.src = avatarUrl as string;
         activeNickname.textContent = localStorage.getItem("nickname") as string;
         activeEmail.textContent = localStorage.getItem("email") as string;
         newNicknamePlaceholder.placeholder = localStorage.getItem("nickname") as string;
@@ -139,20 +145,20 @@ async function updateAvatar(formData: FormData): Promise<void> {
         if (!res.ok)
         {
             const resMsg = await res.json();
-            console.log(resMsg);
+            printResponse("/customAvatar", resMsg);
 
             toasts.error("Failed to update avatar");
             loadProfileCard();
             return ;
         }
-        //Here we should get the return value of the call to update the localStorage.
-        const avatarInput = document.getElementById("update-avatar") as HTMLInputElement;
-        const newAvatar = URL.createObjectURL(avatarInput.files[0]);
+        const resMsg = await res.json();
+        printResponse("/customAvatar", resMsg);
+        localStorage.setItem("avatar", "http://localhost:3000/" + resMsg.user.avatar);
+
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
+        submitBtn.classList.add("hidden");
 
         toasts.success("Updated avatar");
-        localStorage.setItem("avatar", newAvatar);
-        submitBtn.classList.add("hidden");
         loadProfileCard();
     }
     catch(error)
@@ -180,12 +186,6 @@ function handleSubmitAvatar(): void {
 
                 //Call API to really upload file in DB. Atm it just use object URL to store it in localStorage.
                 updateAvatar(formData);
-
-                const newAvatar = URL.createObjectURL(avatarInput.files[0]);
-                localStorage.setItem("avatar", newAvatar);
-                submitBtn.classList.add("hidden");
-                toasts.success("Updated avatar");
-                loadProfileCard();
             }
         })
     }

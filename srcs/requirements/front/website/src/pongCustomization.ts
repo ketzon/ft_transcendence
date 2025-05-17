@@ -29,6 +29,7 @@ function setCustomSettings(): void {
     }
     console.log(newSettings);
     setWinningScore(newSettings.winScore);
+    setWinningScore(1);
     setPaddleSpeed(newSettings.paddleSpeed);
     if (newSettings.featuresMode === true)
         setGameMode(false);

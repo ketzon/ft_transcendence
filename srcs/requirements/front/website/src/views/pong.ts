@@ -33,12 +33,15 @@ export function pongView(): string {
 
     <!-- les boutons -->
       <div class="flex gap-4 mt-4">
-        <button id="button-pause" class="text-white bg-red-400 rounded p-1 ">start</button>
-        <button id="button-reset" class="text-white  bg-red-400 rounded p-1 ">reset</button>
-        <button id="button-ball" class="text-white  bg-red-400 rounded p-1 ">mute</button>
-        <button id="button-basic" class="text-white  bg-red-400 rounded p-1 ">features-mode</button>
+        <button id="button-pause" class="border border-purple-700 bg-purple-300 text-white py-2 px-6 rounded hover:bg-red-300 transition-colors ">start</button>
+        <button id="button-ball" class="border border-purple-700 bg-purple-300 text-white py-2 px-6 rounded hover:bg-red-300 transition-colors ">mute</button>
       </div>
 </div>
 `
 
 }
+
+// -------------------------delete de l'ui pour le moment----------------------------
+// <button id="button-reset" class="text-white  bg-red-400 rounded p-1 ">reset</button>
+// <button id="button-basic" class="text-white  bg-red-400 rounded p-1 ">features-mode</button>
+// -------------------------delete de l'ui pour le moment----------------------------

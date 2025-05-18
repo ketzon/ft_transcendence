@@ -5,7 +5,7 @@ FROM node:23-alpine
 WORKDIR /usr/src/app
 
 # Copy requirements list to docker and install them
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 
 # Copy remaining files to docker

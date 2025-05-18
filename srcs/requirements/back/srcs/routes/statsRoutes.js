@@ -1,4 +1,4 @@
-export default async function statsRoutes(fastify, opts) {
+async function statsRoutes(fastify, opts) {
   fastify.get('/api/stats/user/:id', async (request, reply) => {
     const userId = parseInt(request.params.id);
 
@@ -10,28 +10,30 @@ export default async function statsRoutes(fastify, opts) {
             { player2Id: userId }
           ]
         },
-        orderBy: {
-          date: 'desc'
-        },
+        orderBy: { date: 'desc' },
         include: {
           player1: true,
-           player2: true
+          player2: true
         }
       });
 
       const games = gamesFromDb.map((game) => {
-      const isPlayer1 = game.player1Id === userId;
+        const isPlayer1 = game.player1Id === userId;
         const userScore = isPlayer1 ? game.score1 : game.score2;
         const opponentScore = isPlayer1 ? game.score2 : game.score1;
         const result = userScore > opponentScore ? 'Win' : 'Loss';
 
+        const player1Username = game.player1 && game.player1.username ? game.player1.username : 'Player' + game.player1Id;
+        const player2Username = game.player2 && game.player2.username ? game.player2.username : 'Player' + game.player2Id;
+        const username = isPlayer1 ? player1Username : player2Username;
+
         return {
           date: game.date.toISOString().slice(0, 16).replace('T', ' '),
-          player1: { id: game.player1Id, username: game.player1?.username || `Player${game.player1Id}` },
-          player2: { id: game.player2Id, username: game.player2?.username || `Player${game.player2Id}` },
-          score: `${game.score1}-${game.score2}`,
-          result,
-          username: isPlayer1 ? game.player1?.username : game.player2?.username,
+          player1: { id: game.player1Id, username: player1Username },
+          player2: { id: game.player2Id, username: player2Username },
+          score: game.score1 + '-' + game.score2,
+          result: result,
+          username: username,
           gameStats: {
             gameDuration: game.duration,
             score1: game.score1,
@@ -41,6 +43,7 @@ export default async function statsRoutes(fastify, opts) {
           }
         };
       });
+
       const gamesPlayed = games.length;
       const wins = games.filter(game => game.result === 'Win').length;
       const losses = gamesPlayed - wins;
@@ -54,9 +57,29 @@ export default async function statsRoutes(fastify, opts) {
         winRate,
         games
       });
+
     } catch (err) {
       console.error('❌ Erreur stats route :', err);
       reply.code(500).send({ error: 'Erreur récupération statistiques', details: err.message });
     }
   });
+
+  fastify.get('/api/stats', async (request, reply) => {
+    return {
+      totalMatches: 3,
+      winRate: 100,
+      totalWins: 3,
+      labels: ["08/05", "09/05", "10/05", "11/05", "12/05", "13/05", "14/05", "15/05", "16/05", "17/05"],
+      totalGames: [0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
+      totalWins: [0, 0, 0, 0, 0, 0, 0, 0, 0, 3]
+    };
+  });
 }
+
+// Export si tu es en module ESM :
+export default statsRoutes;
+
+// Ou, si tu es en CommonJS (avec `require`)
+/*
+module.exports = statsRoutes;
+*/

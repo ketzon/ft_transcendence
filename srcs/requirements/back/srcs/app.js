@@ -13,6 +13,7 @@ import fastifyCookie from '@fastify/cookie';
 
 //Stats 
 import InesStatsRoutes from './routes/statsRoutes.js';
+//await fastify.register(InesStatsRoutes);
 
 //Jeu
 import gameRoutes from './routes/gameRoutes.js';

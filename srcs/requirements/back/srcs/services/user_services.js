@@ -24,6 +24,8 @@ const generateRandomUsername = () => {
 }
 
 const comparePass = async (password, user) => {
+  if (user.password == null)
+    return false
 	return await bcrypt.compare(password, user.password)
 }
 

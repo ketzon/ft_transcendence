@@ -56,6 +56,8 @@ const signin = async(req, reply) => {
 	const { email, username, password, avatar } = getBody(req, reply)
 	try {
 		const user = await userService.getUserByEmail(email)
+    if (user == null)
+      return reply.status(404).send({message: "No such user"})
 		const isPasswordValid = await userService.comparePass(password, user);
 		if (!isPasswordValid) {
 			throw new Error("Invalid password")

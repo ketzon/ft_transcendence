@@ -33,6 +33,9 @@ function gameLoop(gameId: GameElements): void {
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
     console.log("dans update ui")
+    if(isBasic === false) {
+        gameId.basicButton.textContent = "default-mode";
+    }
     if (!tournamentMode) {
         console.log("tournament mode off")
         gameId.player1.textContent = localStorage.getItem('nickname');

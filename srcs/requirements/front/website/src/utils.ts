@@ -18,3 +18,10 @@ export function isEmptyString(str: string): boolean {
         return (true);
     return (false);
 }
+
+export function resetAllInputs(): void {
+    const allInputs = document.querySelectorAll("input");
+
+    for (let i = 0; i < allInputs.length; i++)
+        allInputs[i].value = "";
+}

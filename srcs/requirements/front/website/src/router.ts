@@ -61,10 +61,10 @@ export async function router(): Promise<void> {
     console.log("Current path = " + location.pathname);
     switch (location.pathname) {
 
-        case routes.pongSettings:
-            changingArea.innerHTML = gameSettingsView();
-            initGameSettings();
-            break ;
+        // case routes.pongSettings:
+        //     changingArea.innerHTML = gameSettingsView();
+        //     initGameSettings();
+        //     break ;
         case routes.versus:
             stopVersusGame();
             changingArea.innerHTML = combatView();
@@ -129,8 +129,8 @@ export async function router(): Promise<void> {
                 redirectTo("/");
                 return;
             }
-            changingArea.innerHTML = selectView();
-            execSelect();
+            changingArea.innerHTML = gameSettingsView();
+            initGameSettings();
             break ;
 
         case routes.twofa:

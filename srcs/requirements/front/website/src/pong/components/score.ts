@@ -29,7 +29,7 @@ export function checkWinner(gameId: GameElements): void {
   const player1Name = gameId.player1?.textContent || "Unknown";
   const player2Name = gameId.player2?.textContent || "Unknown";
     if (gameState.scoreLeft >= WIN_SCORE) {
-        confetti();
+        // confetti();
         setPause(true);
         gameSounds?.victorySound.play();
         // fetch('/api/games', { 
@@ -53,7 +53,7 @@ export function checkWinner(gameId: GameElements): void {
     
     changeWinnerMsg(gameId, player1Name);
     } else if (gameState.scoreRight >= WIN_SCORE) {
-        confetti();
+        // confetti();
         setPause(true);
         gameSounds?.victorySound.play();
         // fetch('/api/games', { 

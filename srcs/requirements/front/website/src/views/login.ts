@@ -1,6 +1,6 @@
-import { router } from "../router.ts";
-import { toasts } from "../toasts.ts";
-import { printResponse } from "../utils.ts";
+import { router } from "../router";
+import { toasts } from "../toasts";
+import { printResponse } from "../utils";
 
 interface signinformValues {
     email: string,
@@ -101,11 +101,55 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     }
 }
 
+
+function handleCredentialResponse(response) {
+    const errElement = document.getElementById("error-message") as HTMLElement;
+    const responsePayload = decodeJwtResponse(response.credential);
+    let data: signinformValues = {
+        email: responsePayload.email,
+        password: responsePayload.sub,
+    }
+    console.log("DATA TO BE SENT : ",data);
+
+    let errors = verifyInputs(data);
+
+    if (errors.length > 0)
+    {
+        if(errElement)
+        {
+            errElement.innerText = errors.join(". ");
+            console.log("FORM NOT VALID");
+        }
+    }
+    console.log("FORM IS VALID");
+    sendForm(data, errElement);
+}
+
+function decodeJwtResponse(token) {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
+function googleButton():void {
+    google.accounts.id.initialize({
+        client_id: "275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+    google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large" })  // customization attributes;
+    // google.accounts.id.prompt(); // also display the One Tap dialog
+}
+
 export function loginEvents(): void {
     const form = document.getElementById("login-form");
     const errElement = document.getElementById("error-message") as HTMLElement;
 
     resetErrors();
+    googleButton();
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -133,6 +177,7 @@ export function loginEvents(): void {
 
 export function loginView(): string {
     return /*html*/`
+   <script src="https://accounts.google.com/gsi/client" async defer></script>
    <div id="login-view" class="bg-violet-950">
                     <div class="wrapper h-screen w-[max(40%,600px)] bg-violet-200 flex flex-col justify-center items-center m-auto p-2.5 rounded-2xl">
                         <h1 class="i18n text-5xl text-[var(--text-color)] ">LOGIN</h1>
@@ -151,9 +196,12 @@ export function loginView(): string {
                                 </label>
                             </div>
                             <button type="submit" class="i18n bg-[var(--accent-color)] mt-2.5 px-16 py-3.5 text-white border-0 rounded-[1000px] font-semibold text-[length:inherit] ease-150 cursor-pointer hover:bg-[var(--text-color)] focus:outline-0 focus:bg-[var(--text-color)]">LOGIN</button>
+                            <div class="w-full flex flex-row-reverse justify-center">
+                              <div id="googleButton" class="g_id_sign" data-type="standard" data-theme="filled-black" data-size="medium"></div>
+                            </div>
                         </form>
                         <p class="i18n">New here ? <a href="/signup" class="i18n text-[var(--accent-color)]">Create an Account</a></p>
                     </div>
                 </div>
-`
+                `
 }

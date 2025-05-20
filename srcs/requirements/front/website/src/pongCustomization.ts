@@ -7,20 +7,20 @@ import { initGame } from "./ponggame";
 import { pongView } from "./views/pong";
 import { setGameMode } from "./ponggame";
 import { stopPong } from "./pong/core/gameloop";
-
-let pongMaps = {
-    classic: "bg-map-classic",
-    tennis: "bg-map-tennis",
-    hell: "bg-map-hell",
-    ice: "bg-map-ice"
-}
+import { setPongBackground } from "./views/pong";
+import { execSelect} from "./selectgames";
+import { selectView } from "./views/select";
+import { setPause, setTournamentMode } from "./pong/core/gamestate";
+import { setStage } from "./pong/core/gameloop";
 
 function setCustomSettings(): void {
+    console.log("im in custom settings");
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
 
     if (!customSettingsForm)
         return ;
 
+    console.log("custom settings working");
     const formData = new FormData(customSettingsForm);
     let newSettings = {
         winScore: Number(formData.get("score")),
@@ -32,15 +32,14 @@ function setCustomSettings(): void {
     setPaddleSpeed(newSettings.paddleSpeed);
     if (newSettings.featuresMode === true)
         setGameMode(false);
-
-
 }
 
-function setGameSettings(): void {
+export function setGameSettings(): void {
     if (!toggleSettings || !settingsPopup)
         return ;
 
     const selectedValue = new FormData(toggleSettings).get("custom_toggle");
+    console.log(selectedValue)
     if (selectedValue === "OFF")
     {
         console.log("Default settings will be used");
@@ -55,28 +54,25 @@ function setGameSettings(): void {
     }
 }
 
-function handlePlayBtn(): void {
-    const playBtn = document.getElementById("play-btn");
+export function setChoosenBackground(): void {
+    const mapSelectionForm = document.getElementById("mapSelection") as HTMLFormElement | null;
 
-    if (!playBtn)
+    if (!mapSelectionForm)
         return ;
-    playBtn.addEventListener("click", () => {
-        setGameSettings();
-        //When game settings are changed we can now move to the game/tournament setup.
+    const formData = new FormData(mapSelectionForm);
+    const choosenMap = formData.get("map")?.toString();
 
-        if (changingArea)
-        {
-            changingArea.innerHTML = pongView(pongMaps.classic);
-            initGame(false);
-        }
-    })
+    if (choosenMap)
+        setPongBackground(choosenMap);
 }
+
 
 export function initGameSettings(): void {
     stopPong();
 
+    setStage(0);
     showCustomSettings();
-    handlePlayBtn();
+    execSelect()
 }
 
 function showCustomSettings(): void {
@@ -86,6 +82,7 @@ function showCustomSettings(): void {
     toggleSettings?.addEventListener("change", () => {
         const selectedValue = new FormData(toggleSettings).get("custom_toggle");
 
+        console.log(selectedValue)
         if (selectedValue === "ON")
         {
             settingsPopup?.classList.remove("hidden");
@@ -106,7 +103,7 @@ export function gameSettingsView(): string {
                 <div class="m-3">
                     <form id="toggleCustomForm">
                         <fieldset>
-                            <legend class="text-center font-semibold my-2">Custom Settings</legend>
+                        <div class="text-center font-semibold my-2">Custom Settings</div>
                             <div class="flex flex-wrap justify-center my-2 gap-5">
                                 <label>
                                     <input class="hidden peer" type="radio" id="OFF" name="custom_toggle" value="OFF" checked/>
@@ -122,7 +119,7 @@ export function gameSettingsView(): string {
                     <div id="settingsPopup" class="hidden">
                         <form id="customSettingsForm">
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Score to win</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Score to win</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="score" value="5"/>
@@ -143,7 +140,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Paddle Speed</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Paddle Speed</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="paddle-speed" value="0.5"/>
@@ -164,7 +161,7 @@ export function gameSettingsView(): string {
                                 </div>
                             </fieldset>
                             <fieldset class="my-3">
-                                <legend class="text-center font-semibold py-1 mb-2">Features Mode</legend>
+                                <div class="text-center font-semibold py-1 mb-2">Features Mode</div>
                                 <div class="py-2 flex justify-center gap-10">
                                     <label>
                                         <input class="hidden peer" type="radio" name="features" value="" checked/>
@@ -182,16 +179,41 @@ export function gameSettingsView(): string {
             </div>
             <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
                 <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
-                <div class="flex justify-center gap-5 mx-10">
-                    <div class="rounded-md my-5 h-50 w-60 bg-amber-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
-                    <div class="rounded-md my-5 h-50 w-60 bg-green-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
-                    <div class="rounded-md my-5 h-50 w-60 bg-red-300 cursor-pointer hover:border-indigo-400 hover:border-2"></div>
-                </div>
+                    <form id="mapSelection" class="flex flex-wrap justify-center gap-5 mx-10">
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-classic" checked/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_classic_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Classic</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-tennis"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_tennis_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Tennis</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-hell"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_hell_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Hell</div>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer my-5">
+                            <input class="hidden peer" type="radio" name="map" value="bg-map-ice"/>
+                            <div class="overflow-hidden transition-all rounded-lg shadow border-4 border-transparent peer-checked:border-indigo-400">
+                                <img class="w-60 h-50 object-cover" src="../../assets/pong/pong_ice_map.png" alt="pong_classic_map">
+                                <div class="bg-indigo-200 font-semibold text-center py-2">Ice</div>
+                            </div>
+                        </label>
+                    </form>
             </div>
         </div>
         <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">DUEL</button>
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-btn">TOURNAMENT</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-1v1">DUEL</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-tournament">TOURNAMENT</button>
         </div>
     </div>
 `

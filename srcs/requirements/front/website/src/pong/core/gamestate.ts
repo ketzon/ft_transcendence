@@ -10,6 +10,7 @@ export let colorChangeTimer: number | undefined;
 export let animationFrameId: number = -1;
 export let tournamentMode: boolean = false
 
+
 export function setTournamentMode(value: boolean): void {
   tournamentMode = value;
 }
@@ -32,6 +33,7 @@ export function setColorChangeTimer(value: number | undefined): void {
 
 export function setIsBasic(value: boolean): void {
     isBasic = value;
+    console.log(`mode feature: ${isBasic}`)
 }
 
 export function setAnimationFrameId(value: number) {

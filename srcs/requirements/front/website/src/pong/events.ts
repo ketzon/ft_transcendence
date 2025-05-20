@@ -4,6 +4,7 @@ import { changeAudioStatus } from './utils/audio';
 
 
 export function listenStatus(gameId: GameElements): void {
+    
     if (gameId.pauseGame) {
         gameId.pauseGame.addEventListener("click", () =>  changePause(gameId));
     }

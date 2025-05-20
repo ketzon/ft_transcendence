@@ -108,6 +108,43 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
     }
 }
 
+
+function decodeJwtResponse(token) {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
+
+function googleButton():void {
+    google.accounts.id.initialize({
+        client_id: "275175131239-pabv5ep9oergsvbkc9m830ior14u0la8.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+    google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large" })  // customization attributes;
+    // google.accounts.id.prompt(); // also display the One Tap dialog
+}
+
+export function handleCredentialResponse(response): void {
+    const errElement = document.getElementById("error-message") as HTMLElement;
+
+    const responsePayload = decodeJwtResponse(response.credential);
+    let inputsValues: formValues = {
+        username: responsePayload.given_name,
+        email: responsePayload.email,
+        password: responsePayload.sub,
+        repeatpassword: responsePayload.sub,
+    }
+
+    //On recupere les donnees des inputs du form.
+    console.log("DATA TO BE SENT : ",inputsValues);
+
+    sendForm(inputsValues, errElement);
+}
+
 function getFormValues(): formValues {
     const usernameInput = document.getElementById("username-input") as HTMLInputElement;
     const emailInput = document.getElementById("email-input") as HTMLInputElement;
@@ -127,6 +164,7 @@ export function signupEvents(): void {
     const form = document.getElementById("signup-form");
     const errElement = document.getElementById("error-message") as HTMLElement;
 
+    googleButton();
     handleChecklist();
     resetErrors();
     form?.addEventListener("submit", async (e) => {
@@ -157,6 +195,7 @@ export function signupEvents(): void {
 
 export function signupView(): string {
     return /*html*/`
+   <script src="https://accounts.google.com/gsi/client" async defer></script>
    <div id="signup-view" class="bg-violet-950">
                     <div class="wrapper h-screen w-[max(40%,600px)] bg-violet-200 flex flex-col justify-center items-center m-auto p-2.5 rounded-2xl">
                         <h1 class="text-5xl text-[var(--text-color)] uppercase">Signup</h1>
@@ -211,6 +250,7 @@ export function signupView(): string {
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm240-200q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80Z"/></svg>
                                 </label>
                             </div>
+                            <div id="googleButton" class="g_id_sign" data-type="standard" data-theme="filled-black" data-size="medium"></div>
                             <button type="submit" class="bg-[var(--accent-color)] mt-2.5 px-16 py-3.5 text-white border-0 rounded-[1000px] font-semibold text-[length:inherit] uppercase ease-150 cursor-pointer hover:bg-[var(--text-color)] focus:outline-0 focus:bg-[var(--text-color)]">Signup</button>
                         </form>
                         <p>Already have an Account ? <a href="/login" class="text-[var(--accent-color)]">Login</a></p>

@@ -3,10 +3,13 @@ import { changingArea } from "./router";
 import { pongView } from "./views/pong";
 import { tournamentsView } from "./views/tournaments";
 import { bracketView } from "./views/bracket";
-import { gameState } from "./pong/core/gamestate";
+import { gameState, setPause } from "./pong/core/gamestate";
 import { getElements } from "./pong/components/elements";
 import { pongScore } from "./pong/core/gameloop";
 import { combatView} from "./views/combat";
+import { setGameSettings, setChoosenBackground } from "./pongCustomization";
+import { selectView } from "./views/select";
+
 
 export type BracketElements = {
   player1Name: HTMLElement;
@@ -47,27 +50,37 @@ export let player3: string
 export let player4: string
 
 export function execSelect(): void {
-    let pong1v1 = document.getElementById("pong-1v1");
-    let pongTournament = document.getElementById("pong-tournament");
-    // let versusButton = document.getElementById("button-versus");
+    let pong1v1 = document.getElementById("play-1v1");
+    let pongTournament = document.getElementById("play-tournament");
 
-
-    // versusButton.addEventListener("click", ()=> {
-        // changingArea.innerHTML = combatView();
-        // code pour le versus ICI
-    // });
+    if (!pong1v1 || !pongTournament) return;
 
     pong1v1.addEventListener("click", async () => {
-        const player2 = await customPrompt("Enter Player 2 username:");
+        console.log("im in 1v1 mode")
+        if(!changingArea) return;
+        setGameSettings();
+        setChoosenBackground();
+        changingArea.innerHTML = selectView();
+        let player2 = await customPrompt("Enter Player 2 username:");
+        if (player2 === "") { 
+            player2 = "player2👻";
+        }
+        console.log("prompt working")
         localStorage.setItem("Player2", player2);
+        setPause(true);
         changingArea.innerHTML = pongView();
-        setGameMode(true);
+        // setGameMode(true);
         initGame(false);
     });
 
     pongTournament.addEventListener("click", async () => {
+        console.log("im in tournament mode")
+        if(!changingArea) return;
         const players: string[] = [];
-
+        setGameSettings();
+        setChoosenBackground();
+        setPause(true);
+        changingArea.innerHTML = selectView();
         for (let i = 2; i <= 4; i++) { //tournament for 4 person
             let playerName = await customPrompt(`Enter name for Player ${i}:`);
             if (playerName === "") {
@@ -75,40 +88,82 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
+        players.push(localStorage.getItem('nickname'))
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
-        player1 = localStorage.getItem('nickname')
-        player2 = players[0];
-        player3 = players[1];
-        player4 = players[2];
+
+
+        const randomizedPlayer = shufflePlayers(players);
+
+        player1 = randomizedPlayer[0]; 
+        player2 = randomizedPlayer[1]; 
+        player3 = randomizedPlayer[2]; 
+        player4 = randomizedPlayer[3]; 
         showBracket();
     });
 }
 
-//fonction test a update
-export function updateBracket(winner: string, player1: string, player2: string): void {
-    let bracketId = getBracketElements();
-    
-    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
-        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
-        bracketId.finalist1Name.textContent = winner;
-    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
-               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
-        bracketId.finalist2Name.textContent = winner;
-    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
-               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
-        alert(`${winner} has won the tournament!`);
+function shufflePlayers(array: string[]): string[] { 
+    const shuffled = [...array];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    return shuffled;
+};
+
+interface VantaEffect {
+    destroy: () => void;
 }
 
+//recup l'instance
+let vantaEffect:VantaEffect | null = null;
 export function showBracket(): void {
+  if (changingArea) {
+    if (vantaEffect) {
+      vantaEffect.destroy();
+      vantaEffect = null;
+    }
     changingArea.innerHTML = bracketView();
-    let bracketId:BracketElements = getBracketElements();
-   let start = document.getElementById("start-game");
-   start.addEventListener("click", () => {
-       changingArea.innerHTML = pongView();
-        setGameMode(true);
+    document.getElementById('match-title').textContent = `${player1} vs ${player2}`;
+    let start = document.getElementById("start-game");
+    if (!start) return;
+    if (typeof VANTA !== 'undefined') {
+      const targetElement = document.getElementById('vanta-bg');
+      if (targetElement) {
+        try {
+          vantaEffect = VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0xb089cd,
+            backgroundColor: 0xe7e7f2,
+            points: 4.00,
+            maxDistance: 10.00,
+            spacing: 20.00,
+            fps: 30
+          });
+        } catch (error) {
+          console.error("erreur init vanta", error);
+        }
+      }
+    }
+    start.addEventListener("click", () => {
+      if(changingArea) {
+        if (vantaEffect) {
+          vantaEffect.destroy();
+          vantaEffect = null;
+        }
+        changingArea.innerHTML = pongView();
         initGame(true);
-   })
+      }
+    }, { once: true }); //seulement 1 listener
+  }
 }
 
 function customPrompt(message: string): Promise<string> {

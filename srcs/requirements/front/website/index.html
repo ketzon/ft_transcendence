@@ -11,7 +11,11 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <!-- Font Awesome -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
         <script type="module" src="src/main.js" defer></script>
+        <!-- Google Auth -->
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
     </head>
     <body class="h-screen">
         <div id="main-box" class="h-full flex items-center">
@@ -26,8 +30,12 @@
                         <span class="i18n">HOME</span>
                     </a>
                     <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/play">
-                        <i class=" fas fa-gamepad mr-2"></i>
-                        <span class="i18n">PLAY</span>
+                        <i class="fa-solid fa-table-tennis-paddle-ball mr-2"></i>
+                        <span class="i18n">PONG</span>
+                    </a>
+                    <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/versus">
+                        <i class="fa-solid fa-user-ninja mr-2"></i>
+                        <span class="i18n">VERSUS</span>
                     </a>
                     <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/tournaments">
                         <i class=" fas fa-trophy mr-2"></i>
@@ -36,14 +44,6 @@
                     <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/settings">
                         <i class="fas fa-cog mr-2"></i>
                         <span class="i18n">SETTINGS</span>
-                    </a>
-                    <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/pongSettings">
-                        <i class="fas fa-cog mr-2"></i>
-                        <span class="i18n">GAME SETTINGS</span>
-                    </a>
-                    <a class="flex items-center p-3 bg-white rounded-lg text-purple-900 border border-purple-200 hover:bg-purple-50 hover:shadow transition-all" href="/versus">
-                        <i class="fas fa-cog mr-2"></i>
-                        <span class="i18n">VERSUS</span>
                     </a>
                 </div>
                 <div id="selector" class="hidden p-4 border-t border-purple-200 space-y-3">

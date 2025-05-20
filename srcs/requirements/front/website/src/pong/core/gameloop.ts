@@ -7,12 +7,16 @@ import { WIN_SCORE } from '../utils/constants';
 import { resetScore } from '../components/score';
 import { resetPaddles } from '../components/paddle';
 import { getElements } from '../components/elements';
-import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId  } from './gamestate';
+import { setupKeyPress, gameState, pause, isBasic, isResetting, animationFrameId, tournamentMode, colorChangeTimer, setColorChangeTimer, setIsBasic, setPause, setAnimationFrameId, setTournamentMode, } from './gamestate';
 import { setGameSounds, resetAllsounds, initSounds, gameSounds, stopAllAudio, mute} from '../utils/audio';
 import { listenStatus } from '../events';
 import { changingArea } from "../../router";
+import { gameSettingsView, initGameSettings } from "../../pongCustomization";
 import { bracketView } from '../../views/bracket';
-import { getBracketElements, showBracket } from  "../../selectgames"
+import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
+import { settingsView } from '../../views/settings';
+import { winnerView } from '../../views/winner';
+import { player1, player2, player3, player4 } from '../../selectgames';
 
 //main loop
 function gameLoop(gameId: GameElements): void {
@@ -29,15 +33,39 @@ function gameLoop(gameId: GameElements): void {
 
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
+    console.log("dans update ui")
+    if(isBasic === false) {
+        gameId.basicButton.textContent = "default-mode";
+    }
     if (!tournamentMode) {
+        console.log("tournament mode off")
         gameId.player1.textContent = localStorage.getItem('nickname');
         gameId.player2.textContent = localStorage.getItem('Player2');
+    }
+    if(tournamentMode){
+        console.log("tournament mode on")
+        const tournamentPlayers = JSON.parse(localStorage.getItem("tournamentPlayers") || "[]");
+        console.log(tournamentPlayers);
+        console.log(stage);
+        switch (stage){
+            case 0:
+                gameId.player1.textContent = player1;
+                gameId.player2.textContent = player2; 
+                break;
+            case 1:
+                gameId.player1.textContent = player3;
+                gameId.player2.textContent = player4;
+                break;
+            case 2:
+                gameId.player1.textContent = qualifiedPlayer.stage1
+                gameId.player2.textContent = qualifiedPlayer.stage2
+                break;
+        }
     }
 }
 
 
 export function initPong(): void {
-    console.log(tournamentMode);
     setupKeyPress();
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
@@ -54,7 +82,6 @@ export function initPong(): void {
 
 //reset game si leave PongView
 export function stopPong(): void {
-    setPause(true);
     if (animationFrameId !== -1) {
         cancelAnimationFrame(animationFrameId);
         setAnimationFrameId(-1);
@@ -92,39 +119,129 @@ export const pongScore = {
 
 let bracketId: BracketElements;
 
+export let stage:number = 0;
+export function setStage(value: number): void {
+    stage = value
+}
+
 function checkTournament(): void {
-    console.log("debug")
+    console.log("je suis bien dans check tournament")
     if (tournamentMode) {
         if(pongScore.tempLeft >= WIN_SCORE || pongScore.tempRight >= WIN_SCORE){
             showBracket();
             bracketId = getBracketElements();
             if (pongScore.tempLeft >= WIN_SCORE) {
-                console.log("debug")
-                updateBracket(bracketId.player1Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+                getWinner("left", stage);
             } else if (pongScore.tempRight >= WIN_SCORE)  {
-                updateBracket(bracketId.player2Name.textContent, bracketId.player1Name.textContent, bracketId.player2Name.textContent);
+                getWinner("right", stage);
             }
+            stage++;
+            console.log(`je suis stage ${stage}`)
         }
     }
 }
 
-export function updateBracket(winner: string, player1: string, player2: string): void {
-    
-    // Déterminer quel match vient de se terminer
-    if ((player1 === bracketId.player1Name.textContent && player2 === bracketId.player2Name.textContent) || 
-        (player2 === bracketId.player1Name.textContent && player1 === bracketId.player2Name.textContent)) {
-        // C'était le premier match
-        bracketId.finalist1Name.textContent = winner;
-    } else if ((player1 === bracketId.player3Name.textContent && player2 === bracketId.player4Name.textContent) || 
-               (player2 === bracketId.player3Name.textContent && player1 === bracketId.player4Name.textContent)) {
-        // C'était le deuxième match
-        bracketId.finalist2Name.textContent = winner;
-    } else if ((player1 === bracketId.finalist1Name.textContent && player2 === bracketId.finalist2Name.textContent) || 
-               (player2 === bracketId.finalist1Name.textContent && player1 === bracketId.finalist2Name.textContent)) {
-        // C'était le match final
-        alert(`${winner} has won the tournament!`);
+export const qualifiedPlayer = {
+    stage1: "",
+    stage2: "",
+    winner: "",
+}
+
+function updateStage1(winner:string): void {
+    qualifiedPlayer.stage1 = winner;
+    bracketId.finalist1Name.textContent = winner;
+    document.getElementById('match-title')!.textContent = `${player3} vs ${player4}`
+    const stage1 = document.getElementById('match1-bg');
+    if (stage1) {
+        stage1.classList.remove("bg-green-200");
+        stage1.classList.add("bg-white");
+    }
+    const stage2 = document.getElementById('match2-bg');
+    if (stage2) {
+        stage2.classList.remove("bg-white");
+        stage2.classList.add("bg-green-200");
     }
 }
+
+function updateStage2(winner:string): void {
+    qualifiedPlayer.stage2 = winner;
+    bracketId.finalist1Name.textContent = qualifiedPlayer.stage1
+    bracketId.finalist2Name.textContent = winner;
+    document.getElementById('match-title')!.textContent = `${qualifiedPlayer.stage1} vs ${qualifiedPlayer.stage2}`
+    const stage1 = document.getElementById('match1-bg');
+    if (stage1) {
+        stage1.classList.remove("bg-green-200");
+        stage1.classList.add("bg-white");
+    }
+    const stage3 = document.getElementById('match3-bg');
+    if (stage3) {
+        stage3.classList.remove("bg-white");
+        stage3.classList.add("bg-green-200");
+    }
+}
+
+function updateFinal(winner: string): void {
+    document.getElementById('match-title')!.textContent = "";
+    qualifiedPlayer.winner = winner;
+    stopPong();
+    displayWinner(winner);
+
+}
+
+type WinnerElements = {
+    tournamentWinner: HTMLElement
+    leaveButton: HTMLElement
+    tournamentBackground: HTMLElement
+}
+
+export function getWinnerElements(): WinnerElements {
+    return {
+        tournamentBackground: document.getElementById("tournament-victory-background") as HTMLElement,
+        tournamentWinner: document.getElementById("tournament-winner") as HTMLElement,
+        leaveButton: document.getElementById("leave-pong-button") as HTMLElement,
+    };
+}
+
+
+function displayWinner(winner:string): void {
+    if(changingArea){
+        changingArea.innerHTML = winnerView();
+        let gameWinnerId = getWinnerElements();
+        gameWinnerId.tournamentWinner.textContent = winner;
+        gameWinnerId.leaveButton.addEventListener("click", () => {
+            changingArea!.innerHTML = gameSettingsView();
+            initGameSettings();
+        })
+
+    }
+}
+
+function getWinner(pos:string, stage:number):  void {
+    switch (stage) {
+        case 0:
+            if(pos === "left"){
+                updateStage1(player1);
+        } else if(pos === "right") {
+                updateStage1(player2);
+        }
+            break;
+        case 1:
+            if (pos === "left") {
+            updateStage2(player3);
+        }else if(pos === "right") {
+            updateStage2(player4);
+        }
+            break;
+        case 2:
+            if (pos === "left") {
+            updateFinal(qualifiedPlayer.stage1);
+        }else if(pos === "right") {
+            updateFinal(qualifiedPlayer.stage2);
+        }
+            break;
+    }
+}
+
 
 
 //reset le jeu
@@ -143,7 +260,6 @@ export function resetGame(gameId: GameElements): void {
     resetPaddles(gameId);
     resetScore(gameId);
     resetAllsounds();
-    setIsBasic(true);
     if (gameId.basicButton === null) return; //fix temporaire
     gameId.basicButton.textContent = "features-mode";
     gameId.ball.style.backgroundColor = "white";

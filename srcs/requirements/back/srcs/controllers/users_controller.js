@@ -63,7 +63,7 @@ const signin = async(req, reply) => {
 			throw new Error("Invalid password")
 		}
 		const twoFactAuth = await userService.sendTwoFactAuth(user.id, email)
-		return reply.status(200).send({message: "Code authentification sent to:", user: username})
+		return reply.status(200).send({message: "Code authentification sent to:", email: email})
 	}
 	catch(error) {
 		return reply.status(500).send({message: "Internal error", details: error.message})
@@ -147,9 +147,10 @@ const modifyPassword = async (req, reply) => {
 }
 
 const verify2FA = async (req, reply) => {
-	const {auth, user} = req.body
+	const {code, email} = req.body
+    const user = await userService.getUserByEmail(email);
 
-	if (auth !== user.otp || Date.now > user.otp_expiration)
+	if (parseInt(code) !== user.otp || Date.now > user.otp_expiration)
 		return reply.status(401).send({message: "One Time Password invalid."})
 	const token = await userService.createJWT(req.server, user.id, user.email);
 	return reply.status(200).send({message: "Successfully connected.", user: user})

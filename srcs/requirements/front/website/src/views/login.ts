@@ -1,6 +1,7 @@
-import { router } from "../router";
+import { changingArea, router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse } from "../utils";
+import { init2fa, twofaView } from "./2fa";
 
 interface signinformValues {
     email: string,
@@ -88,10 +89,11 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
         toasts.success("Signin successfull");
         printResponse("/signin", responseData);
         errElement.innerText = responseData.message;
-        setTimeout(() => {
-            window.history.pushState(null, "", "/twofa");
-            router();
-        }, 1500);
+        if (changingArea)
+        {
+            changingArea.innerHTML = twofaView(responseData.email);
+            init2fa(responseData.email);
+        }
     }
     catch(error)
     {

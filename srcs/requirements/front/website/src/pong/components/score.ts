@@ -26,12 +26,12 @@ export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void 
 
 export function checkWinner(gameId: GameElements): void {
     if (gameState.scoreLeft >= WIN_SCORE) {
-        confetti();
+        // confetti();
         setPause(true);
         gameSounds?.victorySound.play();
         changeWinnerMsg(gameId, gameId.player1.textContent);
     } else if (gameState.scoreRight >= WIN_SCORE) {
-        confetti();
+        // confetti();
         setPause(true);
         gameSounds?.victorySound.play();
         changeWinnerMsg(gameId, gameId?.player2.textContent);

@@ -2,7 +2,7 @@ import {player1, player2, player3, player4} from "../selectgames"
 
 export function bracketView(): string {
     return /*html*/ `
-    <div class="bg-[url(https://culturezvous.com/wp-content/uploads/2018/09/MV5BYWI3ZDU2MDgtYTBkYy00ZDFkLWIxZDYtODQxZjYxNDE1OTljL2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg)] bg-center bg-contain bg-no-repeat flex justify-center items-center min-h-screen">
+    <div id="vanta-bg" class="bg-[url()] bg-center bg-contain bg-no-repeat flex justify-center items-center min-h-screen">
         <div class="w-full max-w-2xl mx-auto">
             <div class="flex justify-center mb-16">
                 <div id="match-title-bg" class="inline-block bg-purple-300 rounded border border-purple-700 p-4">

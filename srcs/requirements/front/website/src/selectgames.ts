@@ -97,20 +97,58 @@ export function execSelect(): void {
     });
 }
 
+interface VantaEffect {
+    destroy: () => void;
+}
 
+//recup l'instance
+let vantaEffect:VantaEffect | null = null;
 export function showBracket(): void {
-    if (changingArea){
-        changingArea.innerHTML = bracketView();
-        document.getElementById('match-title')!.textContent = `${player1} vs ${player2}`
-        let start = document.getElementById("start-game");
-        if (!start) return;
-        start.addEventListener("click", () => {
-            if(changingArea){
-            changingArea.innerHTML = pongView();
-            initGame(true);
-            }
-        })
+  if (changingArea) {
+    if (vantaEffect) {
+      vantaEffect.destroy();
+      vantaEffect = null;
     }
+    changingArea.innerHTML = bracketView();
+    document.getElementById('match-title').textContent = `${player1} vs ${player2}`;
+    let start = document.getElementById("start-game");
+    if (!start) return;
+    if (typeof VANTA !== 'undefined') {
+      const targetElement = document.getElementById('vanta-bg');
+      if (targetElement) {
+        try {
+          vantaEffect = VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0xb089cd,
+            backgroundColor: 0xe7e7f2,
+            points: 4.00,
+            maxDistance: 10.00,
+            spacing: 20.00,
+            fps: 30
+          });
+        } catch (error) {
+          console.error("erreur init vanta", error);
+        }
+      }
+    }
+    start.addEventListener("click", () => {
+      if(changingArea) {
+        if (vantaEffect) {
+          vantaEffect.destroy();
+          vantaEffect = null;
+        }
+        changingArea.innerHTML = pongView();
+        initGame(true);
+      }
+    }, { once: true }); //seulement 1 listener
+  }
 }
 
 function customPrompt(message: string): Promise<string> {

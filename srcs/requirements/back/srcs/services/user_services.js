@@ -75,7 +75,9 @@ const sendTwoFactAuth = async (id, email) => {
 	const otp = crypto.randomInt(100000, 999999);
 	const otp_expire = Date.now() + 5 * 60 * 1000;
 	await mailSender.sendMail({
+        from: "pongu.sh42@gmail.com",
 		to: email,
+        subject: "Two-Factor-Authentification",
 		text: `Authentification code for next 5 minutes: ${otp}`,
 	});
 

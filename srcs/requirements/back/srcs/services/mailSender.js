@@ -4,17 +4,13 @@ import nodemailer from "nodemailer"; // for 2FA
 dotenv.config()
 
 const mailSender = nodemailer.createTransport({
-	host: process.env.SMTP_HOST,
-	port: parseInt(process.env.SMTP_PORT),
-		auth: {
-			user: process.env.SMTP_USER,
-			pass: process.env.SMTP_PASS
-		}
-	},
-	{
-		from: '"Transcendence" <no-reply@transcendence.com>',
-		subject: "Two-Factor-Authentification",
-	}
-)
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+})
 
 export default mailSender

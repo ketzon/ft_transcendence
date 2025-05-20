@@ -1,6 +1,9 @@
 import userService from "../services/user_services.js"
 import fastifyMultipart from 'fastify-multipart';
 
+BigInt.prototype.toJSON = function () {
+    return this.toString(); // Convert to string for serialization
+  };
 
 //tools
 const getBody = (req, reply ) => {
@@ -153,7 +156,13 @@ const verify2FA = async (req, reply) => {
 	if (parseInt(code) !== user.otp || Date.now > user.otp_expiration)
 		return reply.status(401).send({message: "One Time Password invalid."})
 	const token = await userService.createJWT(req.server, user.id, user.email);
-	return reply.status(200).send({message: "Successfully connected.", user: user})
+
+	return reply.status(200).cookie("token", token, {
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
+        sameSite: 'strict'
+    }).send({message: "Successfully connected.", user: user})
 }
 
 export default {

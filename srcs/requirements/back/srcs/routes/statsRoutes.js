@@ -64,16 +64,6 @@ async function statsRoutes(fastify, opts) {
     }
   });
 
-  fastify.get('/api/stats', async (request, reply) => {
-    return {
-      totalMatches: 3,
-      winRate: 100,
-      totalWins: 3,
-      labels: ["08/05", "09/05", "10/05", "11/05", "12/05", "13/05", "14/05", "15/05", "16/05", "17/05"],
-      totalGames: [0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-      totalWins: [0, 0, 0, 0, 0, 0, 0, 0, 0, 3]
-    };
-  });
 }
 
 // Export si tu es en module ESM :

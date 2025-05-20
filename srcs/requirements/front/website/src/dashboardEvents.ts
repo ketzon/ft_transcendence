@@ -117,7 +117,9 @@ function createPerformanceGraph(games: Game[]) {
 
     // Count games and wins by day
     games.forEach(game => {
-        const dateStr = game.date.split(' ')[0]; // Take just the date without time
+        // const dateStr = game.date.split(' ')[0]; // Take just the date without time
+        const dateObj = new Date(game.date);
+        const dateStr = formatShortDateFR(dateObj); // ✅ ex : "17/05"
         const stats = gamesByDate.get(dateStr) || { total: 0, wins: 0 };
         stats.total++;
         if (game.result === 'Win') {
@@ -161,7 +163,8 @@ function createPerformanceGraph(games: Game[]) {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1
-                    }
+                    },
+                    suggestedMax: Math.max(...totalGames, ...totalWins) + 1
                 }
             },
             plugins: {

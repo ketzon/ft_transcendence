@@ -47,7 +47,7 @@ const signup = async (req, reply) => {
 	catch (error) {
 		if (error.code === "P2002")
 			return reply.status(409).send({message: "Username already used.", details: error.message})
-		else 
+		else
 			return reply.status(500).send({message: "Internal error", details: error.message})
 	}
 }
@@ -56,6 +56,8 @@ const signin = async(req, reply) => {
 	const { email, username, password, avatar } = getBody(req, reply)
 	try {
 		const user = await userService.getUserByEmail(email)
+    if (user == null)
+      return reply.status(404).send({message: "No such user"})
 		const isPasswordValid = await userService.comparePass(password, user);
 		if (!isPasswordValid) {
 			throw new Error("Invalid password")
@@ -114,15 +116,16 @@ const customUsername = async (req, reply) => {
 }
 
 const customAvatar = async (req, reply) => {
+    let user = null;
 	try {
-		const newAvatar = req.body.newAvatar
 		const token = getToken(req, reply)
-		const user = await userService.getUserByToken(req.server, token)
-		const userUpdated = await userService.updateAvatar(user, req.avatar)
+		user = await userService.getUserByToken(req.server, token)
+        const newAvatar = await req.file();
+		const userUpdated = await userService.updateAvatar(user, newAvatar)
 		reply.status(200).send({message: "Avatar succesfully changed.", user: userUpdated})
 	}
 	catch (error) {
-		reply.status(500).send({message: "customAvatar internal error", details: error.message, userID: user.id})
+		reply.status(500).send({message: "customAvatar internal error", details: error.message, userID: user.id || null})
 	}
 }
 

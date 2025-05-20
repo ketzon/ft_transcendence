@@ -16,7 +16,7 @@ function listenAllClicks(): void {
     }
 
     body.addEventListener("click", (e) => {
-        const target = e.target;
+        const target = e?.target?.closest("a")
 
         // console.log("Click event Target = " + target);
         if (target instanceof HTMLAnchorElement)

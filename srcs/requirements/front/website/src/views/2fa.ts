@@ -52,6 +52,7 @@ function verifyCode(userEmail: string): void {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             const code = getCode(form);
+            console.log(code);
             sendCode(userEmail, code);
         })
     }
@@ -67,7 +68,17 @@ function handleAutoswitch(): void {
         if (target && target instanceof HTMLInputElement)
         {
             const val = target?.value;
-            if (isNaN(val)) // Act as verify that we have a number in value.
+            if (val.length > 1)
+            {
+                if (!isNaN(target.value[1]))
+                    target.value = target.value[1];
+                else
+                {
+                    target.value = target.value[0];
+                    return ;
+                }
+            }
+            if (isNaN(target.value)) // Act as verify that we have a number in value.
             {
                 target.value = "";
                 return ;
@@ -94,7 +105,7 @@ function handleDeleteKeys(): void {
         {
             if (target && target instanceof HTMLInputElement)
             {
-                target.value = "";
+                // target.value = "";
                 const prev = target.previousElementSibling;
 
                 if (prev && prev instanceof HTMLInputElement)
@@ -105,31 +116,10 @@ function handleDeleteKeys(): void {
     })
 }
 
-//Handle if a value is already in the input to replace it then focus next.
-function handleInputReplace() {
-    const allInputs = document.querySelectorAll("input");
-
-    for (let i = 0; i < allInputs.length; i++)
-    {
-        allInputs[i].addEventListener("keyup", (e) => {
-            if (allInputs[i].value === "")
-            {
-                return;
-            }
-            else if (!isNaN(e.key))
-            {
-                allInputs[i].value = e.key;
-                const next = allInputs[i].nextElementSibling as HTMLInputElement | null;
-                next?.focus();
-            }
-        })
-    }
-}
 
 export function init2fa(userEmail: string): void {
     handleAutoswitch();
     handleDeleteKeys();
-    handleInputReplace();
     verifyCode(userEmail);
 }
 
@@ -140,12 +130,12 @@ export function twofaView(userEmail: string):string {
                <span class="text-2xl font-bold">Enter OTP</span>
                <p class="text-center text-gray-600">We have sent a verification code to your email address</p>
                <div id="inputs" class="w-full flex gap-2.5 items-center justify-center">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input1" name="otp">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input2" name="otp">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input3" name="otp">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input4" name="otp">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input5" name="otp">
-                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input1" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input2" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input3" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input4" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input5" name="otp">
+                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
                </div>
                <button class="px-20 py-3 border-0 text-white bg-[var(--accent-color)] font-semibold cursor-pointer rounded-xl hover:bg-[var(--text-color)] transition ease-in" type="submit" id="submit-2fa">Verify</button>
             </form>

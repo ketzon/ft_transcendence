@@ -60,66 +60,33 @@ function verifyCode(userEmail: string): void {
 
 //Auto switch when a input to the next input when keypress.
 function handleAutoswitch(): void {
-    const inputs = document.getElementById("inputs");
+    const allInputs = document.querySelectorAll("input");
 
-    inputs?.addEventListener("input", (e) => {
-        const target = e.target;
+    for (let idx = 0; idx < allInputs.length; idx++)
+    {
+        const currentInput = allInputs[idx] as HTMLInputElement | null;
+        const prevInput = currentInput?.previousElementSibling as HTMLInputElement | null;
+        const nextInput = currentInput?.nextElementSibling as HTMLInputElement | null;
 
-        if (target && target instanceof HTMLInputElement)
-        {
-            const val = target?.value;
-            if (val.length > 1)
+        currentInput?.addEventListener("input", (event) => {
+            if (isNaN(currentInput.value))
+                currentInput.value = "";
+            else if (currentInput.value && nextInput)
+                nextInput.focus();
+        })
+
+        currentInput?.addEventListener("keydown", (event) => {
+            if (event.key == "Backspace")
             {
-                if (!isNaN(target.value[1]))
-                    target.value = target.value[1];
-                else
-                {
-                    target.value = target.value[0];
-                    return ;
-                }
+                if (!currentInput.value && prevInput)
+                    prevInput.focus();
             }
-            if (isNaN(target.value)) // Act as verify that we have a number in value.
-            {
-                target.value = "";
-                return ;
-            }
-            if (val !== "")
-            {
-                const next = target.nextElementSibling;
-                if (next && next instanceof HTMLInputElement)
-                    next.focus();
-            }
-        }
-    })
+        })
+    }
 }
-
-//Handle delete a input value and go back to previous input
-function handleDeleteKeys(): void {
-    const inputs = document.getElementById("inputs");
-
-    inputs?.addEventListener("keyup", (e) => {
-        const target = e.target;
-        const key = e.key.toLocaleLowerCase();
-
-        if (key == "backspace" || key == "delete")
-        {
-            if (target && target instanceof HTMLInputElement)
-            {
-                // target.value = "";
-                const prev = target.previousElementSibling;
-
-                if (prev && prev instanceof HTMLInputElement)
-                    prev.focus();
-            }
-            return;
-        }
-    })
-}
-
 
 export function init2fa(userEmail: string): void {
     handleAutoswitch();
-    handleDeleteKeys();
     verifyCode(userEmail);
 }
 
@@ -130,12 +97,12 @@ export function twofaView(userEmail: string):string {
                <span class="text-2xl font-bold">Enter OTP</span>
                <p class="text-center text-gray-600">We have sent a verification code to your email address</p>
                <div id="inputs" class="w-full flex gap-2.5 items-center justify-center">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input1" name="otp">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input2" name="otp">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input3" name="otp">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input4" name="otp">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input5" name="otp">
-                    <input required maxlength="2" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input1" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input2" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input3" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input4" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input5" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
                </div>
                <button class="px-20 py-3 border-0 text-white bg-[var(--accent-color)] font-semibold cursor-pointer rounded-xl hover:bg-[var(--text-color)] transition ease-in" type="submit" id="submit-2fa">Verify</button>
             </form>

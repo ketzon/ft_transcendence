@@ -103,7 +103,7 @@ export function execSelect(): void {
 }
 
 function shufflePlayers(array: string[]): string[] { 
-    const shuffled = [...array];
+    const shuffled: string[] = [...array];
 
     for (let i = shuffled.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

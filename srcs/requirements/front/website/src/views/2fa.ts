@@ -82,6 +82,20 @@ function handleAutoswitch(): void {
                     prevInput.focus();
             }
         })
+
+        currentInput?.addEventListener("paste", (event) => {
+            event.preventDefault();
+
+            let paste = event?.clipboardData?.getData("text");
+            if (!paste || isNaN(paste))
+                return;
+            for (let i = 0; i < allInputs.length; i++)
+            {
+                if (paste[i])
+                    allInputs[i].value = paste[i];
+                allInputs[i].focus();
+            }
+        })
     }
 }
 

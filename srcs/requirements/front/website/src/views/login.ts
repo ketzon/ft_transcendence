@@ -91,7 +91,7 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
         errElement.innerText = responseData.message;
         if (changingArea)
         {
-            changingArea.innerHTML = twofaView(responseData.email);
+            changingArea.innerHTML = twofaView();
             init2fa(responseData.email);
         }
     }

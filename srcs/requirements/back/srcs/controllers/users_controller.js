@@ -73,6 +73,25 @@ const signin = async(req, reply) => {
 	}
 }
 
+const resendOtpCode = async(req, reply) => {
+    if (!req.body || !req.body.email)
+        return reply.status(400).send("Invalid body in request");
+
+    const email = req.body.email;
+    try
+    {
+        const user = await userService.getUserByEmail(email);
+        if (!user)
+            return reply.status(404).send({message: "No such user"});
+        const twoFactAuth = await userService.sendTwoFactAuth(user.id, email)
+		return reply.status(200).send({message: "New Code authentification sent to:", email: email})
+    }
+    catch (error)
+    {
+        return reply.status(500).send({message: "Internal error", details: error.message})
+    }
+}
+
 const displayCurrentUser = async(req, reply) => {
 	try {
 		const token = req.cookies?.token
@@ -174,4 +193,5 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
+    resendOtpCode,
 }

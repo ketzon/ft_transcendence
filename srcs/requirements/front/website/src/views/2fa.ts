@@ -58,7 +58,12 @@ function verifyCode(userEmail: string): void {
     }
 }
 
-//Auto switch when a input to the next input when keypress.
+
+/*
+    Auto switch to the next input field when valid value entered.
+    Handle delete and refocus on previous input.
+    Handle paste from clipboard.
+*/
 function handleAutoswitch(): void {
     const allInputs = document.querySelectorAll("input");
 
@@ -99,12 +104,43 @@ function handleAutoswitch(): void {
     }
 }
 
+function handleResendBtn(userEmail: string): void {
+    const resendBtn = document.getElementById("resendBtn");
+
+    resendBtn?.addEventListener("click", async (event) => {
+        console.log("Email sent to back = ", userEmail);
+        try
+        {
+            const res = await fetch("http://localhost:3000/user/resendOtpCode", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    },
+                credentials: "include",
+                body: JSON.stringify({email: userEmail}),
+            })
+            const resMsg = await res.json();
+            if (!res.ok)
+            {
+                printResponse("/resendOtpCode", resMsg);
+                return ;
+            }
+            printResponse("/resendOtpCode", resMsg);
+        }
+        catch (error)
+        {
+            console.log("Could not contact /resendOtpCode");
+        }
+    })
+}
+
 export function init2fa(userEmail: string): void {
     handleAutoswitch();
+    handleResendBtn(userEmail);
     verifyCode(userEmail);
 }
 
-export function twofaView(userEmail: string):string {
+export function twofaView():string {
     return /*html*/ `
         <div id="2fa-area" class="w-full h-full flex flex-col justify-center items-center">
             <form id="twofa-form" class="flex flex-col items-center justify-center gap-9 rounded-2xl w-[460px] h-[600px] bg-white shadow relative">
@@ -119,6 +155,10 @@ export function twofaView(userEmail: string):string {
                     <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
                </div>
                <button class="px-20 py-3 border-0 text-white bg-[var(--accent-color)] font-semibold cursor-pointer rounded-xl hover:bg-[var(--text-color)] transition ease-in" type="submit" id="submit-2fa">Verify</button>
+               <div class="flex flex-col items-center gap-2">
+                    <p class="text-center text-gray-600 text-[0.7em]">Didn't receive the code?</p>
+                    <button id="resendBtn" type="button" class="text-violet-400 cursor-pointer font-bold text-[1em]">Resend code</button>
+               </div>
             </form>
         </div>
     `

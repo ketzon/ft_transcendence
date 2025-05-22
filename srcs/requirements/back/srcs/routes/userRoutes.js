@@ -10,4 +10,5 @@ export default async function registerUserRoute(fastify) {
 	fastify.post("/verify-2FA", userManagement.verify2FA)
 	fastify.get("/profil", userManagement.displayCurrentUser)
 
+    fastify.post("/resendOtpCode", userManagement.resendOtpCode);
 }

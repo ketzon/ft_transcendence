@@ -133,10 +133,10 @@ export async function router(): Promise<void> {
             initGameSettings();
             break ;
 
-        case routes.twofa:
-            changingArea.innerHTML = twofaView("lol");
-            init2fa("lol");
-            break ;
+        // case routes.twofa:
+        //     changingArea.innerHTML = twofaView();
+        //     init2fa("lol@gmail.com");
+        //     break ;
 
         case routes.settings:
             if (isAuth === false)

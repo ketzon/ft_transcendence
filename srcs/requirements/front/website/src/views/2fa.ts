@@ -52,7 +52,6 @@ function verifyCode(userEmail: string): void {
         form.addEventListener("submit", (event) => {
             event.preventDefault();
             const code = getCode(form);
-            console.log(code);
             sendCode(userEmail, code);
         })
     }
@@ -108,21 +107,18 @@ function handleResendBtn(userEmail: string): void {
     const resendBtn = document.getElementById("resendBtn");
 
     resendBtn?.addEventListener("click", async (event) => {
-        console.log("Email sent to back = ", userEmail);
         try
         {
             const res = await fetch("http://localhost:3000/user/resendOtpCode", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    },
                 credentials: "include",
-                body: JSON.stringify({email: userEmail}),
             })
             const resMsg = await res.json();
             if (!res.ok)
             {
                 printResponse("/resendOtpCode", resMsg);
+                //Clear cookie if exits.
+                router();
                 return ;
             }
             printResponse("/resendOtpCode", resMsg);

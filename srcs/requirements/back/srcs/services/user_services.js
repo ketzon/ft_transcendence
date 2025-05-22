@@ -31,12 +31,26 @@ const comparePass = async (password, user) => {
 
 //Tokens
 const createJWT = async (app, id, email) => {
-	const token = await app.jwt.sign({ id: id, email: email });
+	const token = await app.jwt.sign({ id: id, email: email, type: "auth" });
 	return token
+}
+
+const createTempJWT = async (app, email) => {
+    const token = await app.jwt.sign({ email: email, type: "twofa" }, { expiresIn: "1h"});
+    return token
+}
+
+const getTempTwofaToken = async (app, token) => {
+    const decoded =  await app.jwt.verify(token);
+    if (decoded.type !== "twofa")
+        return (null);
+    return decoded.email;
 }
 
 const getUserByToken = async (app, token) => {
 	const decoded =  await app.jwt.verify(token)
+    if (decoded.type !== "auth")
+        return (null);
 	const user = await getUserById(decoded.id)
 	return user
 }
@@ -139,6 +153,8 @@ const updatePassword = async (user, newPassword) => {
 
 export default {
 	createJWT,
+    createTempJWT,
+    getTempTwofaToken,
 	createUser,
 	getUserById,
 	getUserByToken,

@@ -69,7 +69,7 @@ function handleAutoswitch(): void {
         const nextInput = currentInput?.nextElementSibling as HTMLInputElement | null;
 
         currentInput?.addEventListener("input", (event) => {
-            if (isNaN(currentInput.value))
+            if (isNaN(currentInput.value) || currentInput.value === " ")
                 currentInput.value = "";
             else if (currentInput.value && nextInput)
                 nextInput.focus();

@@ -88,14 +88,29 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
+        players.push(localStorage.getItem('nickname'))
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
-        player1 = localStorage.getItem('nickname')
-        player2 = players[0];
-        player3 = players[1];
-        player4 = players[2];
+
+
+        const randomizedPlayer = shufflePlayers(players);
+
+        player1 = randomizedPlayer[0]; 
+        player2 = randomizedPlayer[1]; 
+        player3 = randomizedPlayer[2]; 
+        player4 = randomizedPlayer[3]; 
         showBracket();
     });
 }
+
+function shufflePlayers(array: string[]): string[] { 
+    const shuffled: string[] = [...array];
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+};
 
 interface VantaEffect {
     destroy: () => void;

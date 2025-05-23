@@ -16,6 +16,7 @@ import { bracketView } from '../../views/bracket';
 import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
 import { settingsView } from '../../views/settings';
 import { winnerView } from '../../views/winner';
+import { player1, player2, player3, player4 } from '../../selectgames';
 
 //main loop
 function gameLoop(gameId: GameElements): void {
@@ -48,12 +49,12 @@ function updateUi(gameId: GameElements) : void {
         console.log(stage);
         switch (stage){
             case 0:
-                gameId.player1.textContent = localStorage.getItem('nickname')
-                gameId.player2.textContent = tournamentPlayers[0];
+                gameId.player1.textContent = player1;
+                gameId.player2.textContent = player2; 
                 break;
             case 1:
-                gameId.player1.textContent = tournamentPlayers[1];
-                gameId.player2.textContent = tournamentPlayers[2];
+                gameId.player1.textContent = player3;
+                gameId.player2.textContent = player4;
                 break;
             case 2:
                 gameId.player1.textContent = qualifiedPlayer.stage1

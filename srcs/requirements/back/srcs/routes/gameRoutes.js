@@ -48,9 +48,7 @@ fastify.post('/api/games', async function (request, reply) {
   console.log("✅ POST /api/games bien reçu");
 
   console.log("📦 Contenu body :", request.body);
-  console.log("🧪 this.prisma =", this.prisma);
-
-  const player2Id = 2; 
+  // console.log("🧪 this.prisma =", this.prisma);
 
   try {
     const {
@@ -64,6 +62,15 @@ fastify.post('/api/games', async function (request, reply) {
 
     const player1Id = 1; // temporairement
 
+//test si les joueurs existent
+    const player1 = await fastify.prisma.user.findUnique({ where: { id: player1Id } });
+const player2 = await fastify.prisma.user.findUnique({ where: { id: player2Id } });
+
+console.log("🔍 Joueurs trouvés : player1 =", player1, "player2 =", player2);
+
+if (!player1 || !player2) {
+  return reply.code(400).send({ error: "One or both players do not exist" });
+}
  
     const data = {
       date: new Date(),

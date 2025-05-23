@@ -89,13 +89,13 @@ fastify.get('/api/debug/create-player2', async (request, reply) => {
       avatar: "./public/avatar.png"
     }
   });
-  reply.send({ message: "User créé", user });
+  reply.send(toSerializable({ message: "User créé", user }));
 });
 //A SUPPRIMER MODIF TEMP TEST
 fastify.get('/api/debug/games', async (request, reply) => {
   try {
     const games = await fastify.prisma.game.findMany();
-    reply.send(games);
+    reply.send(toSerializable(games));
   } catch (err) {
     console.error("❌ Erreur récupération parties :", err);
     reply.code(500).send({ error: "Erreur récupération parties", details: err.message });
@@ -112,7 +112,7 @@ fastify.get('/api/debug/create-test-user', async (request, reply) => {
         avatar: "./public/avatar.png"
       }
     });
-    reply.send({ message: "Utilisateur créé", user });
+    reply.send(toSerializable({ message: "Utilisateur créé", user }));
   } catch (err) {
     console.error("❌ Erreur création utilisateur :", err);
     reply.code(500).send({ error: "Erreur création utilisateur", details: err.message });
@@ -134,7 +134,7 @@ fastify.get('/api/debug/users', async (request, reply) => {
     const safeUsers = toSerializable(users);
 
     console.log("🧪 Utilisateurs convertis :", safeUsers);
-    reply.send(safeUsers);
+    reply.send(toSerializable(safeUsers));
   } catch (err) {
     console.error("❌ Erreur récupération utilisateurs :", err);
     reply.code(500).send({ error: "Erreur lors de la récupération des utilisateurs" });

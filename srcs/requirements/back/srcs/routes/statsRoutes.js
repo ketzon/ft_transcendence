@@ -1,3 +1,10 @@
+
+function toSerializable(obj) {
+  return JSON.parse(JSON.stringify(obj, (key, value) =>
+    typeof value === 'bigint' ? Number(value) : value
+  ));
+}
+
 async function statsRoutes(fastify, opts) {
   fastify.get('/api/stats/user/:id', async (request, reply) => {
     const userId = parseInt(request.params.id);
@@ -16,6 +23,7 @@ async function statsRoutes(fastify, opts) {
           player2: true
         }
       });
+      console.log("🧪 Games from DB :", gamesFromDb);
 
       const games = gamesFromDb.map((game) => {
         const isPlayer1 = game.player1Id === userId;
@@ -49,14 +57,14 @@ async function statsRoutes(fastify, opts) {
       const losses = gamesPlayed - wins;
       const winRate = gamesPlayed > 0 ? Math.round((wins / gamesPlayed) * 1000) / 10 : 0;
 
-      return reply.send({
+      return reply.send(toSerializable({
         userId,
         gamesPlayed,
         wins,
         losses,
         winRate,
         games
-      });
+      }));
 
     } catch (err) {
       console.error('❌ Erreur stats route :', err);

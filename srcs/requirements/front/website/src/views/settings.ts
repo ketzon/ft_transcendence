@@ -106,8 +106,8 @@ async function updateNickname(newUsername: string): Promise<void> {
     }
 }
 
-export async function updateLanguage(newLanguage: string): Promise<void> {
-    console.log(`mon language selectionne est ${newLanguage}`)
+export async function updateLanguage(language: string): Promise<void> {
+    console.log(`mon language selectionne est ${language}`)
     try {
         const res = await fetch("http://localhost:3000/user/language", {
             method: 'POST',
@@ -115,7 +115,7 @@ export async function updateLanguage(newLanguage: string): Promise<void> {
                 'Content-Type': 'application/json',
             },
             credentials: "include", 
-            body: JSON.stringify({ newLanguage}),
+            body: JSON.stringify({ language}),
         });
         const resMsg = await res.json();
         console.log(resMsg);
@@ -125,7 +125,7 @@ export async function updateLanguage(newLanguage: string): Promise<void> {
             return;
         }
         printResponse("/language", resMsg);
-        localStorage.setItem("preferred_language", newLanguage);
+        localStorage.setItem("preferred_language", language);
         toasts.success("Language preference updated");
     }
     catch(error) {

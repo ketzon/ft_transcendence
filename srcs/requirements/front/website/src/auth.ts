@@ -42,11 +42,10 @@ function checkLocalStorage(user)
     // }
     //recup par defaut en et init le site en anglais, si le user a deja change son language alors on use le language dans la db
         if(user.language) {
-            localStorage.setItem("preferred_language", user.preferred_language);
-            changeLanguage(user.preferred_language);
+            localStorage.setItem("preferred_language", user.language);
+            changeLanguage(user._language);
         }
 }
-
 
 export async function initLogoutButton(): Promise<void> {
 
@@ -56,6 +55,7 @@ export async function initLogoutButton(): Promise<void> {
 
     //si bouton existe deja (deuxieme connexion)
     if (logoutBtn && selectLanguage) {
+       selectLanguage.classList.remove('hidden'); 
        selectLanguage.style.display = 'block' 
        logoutBtn.style.display = 'block'
     }

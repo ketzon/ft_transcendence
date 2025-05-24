@@ -9,7 +9,7 @@ import { selectView } from "./views/select";
 import { execSelect} from "./selectgames";
 
 
-import { isUserAuth } from "./auth";
+import { initLogoutButton, isUserAuth } from "./auth";
 import { initSettings, settingsView } from "./views/settings";
 import { signupView, signupEvents } from "./views/signup";
 import { loginView, loginEvents } from "./views/login";
@@ -51,6 +51,9 @@ export async function router(): Promise<void> {
     //On injecte dans changingArea pour garder la navbar sur la gauche dans le body.
     changingArea = document.getElementById("changingArea");
     const isAuth: boolean = await isUserAuth()// Test if user is logged to protect access to views (just testing).
+    if(isAuth) {
+        initLogoutButton();
+    }
 
     if (!changingArea)
     {

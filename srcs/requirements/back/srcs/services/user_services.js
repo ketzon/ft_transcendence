@@ -134,6 +134,12 @@ const updatePassword = async (user, newPassword) => {
 	})
 }
 
+const updateLanguage = async (user, newLanguage) => {
+    return await prisma.user.update({
+        where: {id: user.id},
+        data: {language: newLanguage}
+    })
+}
 
 export default {
 	createJWT,
@@ -146,4 +152,5 @@ export default {
 	updateAvatar,
 	updatePassword,
 	sendTwoFactAuth,
+    updateLanguage,
 }

@@ -146,6 +146,18 @@ const modifyPassword = async (req, reply) => {
 	}
 }
 
+const updateLanguage = async (req, reply) => {
+    const { language } = req.body;
+    try {
+        const token = getToken(req, reply);
+        const user = await userService.getUserByToken(req.server, token);
+        const userUpdated = await userService.updateLanguage(user, language);
+        reply.status(200).send({ message: "Language successfully changed", user: userUpdated });
+    } catch (error) {
+        reply.status(500).send({ error: "updateLanguage internal error" });
+    }
+}
+
 const verify2FA = async (req, reply) => {
 	const {auth, user} = req.body
 
@@ -164,4 +176,5 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
+    updateLanguage,
 }

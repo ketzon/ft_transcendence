@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import { isUserAuth } from '../auth';
+import {updateLanguage} from '../views/settings'
 
 //la valeur du DOM charge dans les view EN (default) est utilisee comme clef pour les autres langues
 const resources = {
@@ -77,6 +79,11 @@ export function changeLanguage(lang: string): void {
     i18next.changeLanguage(lang).then(() => { //place un ecouteur sur le language que je veux
       updateI18nTranslations();
     });
+    isUserAuth().then(isAuth => {
+        if(isAuth) {
+            updateLanguage(lang); //fetch language et stock dans localstorage
+        }
+    })
   }
 }
 

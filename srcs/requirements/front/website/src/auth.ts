@@ -1,3 +1,4 @@
+import { changeLanguage } from "./i18next";
 import { router } from "./router";
 import { printResponse } from "./utils";
 
@@ -39,6 +40,11 @@ function checkLocalStorage(user)
         localStorage.setItem("nickname", user.username);
         localStorage.setItem("avatar", "http://localhost:3000/" + user.avatar);
     // }
+    //recup par defaut en et init le site en anglais, si le user a deja change son language alors on use le language dans la db
+        if(user.language) {
+            localStorage.setItem("preferred_language", user.preferred_language);
+            changeLanguage(user.preferred_language);
+        }
 }
 
 

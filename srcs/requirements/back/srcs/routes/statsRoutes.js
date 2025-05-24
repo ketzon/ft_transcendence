@@ -47,15 +47,29 @@ async function statsRoutes(fastify, opts) {
             score1: game.score1,
             score2: game.score2,
             totalMoves: game.totalMoves,
-            avgMoveTime: game.avgMoveTime
+            avgMoveTime: game.avgMoveTime,
+
           }
         };
+      });
+
+      let currentStreak = 0;
+      let maxStreak = 0;
+      games.forEach(game => {
+        if (game.result === 'Win') {
+          currentStreak++;
+          if (currentStreak > maxStreak) maxStreak = currentStreak;
+        } else {
+          currentStreak = 0;
+        }
       });
 
       const gamesPlayed = games.length;
       const wins = games.filter(game => game.result === 'Win').length;
       const losses = gamesPlayed - wins;
       const winRate = gamesPlayed > 0 ? Math.round((wins / gamesPlayed) * 1000) / 10 : 0;
+      
+      console.log("🎯 maxStreak calculé dans le backend :", maxStreak);
 
       return reply.send(toSerializable({
         userId,
@@ -63,7 +77,8 @@ async function statsRoutes(fastify, opts) {
         wins,
         losses,
         winRate,
-        games
+        games,
+        maxStreak
       }));
 
     } catch (err) {

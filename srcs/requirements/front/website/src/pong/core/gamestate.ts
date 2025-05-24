@@ -57,7 +57,9 @@ export let gameState: GameState = {
     paddleLeftY: 160,
     paddleRightY: 160,
     scoreRight: 0,
-    scoreLeft: 0
+    scoreLeft: 0,
+    player1Id: null,
+    player2Id: null
 };
 
 // config touches

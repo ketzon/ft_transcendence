@@ -235,12 +235,16 @@ async function updateGameHistory() {
     createPerformanceGraph(games);
     const totalGames = games.length;
     const totalWins = games.filter(g => g.result === 'Win').length;
+    const totalDefeats = totalGames - totalWins;
     const winRate = totalGames > 0 ? Math.round((totalWins / totalGames) * 100) : 0;
 
     // Mise à jour du DOM
     document.getElementById('total-matches')!.textContent = totalGames.toString();
     document.getElementById('total-wins')!.textContent = totalWins.toString();
     document.getElementById('win-rate')!.textContent = `${winRate}%`;
+    document.getElementById('total-defeats')!.textContent = totalDefeats.toString();
+
+
 }
 
 export function initializeDashboard() {
@@ -296,6 +300,9 @@ fetch('http://localhost:3000/api/stats/user/1', {cache: 'no-store'})  // à adap
     document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
     document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
     document.getElementById('total-wins')!.textContent = data.wins.toString();
+    document.getElementById('max-streak')!.textContent = data.maxStreak.toString();
+    document.getElementById('total-defeats')!.textContent = data.losses.toString();
+
   })
   .catch(err => {
     console.error('❌ Erreur récupération stats :', err);

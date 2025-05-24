@@ -126,6 +126,7 @@ export function dashboardView(): string {
         }
 
         async function loadStats(userId = 1) {
+        console.log("✅ loadStats called");
             try {
                 const res = await fetch(\`http://localhost:3000/api/stats/user/\${userId}\`, { credentials: 'include' });
                 if (!res.ok) throw new Error('Erreur API');
@@ -150,16 +151,7 @@ export function dashboardView(): string {
                 document.getElementById("total-wins").textContent = data.wins;
                 document.getElementById("total-losses").textContent = data.losses;
 
-                let streak = 0, maxStreak = 0;
-                data.games.forEach(g => {
-                    if (g.result === 'Win') {
-                        streak++;
-                        if (streak > maxStreak) maxStreak = streak;
-                    } else {
-                        streak = 0;
-                    }
-                });
-                document.getElementById("max-streak").textContent = maxStreak;
+                document.getElementById("max-streak").textContent = data.maxStreak;
 
                 const map = {};
                 data.games.forEach(g => {

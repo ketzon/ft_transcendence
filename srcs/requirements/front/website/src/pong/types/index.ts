@@ -41,6 +41,8 @@ export type GameState = {
   paddleRightY: number;
   scoreRight: number;
   scoreLeft: number;
+  player1Id: number | null;
+  player2Id: number | null;
 }
 
 export type Keys = {

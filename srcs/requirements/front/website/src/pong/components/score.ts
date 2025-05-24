@@ -38,12 +38,20 @@ export function checkWinner(gameId: GameElements): void {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
-        player2Id: 3,
+        // player2Id: 3,
+        // score1: gameState.scoreLeft,
+        // score2: gameState.scoreRight,
+        // totalMoves: Math.floor(Math.random() * 50) + 30,
+        // avgMoveTime: "1.4s",
+        // duration: "7:00"
+        player1Id: gameState.player1Id = 1, // Pour le passage en variable dynamique, enlerver les = 1 et = 3
+        player2Id: gameState.player2Id = 3, //
         score1: gameState.scoreLeft,
         score2: gameState.scoreRight,
         totalMoves: Math.floor(Math.random() * 50) + 30,
-        avgMoveTime: "1.4s",
-        duration: "7:00"
+        avgMoveTime: (Math.random() * 3).toFixed(1) + "s", // aléatoire ou calculé
+        duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}` // aléatoire ou calculé
+
       })
     })
     .then(res => res.json())
@@ -62,12 +70,14 @@ export function checkWinner(gameId: GameElements): void {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
-        player2Id: 3,
+      player1Id: gameState.player1Id = 1, // Pour le passage en variable dynamique, enlerver les = 1 et = 3
+        player2Id: gameState.player2Id = 3, //
         score1: gameState.scoreLeft,
         score2: gameState.scoreRight,
         totalMoves: Math.floor(Math.random() * 50) + 30,
-        avgMoveTime: "1.4s",
-        duration: "7:00"
+        avgMoveTime: (Math.random() * 3).toFixed(1) + "s", // aléatoire ou calculé
+        duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}` // aléatoire ou calculé
+
       })
     })
     .then(res => res.json())

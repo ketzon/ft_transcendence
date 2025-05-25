@@ -9,10 +9,10 @@ async function gameRoutes(fastify, opts) {
   fastify.post('/api/games', async function (request, reply) {
   console.log("✅ POST /api/games bien reçu");
   console.log("📦 Contenu body :", request.body);
-  
+
   try {
     const {
-      player2Name = "player2👻",
+      player2Name = "Player2", // Valeur par défaut si player2Name n'est pas fourni
       score1,
       score2,
       totalMoves,

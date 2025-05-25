@@ -56,7 +56,7 @@ export function execSelect(): void {
     if (!pong1v1 || !pongTournament) return;
 
     pong1v1.addEventListener("click", async () => {
-        console.log("im in 1v1 mode")
+        console.log("👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻")
         if(!changingArea) return;
         setGameSettings();
         setChoosenBackground();
@@ -67,6 +67,9 @@ export function execSelect(): void {
         }
         console.log("prompt working")
         localStorage.setItem("Player2", player2);
+        console.log("👁️ player2 dans localStorage :", localStorage.getItem("Player2"));
+        console.log("👁️ player2 dans DOM :", document.getElementById("player2-name")?.textContent);
+
         setPause(true);
         changingArea.innerHTML = pongView();
         // setGameMode(true);

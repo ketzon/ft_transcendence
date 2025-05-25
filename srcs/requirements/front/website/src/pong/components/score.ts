@@ -27,8 +27,10 @@ export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void 
 export function checkWinner(gameId: GameElements): void {
   console.log("🧪 checkWinner appelé");
   const player1Name = gameId.player1?.textContent || "Unknown";
-  const player2Name = gameId.player2?.textContent || "Unknown";
+  // const player2Name = gameId.playere2?.textContent || "Unknown";
     if (gameState.scoreLeft >= WIN_SCORE) {
+      console.log("👀 Player2:", localStorage.getItem("Player2"));
+
         // confetti();
         setPause(true);
         gameSounds?.victorySound.play();

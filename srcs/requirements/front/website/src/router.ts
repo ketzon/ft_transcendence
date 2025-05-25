@@ -6,7 +6,7 @@ import { initializeTournaments } from "./tournamentsEvents";
 import { initGame, stopGame, setGameMode } from "./ponggame";
 import { pongView } from "./views/pong";
 import { selectView } from "./views/select";
-import { execSelect} from "./selectgames";
+// import { execSelect} from "./selectgames";
 
 
 import { initLogoutButton, isUserAuth } from "./auth";

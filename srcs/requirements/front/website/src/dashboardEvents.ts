@@ -80,12 +80,11 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/stats/user/1', { cache: 'no-store' }); // adapte l’ID ou utilise une variable plus tard
+    const res = await fetch('http://localhost:3000/api/stats/user/1', { cache: 'no-store' }); // temp adapte l’ID ou utilise une variable plus tard
     if (!res.ok) throw new Error('Erreur HTTP');
 
     const data = await res.json();
-
-    // Adapte cette ligne selon la structure réelle de la réponse backend
+    console.log('📊 Historique des parties récupéré :', data);
     return data.games;
   } catch (err) {
     console.error('Erreur lors de la récupération de l’historique :', err);
@@ -231,20 +230,8 @@ async function updateGameHistory() {
     console.log("👤 Joueurs des parties :", games.map(g => g.player1?.username || 'Unknown', g.player2?.username || 'Unknown'));
     console.log("🏆 Scores des parties :", games.map(g => g.score));
     console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
-    // Update performance graph
+
     createPerformanceGraph(games);
-    const totalGames = games.length;
-    const totalWins = games.filter(g => g.result === 'Win').length;
-    const totalDefeats = totalGames - totalWins;
-    const winRate = totalGames > 0 ? Math.round((totalWins / totalGames) * 100) : 0;
-
-    // Mise à jour du DOM
-    document.getElementById('total-matches')!.textContent = totalGames.toString();
-    document.getElementById('total-wins')!.textContent = totalWins.toString();
-    document.getElementById('win-rate')!.textContent = `${winRate}%`;
-    document.getElementById('total-defeats')!.textContent = totalDefeats.toString();
-
-
 }
 
 export function initializeDashboard() {

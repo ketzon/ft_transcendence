@@ -70,6 +70,7 @@ async function statsRoutes(fastify, opts) {
       const winRate = gamesPlayed > 0 ? Math.round((wins / gamesPlayed) * 1000) / 10 : 0;
       
       console.log("🎯 maxStreak calculé dans le backend :", maxStreak);
+      console.log("🎯 total losses calculé dans le backend :", losses);
 
       return reply.send(toSerializable({
         userId,

@@ -28,7 +28,7 @@ export function dashboardView(): string {
                     <div class="stat-card">🎮 <strong>Total Matches</strong><p id="total-matches" class="stat-value">0</p></div>
                     <div class="stat-card">🏆 <strong>Win Rate</strong><p id="win-rate" class="stat-value">0%</p></div>
                     <div class="stat-card">✨ <strong>Total Wins</strong><p id="total-wins" class="stat-value">0</p></div>
-                    <div class="stat-card">❌ <strong>Total Defeats</strong><p id="total-losses" class="stat-value">0</p></div>
+                    <div class="stat-card">❌ <strong>Total Defeats</strong><p id="total-defeats" class="stat-value">0</p></div>
                     <div class="stat-card">🔥 <strong>Best Win Streak</strong><p id="max-streak" class="stat-value">0</p></div>
                     <div class="stat-card">⚔️ <strong>Most Played Opponent</strong><p id="top-opponent" class="stat-value text-sm text-gray-700 mt-2">-</p></div>
                     <div class="stat-card">🎯 <strong>Avg Score</strong><p id="avg-score" class="stat-value">0</p></div>
@@ -143,14 +143,13 @@ export function dashboardView(): string {
                 else if (data.winRate >= 50) rank = "🥈 Confirmé";
                 else if (data.winRate > 0) rank = "🥉 Débutant";
                 else rank = "👾 Novice";
-                document.getElementById("profile-rank").textContent = "Rang : " + rank;
+                document.getElementById("profile-rank").textContent = "Rank : " + rank;
 
                 // Stats
                 document.getElementById("total-matches").textContent = data.gamesPlayed;
                 document.getElementById("win-rate").textContent = data.winRate + "%";
                 document.getElementById("total-wins").textContent = data.wins;
-                document.getElementById("total-losses").textContent = data.losses;
-
+                document.getElementById("total-defeats").textContent = data.losses;
                 document.getElementById("max-streak").textContent = data.maxStreak;
 
                 const map = {};

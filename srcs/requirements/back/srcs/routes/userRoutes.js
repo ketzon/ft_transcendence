@@ -9,5 +9,6 @@ export default async function registerUserRoute(fastify) {
 	fastify.post("/modifyPassword", userManagement.modifyPassword)
 	fastify.post("/verify-2FA", userManagement.verify2FA)
 	fastify.get("/profil", userManagement.displayCurrentUser)
-
+    fastify.post("/language", userManagement.updateLanguage);
+    fastify.post("/resendOtpCode", userManagement.resendOtpCode);
 }

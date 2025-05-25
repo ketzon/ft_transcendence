@@ -31,12 +31,26 @@ const comparePass = async (password, user) => {
 
 //Tokens
 const createJWT = async (app, id, email) => {
-	const token = await app.jwt.sign({ id: id, email: email });
+	const token = await app.jwt.sign({ id: id, email: email, type: "auth" });
 	return token
+}
+
+const createTempJWT = async (app, email) => {
+    const token = await app.jwt.sign({ email: email, type: "twofa" }, { expiresIn: "1h"});
+    return token
+}
+
+const getTempTwofaToken = async (app, token) => {
+    const decoded =  await app.jwt.verify(token);
+    if (decoded.type !== "twofa")
+        return (null);
+    return decoded.email;
 }
 
 const getUserByToken = async (app, token) => {
 	const decoded =  await app.jwt.verify(token)
+    if (decoded.type !== "auth")
+        return (null);
 	const user = await getUserById(decoded.id)
 	return user
 }
@@ -75,7 +89,9 @@ const sendTwoFactAuth = async (id, email) => {
 	const otp = crypto.randomInt(100000, 999999);
 	const otp_expire = Date.now() + 5 * 60 * 1000;
 	await mailSender.sendMail({
+        from: "pongu.sh42@gmail.com",
 		to: email,
+        subject: "Two-Factor-Authentification",
 		text: `Authentification code for next 5 minutes: ${otp}`,
 	});
 
@@ -134,9 +150,17 @@ const updatePassword = async (user, newPassword) => {
 	})
 }
 
+const updateLanguage = async (user, newLanguage) => {
+    return await prisma.user.update({
+        where: {id: user.id},
+        data: {language: newLanguage}
+    })
+}
 
 export default {
 	createJWT,
+    createTempJWT,
+    getTempTwofaToken,
 	createUser,
 	getUserById,
 	getUserByToken,
@@ -146,4 +170,5 @@ export default {
 	updateAvatar,
 	updatePassword,
 	sendTwoFactAuth,
+    updateLanguage,
 }

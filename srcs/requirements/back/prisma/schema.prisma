@@ -17,6 +17,7 @@ model User {
   username  String    //@unique uncomment post dev
   password  String
   avatar    String    @default("public/avatar.png")
+  language  String    @default("en")
 
   otp        Int?
   otp_expire BigInt?

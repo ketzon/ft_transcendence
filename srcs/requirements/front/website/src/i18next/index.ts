@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import { isUserAuth } from '../auth';
+import {updateLanguage} from '../views/settings'
 
 //la valeur du DOM charge dans les view EN (default) est utilisee comme clef pour les autres langues
 const resources = {
@@ -61,29 +63,50 @@ export function updateI18nTranslations(): void {
   });
 }
 
+const userLng = (() => {
+    const stored = localStorage.getItem('preferred_language');
+    if (!stored || stored === 'undefined' || stored === 'null') {
+        return 'en';
+    }
+    if (resources[stored]) {
+        return stored;
+    }
+    return 'en';
+})();
+
+// const userLng = localStorage.getItem('preferred_language') || 'en';
 i18next.init({
-  lng: 'en',
-  fallbackLng: 'en',
-  resources,
-  interpolation: { //interpolation pour inserer des variables dynamique dans mes ressources
-    escapeValue: true //echape les valeur pour eviter les injections XSS
-  }
+    lng: userLng,
+    fallbackLng: 'en',
+    resources,
+    interpolation: { //interpolation pour inserer des variables dynamique dans mes ressources
+        escapeValue: true //echape les valeur pour eviter les injections XSS
+    }
 }).then(() => {
-  updateI18nTranslations();
+    updateI18nTranslations();
+    const selector = document.getElementById('language-selector') as HTMLSelectElement;
+    if (selector) {
+        selector.value = userLng;
+    }
 });
 
 export function changeLanguage(lang: string): void {
-  if (resources[lang]) {
-    i18next.changeLanguage(lang).then(() => { //place un ecouteur sur le language que je veux
-      updateI18nTranslations();
-    });
-  }
+    if (resources[lang]) {
+        i18next.changeLanguage(lang).then(() => { //place un ecouteur sur le language que je veux
+            updateI18nTranslations();
+        });
+        isUserAuth().then(isAuth => {
+            if(isAuth) {
+                updateLanguage(lang); //fetch language et stock dans localstorage
+            }
+        })
+    }
 }
 
 export function initI18n(): void {
-  const selector = document.getElementById('language-selector') as HTMLSelectElement;
+    const selector = document.getElementById('language-selector') as HTMLSelectElement;
     selector.addEventListener('change', (event) => {
-      const target = event.target as HTMLSelectElement;
-      changeLanguage(target.value);
+        const target = event.target as HTMLSelectElement;
+        changeLanguage(target.value);
     });
 }

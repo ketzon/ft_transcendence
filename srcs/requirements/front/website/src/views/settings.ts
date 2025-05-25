@@ -106,6 +106,33 @@ async function updateNickname(newUsername: string): Promise<void> {
     }
 }
 
+export async function updateLanguage(language: string): Promise<void> {
+    console.log(`mon language selectionne est ${language}`)
+    try {
+        const res = await fetch("http://localhost:3000/user/language", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "include", 
+            body: JSON.stringify({ language}),
+        });
+        const resMsg = await res.json();
+        console.log(resMsg);
+        if (!res.ok) {
+            printResponse("/language", resMsg); 
+            toasts.error("Failed to update language")
+            return;
+        }
+        printResponse("/language", resMsg);
+        localStorage.setItem("preferred_language", language);
+        toasts.success("Language preference updated");
+    }
+    catch(error) {
+        console.error("Error with API when trying to update language");
+    }
+}
+
 //Function to check that the new nickname respect our conditions. We can add new rules here.
 function isValidNickname(newNickname: string): boolean {
     if (isEmptyString(newNickname))

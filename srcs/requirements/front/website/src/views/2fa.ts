@@ -1,12 +1,8 @@
 import { router } from "../router";
+import { toasts } from "../toasts";
+import { printResponse, resetAllInputs } from "../utils";
 
-async function sendCode(form:HTMLFormElement): Promise<void> {
-    console.log("2FA FORM | Code will be sent to back");
-
-//     A Tester avec la route du backend
-    const otp = document.getElementById("code") as HTMLInputElement;
-    const errElement = document.getElementById("error-message") as HTMLElement;
-
+async function sendCode(userEmail: string, code: string): Promise<void> {
     try
     {
         const res = await fetch("http://localhost:3000/user/verify-2FA", {
@@ -14,22 +10,18 @@ async function sendCode(form:HTMLFormElement): Promise<void> {
             headers: {
             "Content-Type": "application/json",
             },
-            credentials: "include", // A rajouter pour la vraie route.
-            body: JSON.stringify({otp}),
+            credentials: "include",
+            body: JSON.stringify({code, email: userEmail}),
         });
+        const resMsg = await res.json();
+        printResponse("/verify-2FA", resMsg);
         if (!res.ok)
         {
-            const error = await res.json();
-            if (errElement)
-            {
-                // errElement.innerText = error.message; //Vrai message du back.
-                console.log(error);
-                errElement.innerText = "Invalid code";
-                return;
-            }
+            resetAllInputs();
+            toasts.error("Wrong code");
+            return;
         }
-        console.log("2FA Successfull , redirecting to dashboard");
-
+        toasts.success("Succesfully logged");
         setTimeout(() => {
             window.history.pushState(null, "" , "/dashboard");
             router();
@@ -37,63 +29,133 @@ async function sendCode(form:HTMLFormElement): Promise<void> {
     }
     catch(error)
     {
+        toasts.error("Unexpected error");
         console.error("Error fectch 2fa");
     }
 }
 
-function isValidInput(form: HTMLFormElement): boolean {
+function getCode(form: HTMLFormElement): string {
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
+    let code:string = "";
 
-
-    //Ici on peut rajouter d'autre verifications avant d'envoyer le code.
-    if (data.code === null || data.code === "")
-    {
-        console.log("2FA FORM ERROR | input value = ", data.code);
-        return (false);
-    }
-    return (true);
-
+    for (const value of formData.values())
+        code += value;
+    return (code);
 }
 
-function verifyCode(): void {
+
+function verifyCode(userEmail: string): void {
     const form = document.getElementById("twofa-form") as HTMLFormElement;
-    const submitBtn = document.getElementById("submit-2fa") as HTMLButtonElement;
 
-    if (submitBtn)
+    if (form)
     {
-        submitBtn.addEventListener("click", (event: MouseEvent) => {
-            console.log("SUBMIT 2FA CLICKED");
-
+        form.addEventListener("submit", (event) => {
             event.preventDefault();
-            if (isValidInput(form) === true )
-            sendCode(form);
+            const code = getCode(form);
+            sendCode(userEmail, code);
         })
     }
 }
 
-export function init2fa(): void {
-    const mailDiv = document.getElementById("user-email") as HTMLElement;
 
-    if (mailDiv)
-        mailDiv.innerText = "2FA Code has been sent to : " + "dummy@gmail.com"; // Replace with real email.
-    verifyCode();
+/*
+    Auto switch to the next input field when valid value entered.
+    Handle delete and refocus on previous input.
+    Handle paste from clipboard.
+*/
+function handleAutoswitch(): void {
+    const allInputs = document.querySelectorAll("input");
+
+    for (let idx = 0; idx < allInputs.length; idx++)
+    {
+        const currentInput = allInputs[idx] as HTMLInputElement | null;
+        const prevInput = currentInput?.previousElementSibling as HTMLInputElement | null;
+        const nextInput = currentInput?.nextElementSibling as HTMLInputElement | null;
+
+        currentInput?.addEventListener("input", (event) => {
+            if (isNaN(currentInput.value) || currentInput.value === " ")
+                currentInput.value = "";
+            else if (currentInput.value && nextInput)
+                nextInput.focus();
+        })
+
+        currentInput?.addEventListener("keydown", (event) => {
+            if (event.key == "Backspace")
+            {
+                if (!currentInput.value && prevInput)
+                    prevInput.focus();
+            }
+        })
+
+        currentInput?.addEventListener("paste", (event) => {
+            event.preventDefault();
+
+            let paste = event?.clipboardData?.getData("text");
+            if (!paste || isNaN(paste))
+                return;
+            for (let i = 0; i < allInputs.length; i++)
+            {
+                if (paste[i])
+                    allInputs[i].value = paste[i];
+                allInputs[i].focus();
+            }
+        })
+    }
+}
+
+function handleResendBtn(userEmail: string): void {
+    const resendBtn = document.getElementById("resendBtn");
+
+    resendBtn?.addEventListener("click", async (event) => {
+        try
+        {
+            const res = await fetch("http://localhost:3000/user/resendOtpCode", {
+                method: "POST",
+                credentials: "include",
+            })
+            const resMsg = await res.json();
+            if (!res.ok)
+            {
+                printResponse("/resendOtpCode", resMsg);
+                //Clear cookie if exits.
+                router();
+                return ;
+            }
+            printResponse("/resendOtpCode", resMsg);
+        }
+        catch (error)
+        {
+            console.log("Could not contact /resendOtpCode");
+        }
+    })
+}
+
+export function init2fa(userEmail: string): void {
+    handleAutoswitch();
+    handleResendBtn(userEmail);
+    verifyCode(userEmail);
 }
 
 export function twofaView():string {
     return /*html*/ `
         <div id="2fa-area" class="w-full h-full flex flex-col justify-center items-center">
-            <div class="flex flex-col justify-center items-center h-1/2 w-1/2 border-2 rounded-4xl">
-                <h1>2FA AUTH</h1>
-                <img id="qr-code-img" class="w-full max-w-64 h-auto" src="">
-                <div id="user-email"></div>
-                <div id="error-message"></div>
-                <form id="twofa-form" class="flex flex-col gap-2.5 items-center">
-                    <label for="code">CODE : </label>
-                    <input required type="text" name="code" id="code" maxlength="6" class="w-2/3 border-2 rounded-2xl text-center">
-                    <button type="submit" id="submit-2fa" class="w-1/2 border-2 border-purple-500 rounded-2xl">SUBMIT</button>
-                </form>
-            </div>
+            <form id="twofa-form" class="flex flex-col items-center justify-center gap-9 rounded-2xl w-[460px] h-[600px] bg-white shadow relative">
+               <span class="text-2xl font-bold">Enter OTP</span>
+               <p class="text-center text-gray-600">We have sent a verification code to your email address</p>
+               <div id="inputs" class="w-full flex gap-2.5 items-center justify-center">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input1" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input2" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input3" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input4" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input5" name="otp">
+                    <input required maxlength="1" type="text" class="bg-gray-200 w-10 h-10 border-0 rounded-md text-center font-bold outline-0" id="otp-input6" name="otp">
+               </div>
+               <button class="px-20 py-3 border-0 text-white bg-[var(--accent-color)] font-semibold cursor-pointer rounded-xl hover:bg-[var(--text-color)] transition ease-in" type="submit" id="submit-2fa">Verify</button>
+               <div class="flex flex-col items-center gap-2">
+                    <p class="text-center text-gray-600 text-[0.7em]">Didn't receive the code?</p>
+                    <button id="resendBtn" type="button" class="text-violet-400 cursor-pointer font-bold text-[1em]">Resend code</button>
+               </div>
+            </form>
         </div>
     `
 }

@@ -1,3 +1,5 @@
+import userController from '../controllers/users_controller.js';
+import userService from "../services/user_services.js"
 
 function toSerializable(obj) {
   return JSON.parse(JSON.stringify(obj, (key, value) =>
@@ -6,8 +8,11 @@ function toSerializable(obj) {
 }
 
 async function statsRoutes(fastify, opts) {
-  fastify.get('/api/stats/user/:id', async (request, reply) => {
-    const userId = parseInt(request.params.id);
+  fastify.get('/api/stats/user', async (request, reply) => {
+    const token = userController.getToken(request, reply);
+    const user = await userService.getUserByToken(request.server, token);
+    const userId = user.id;
+    // const userId = parseInt(request.params.id);
 
     try {
       const gamesFromDb = await fastify.prisma.game.findMany({

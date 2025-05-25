@@ -231,4 +231,5 @@ export default {
 	verify2FA,
     updateLanguage,
     resendOtpCode,
+	getToken,
 }

@@ -80,7 +80,10 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/stats/user/1', { cache: 'no-store' }); // temp adapte l’ID ou utilise une variable plus tard
+    const res = await fetch('http://localhost:3000/api/stats/user', { 
+        cache: 'no-store', 
+        credentials: 'include' // Include cookies for authentication ETAPE 1
+    }); 
     if (!res.ok) throw new Error('Erreur HTTP');
 
     const data = await res.json();
@@ -281,7 +284,10 @@ export function initializeDashboard() {
     } else {
         // Otherwise, initialize just the graph with data
          getGameHistory().then((games) => { //getGameHistory() is async, then permet d'agir quand la promesse est resolue
-fetch('http://localhost:3000/api/stats/user/1', {cache: 'no-store'})  // à adapter dynamiquement plus tard
+fetch('http://localhost:3000/api/stats/user', {
+    cache: 'no-store', 
+    credentials: 'include'  // Include cookies for authentication ETAPE 1
+    })  // à adapter dynamiquement plus tard
   .then(res => res.json())
   .then(data => {
     document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();

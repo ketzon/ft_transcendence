@@ -16,7 +16,7 @@ export async function isUserAuth():Promise<boolean> {
         {
             console.log("User is NOT LOGGED");
             printResponse("/profil", user);
-            return (true);
+            return (false);
         }
         console.log("USER IS LOGGED");
         printResponse("/profil", user);

@@ -32,6 +32,7 @@ export async function isUserAuth():Promise<boolean> {
     }
 }
 
+let isFirstLoop:boolean = false;
 function checkLocalStorage(user)
 {
     // if (!localStorage.getItem("email") || !localStorage.getItem("nickname") || !localStorage.getItem("avatar"))
@@ -41,9 +42,10 @@ function checkLocalStorage(user)
         localStorage.setItem("avatar", "http://localhost:3000/" + user.avatar);
     // }
     //recup par defaut en et init le site en anglais, si le user a deja change son language alors on use le language dans la db
-        if(user.language) {
+        if(user.language && !isFirstLoop) {
             localStorage.setItem("preferred_language", user.language);
-            changeLanguage(user._language);
+            isFirstLoop = true
+            changeLanguage(user.language);
         }
 }
 
@@ -52,6 +54,11 @@ export async function initLogoutButton(): Promise<void> {
     let logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
     let selectLanguage = document.getElementById("selector") as HTMLButtonElement;
     const navbarElem = document.getElementById("navbar-box");
+
+    if (navbarElem) {
+        navbarElem.classList.remove('hidden'); 
+        navbarElem.style.display = 'flex'
+    }
 
     //si bouton existe deja (deuxieme connexion)
     if (logoutBtn && selectLanguage) {
@@ -100,6 +107,7 @@ export async function initLogoutButton(): Promise<void> {
             localStorage.clear(); //Clear all infos from the client that was stored in localStorage.
             if(logoutBtn) logoutBtn.style.display = 'none'
             if(selectLanguage) selectLanguage.style.display = 'none'
+            if(navbarElem) navbarElem.style.display = 'none'
             window.history.pushState(null, "", "/");
             router();
         }

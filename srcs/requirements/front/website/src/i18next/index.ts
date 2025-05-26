@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { toasts } from "../toasts";
 import { isUserAuth } from '../auth';
 import {updateLanguage} from '../views/settings'
 
@@ -27,8 +28,6 @@ const resources = {
       "Account Settings": "Account Settings",
       "Change Nickname": "Change Nickname",
       "Change Password": "Change Password",
-      "Update": "Update",
-
     }
   },
   ja: {
@@ -42,7 +41,6 @@ const resources = {
       "Change Nickname": "ニックネーム変更",
       "Update": "更新",
       "Change Password": "パスワードを変更する",
-
     }
   }
 };
@@ -92,6 +90,10 @@ i18next.init({
 
 export function changeLanguage(lang: string): void {
     if (resources[lang]) {
+        const selector = document.getElementById('language-selector') as HTMLSelectElement;
+        if (selector) {
+            selector.value = lang;
+        }
         i18next.changeLanguage(lang).then(() => { //place un ecouteur sur le language que je veux
             updateI18nTranslations();
         });
@@ -108,5 +110,6 @@ export function initI18n(): void {
     selector.addEventListener('change', (event) => {
         const target = event.target as HTMLSelectElement;
         changeLanguage(target.value);
+        toasts.success("Language preference updated");
     });
 }

@@ -98,8 +98,8 @@ export function gameSettingsView(): string {
     return /*html*/ `
     <div class="flex justify-center items-center h-full gap-2"> <!-- Wrapper !-->
         <div class="flex flex-col  bg-white rounded-2xl"> <!-- Main box !-->
-            <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
-                <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Game Settings</h2>
+            <div class="flex flex-col items-center m-3 bg-violet-100 rounded-2xl">
+                <h2 class="bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Game Settings</h2>
                 <div class="m-3">
                     <form id="toggleCustomForm">
                         <fieldset>
@@ -177,8 +177,8 @@ export function gameSettingsView(): string {
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col items-center m-3 bg-indigo-100 rounded-2xl">
-                <h2 class="bg-indigo-200 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
+            <div class="flex flex-col items-center m-3 bg-violet-100 rounded-2xl">
+                <h2 class="bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
                     <form id="mapSelection" class="flex flex-wrap justify-center gap-5 mx-10">
                         <label class="cursor-pointer my-5">
                             <input class="hidden peer" type="radio" name="map" value="bg-map-classic" checked/>
@@ -212,8 +212,8 @@ export function gameSettingsView(): string {
             </div>
         </div>
         <div class="flex flex-col justify-center py-10 w-1/5 bg-white rounded-2xl gap-1">
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-1v1">DUEL</button>
-            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-blue-600 text-white cursor-pointer hover:opacity-50" type="button" id="play-tournament">TOURNAMENT</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-violet-400 text-white cursor-pointer hover:opacity-50" type="button" id="play-1v1">DUEL</button>
+            <button class="border-2 mx-2 px-20 py-2 rounded-xl bg-violet-400 text-white cursor-pointer hover:opacity-50" type="button" id="play-tournament">TOURNAMENT</button>
         </div>
     </div>
 `

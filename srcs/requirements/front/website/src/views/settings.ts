@@ -126,7 +126,6 @@ export async function updateLanguage(language: string): Promise<void> {
         }
         printResponse("/language", resMsg);
         localStorage.setItem("preferred_language", language);
-        toasts.success("Language preference updated");
     }
     catch(error) {
         console.error("Error with API when trying to update language");

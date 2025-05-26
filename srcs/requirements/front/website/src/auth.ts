@@ -55,6 +55,11 @@ export async function initLogoutButton(): Promise<void> {
     let selectLanguage = document.getElementById("selector") as HTMLButtonElement;
     const navbarElem = document.getElementById("navbar-box");
 
+    if (navbarElem) {
+        navbarElem.classList.remove('hidden'); 
+        navbarElem.style.display = 'flex'
+    }
+
     //si bouton existe deja (deuxieme connexion)
     if (logoutBtn && selectLanguage) {
        selectLanguage.classList.remove('hidden'); 
@@ -102,6 +107,7 @@ export async function initLogoutButton(): Promise<void> {
             localStorage.clear(); //Clear all infos from the client that was stored in localStorage.
             if(logoutBtn) logoutBtn.style.display = 'none'
             if(selectLanguage) selectLanguage.style.display = 'none'
+            if(navbarElem) navbarElem.style.display = 'none'
             window.history.pushState(null, "", "/");
             router();
         }

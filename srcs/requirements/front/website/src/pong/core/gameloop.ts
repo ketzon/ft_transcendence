@@ -16,10 +16,10 @@ import { bracketView } from '../../views/bracket';
 import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
 import { settingsView } from '../../views/settings';
 import { winnerView } from '../../views/winner';
-import { player1, player2, player3, player4 } from '../../selectgames';
+// import { player1, player2, player3, player4 } from '../../selectgames';
 
 //main loop
-function gameLoop(gameId: GameElements): void {
+export function gameLoop(gameId: GameElements): void {
     if (pause === false) {
         updatePaddles(gameId)
         updateBall(gameId);
@@ -28,6 +28,7 @@ function gameLoop(gameId: GameElements): void {
         stopAllAudio();
     }
     checkWinner(gameId);
+    console.log("dans game loop");
     setAnimationFrameId(requestAnimationFrame(() => gameLoop(gameId)));
 }
 
@@ -288,3 +289,4 @@ export function setBasicMode(gameId: GameElements):void {
         }
     }
 }
+

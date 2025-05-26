@@ -48,7 +48,7 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">General Information</h3>
                 <p class="mb-2"><span class="font-medium">Date:</span> ${game.date}</p>
-                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.player2?.username || 'Unknown'}</p>
+                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.player2Name || 'Unknown'}</p>
                 <p class="mb-2"><span class="font-medium">Final Score:</span> ${game.score}</p>
                 <p class="mb-2"><span class="font-medium">Result:</span> <span class="${
                     game.result === 'Win' ? 'text-green-600' :
@@ -60,7 +60,7 @@ function showGameDetails(game: Game) {
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">Game Statistics</h3>
                 <p class="mb-2"><span class="font-medium">Total Duration:</span> ${game.gameStats.gameDuration}</p>
                 <p class="mb-2"><span class="font-medium">Points ${game.player1?.username || 'Player 1'}:</span> ${game.gameStats.score1}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.player2?.username || 'Player 2'}:</span> ${game.gameStats.score2}</p>
+                <p class="mb-2"><span class="font-medium">Points ${game.player2Name|| 'Player 2'}:</span> ${game.gameStats.score2}</p>
                 <p class="mb-2"><span class="font-medium">Total Moves:</span> ${game.gameStats.totalMoves}</p>
                 <p class="mb-2"><span class="font-medium">Average Move Time:</span> ${game.gameStats.avgMoveTime}</p>
             </div>
@@ -205,7 +205,7 @@ async function updateGameHistory() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.date}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.player2?.username || 'Unknown'}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.player2Name || 'Unknown'}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.score}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm ${
                 game.result === 'Win' ? 'text-green-600' :
@@ -230,7 +230,7 @@ async function updateGameHistory() {
 
     console.log("📊 Résultats des parties :", games.map(g => g.result));
     console.log("📅 Dates des parties :", games.map(g => g.date));
-    console.log("👤 Joueurs des parties :", games.map(g => g.player1?.username || 'Unknown', g.player2?.username || 'Unknown'));
+    console.log("👤 Joueurs des parties :", games.map(g => `${g.player1?.username || 'Unknown'} vs ${g.player2Name || 'Unknown'}`));
     console.log("🏆 Scores des parties :", games.map(g => g.score));
     console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
 

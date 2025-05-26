@@ -42,7 +42,6 @@ export type GameState = {
   scoreRight: number;
   scoreLeft: number;
   player1Id: number | null;
-  player2Id: number | null;
 }
 
 export type Keys = {

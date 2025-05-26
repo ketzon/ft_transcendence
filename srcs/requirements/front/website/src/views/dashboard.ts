@@ -106,7 +106,9 @@ export function dashboardView(): string {
             tbody.innerHTML = "";
 
             games.forEach((game) => {
-                const opponent = game.username;
+                const opponent = game.player2Name;
+                console.log("Opponent:");
+                console.log("Opponent:", opponent);
                 const resultColor = game.result === "Win" ? "text-green-600" : "text-red-500";
                 const resultEmoji = game.result === "Win" ? "✅" : "❌";
 
@@ -128,12 +130,12 @@ export function dashboardView(): string {
         async function loadStats(userId = 1) {
         console.log("✅ loadStats called");
             try {
-                const res = await fetch(\`http://localhost:3000/api/stats/user/\${userId}\`, { credentials: 'include' });
+                const res = await fetch('http://localhost:3000/api/stats/user', { cache: 'no-store', credentials: 'include'})
                 if (!res.ok) throw new Error('Erreur API');
                 const data = await res.json();
 
                 // 📛 Profil
-                const username = data.games[0]?.username || "Player";
+                const username = data.user.username || "Player";
                 document.getElementById("profile-username").textContent = username;
                 document.getElementById("profile-avatar").src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username;
 
@@ -154,7 +156,7 @@ export function dashboardView(): string {
 
                 const map = {};
                 data.games.forEach(g => {
-                    const opp = g.username;
+                    const opp = g.player2Name;
                     map[opp] = (map[opp] || 0) + 1;
                 });
                 const top = Object.entries(map).sort((a, b) => b[1] - a[1])[0];

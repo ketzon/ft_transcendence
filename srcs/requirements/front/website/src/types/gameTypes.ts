@@ -2,7 +2,7 @@ export interface Game {
     date: string;
     starts_at: string,
     player1: Player | null;
-    player2: Player | null;
+    player2Name : string;
     score: string;
     score1?: number;
     score2?: number;

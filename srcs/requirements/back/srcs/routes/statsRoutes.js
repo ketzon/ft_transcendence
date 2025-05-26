@@ -18,17 +18,15 @@ async function statsRoutes(fastify, opts) {
       const gamesFromDb = await fastify.prisma.game.findMany({
         where: {
           OR: [
-            { player1Id: userId },
-            { player2Id: userId }
+            { player1Id: userId }
           ]
         },
         orderBy: { date: 'desc' },
         include: {
-          player1: true,
-          player2: true
+          player1: true
         }
       });
-      console.log("🧪 Games from DB :", gamesFromDb);
+      // console.log("🧪 Games from DB :", gamesFromDb);
 
       const games = gamesFromDb.map((game) => {
         const isPlayer1 = game.player1Id === userId;
@@ -37,16 +35,15 @@ async function statsRoutes(fastify, opts) {
         const result = userScore > opponentScore ? 'Win' : 'Loss';
 
         const player1Username = game.player1 && game.player1.username ? game.player1.username : 'Player' + game.player1Id;
-        const player2Username = game.player2 && game.player2.username ? game.player2.username : 'Player' + game.player2Id;
-        const username = isPlayer1 ? player1Username : player2Username;
+        const username = isPlayer1 ? player1Username : game.player2Name;
 
         return {
           date: game.date.toISOString().slice(0, 16).replace('T', ' '),
           player1: { id: game.player1Id, username: player1Username },
-          player2: { id: game.player2Id, username: player2Username },
           score: game.score1 + '-' + game.score2,
           result: result,
           username: username,
+          player2Name: game.player2Name, //utilise dans dashboard.ts pour le gameHistory
           gameStats: {
             gameDuration: game.duration,
             score1: game.score1,

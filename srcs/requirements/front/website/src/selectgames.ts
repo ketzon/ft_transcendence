@@ -9,6 +9,7 @@ import { pongScore } from "./pong/core/gameloop";
 import { combatView} from "./views/combat";
 import { setGameSettings, setChoosenBackground } from "./pongCustomization";
 import { selectView } from "./views/select";
+import { gameLoop } from "./pong/core/gameloop";
 
 
 export type BracketElements = {
@@ -56,7 +57,6 @@ export function execSelect(): void {
     if (!pong1v1 || !pongTournament) return;
 
     pong1v1.addEventListener("click", async () => {
-        console.log("👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻👻")
         if(!changingArea) return;
         setGameSettings();
         setChoosenBackground();
@@ -67,11 +67,12 @@ export function execSelect(): void {
         }
         console.log("prompt working")
         localStorage.setItem("Player2", player2);
-        console.log("👁️ player2 dans localStorage :", localStorage.getItem("Player2"));
-        console.log("👁️ player2 dans DOM :", document.getElementById("player2-name")?.textContent);
 
         setPause(true);
         changingArea.innerHTML = pongView();
+        const gameId = getElements(); //26/05 
+        gameLoop(gameId); //26/05
+
         // setGameMode(true);
         initGame(false);
     });
@@ -163,6 +164,9 @@ export function showBracket(): void {
           vantaEffect = null;
         }
         changingArea.innerHTML = pongView();
+        const gameId = getElements(); //26/05
+        gameLoop(gameId); //26/05
+
         initGame(true);
       }
     }, { once: true }); //seulement 1 listener

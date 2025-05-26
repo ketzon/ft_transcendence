@@ -28,22 +28,10 @@ async function gameRoutes(fastify, opts) {
   if (!player1) {
     return reply.code(400).send({ error: "One or both players do not exist" });
   }
-  
-  const player2 = await fastify.prisma.user.create({
-    data: {
-      username: player2Name,
-      email: `${player2Name.toString().toLowerCase()}${Date.now()}@example.com`,  // Ajoute un timestamp pour rendre l'email unique
-      password: "defaultpassword",
-      avatar: "default_avatar.png"
-    }
-  });
-
-  const player2Id = player2.id;
-
-  const data = {
+    const data = {
     date: new Date(),
     player1Id,
-    player2Id, 
+    player2Name, 
     score1,
     score2,
     totalMoves,

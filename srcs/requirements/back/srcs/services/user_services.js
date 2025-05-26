@@ -157,6 +157,40 @@ const updateLanguage = async (user, newLanguage) => {
     })
 }
 
+const validPasswordPolicy = (password) => {
+    let passwordRules = [
+    {
+        regex: /.{8,}/,   // min 8 letters
+        itemId : "min-len-item"
+    },
+    {
+        regex: /[0-9]/, // at least 1 number
+        itemId: "number-item"
+    },
+    {
+        regex: /[a-z]/, // at least one lowercase
+        itemId: "lowercase-item"
+    },
+    {
+        regex: /[A-Z]/,
+        itemId: "uppercase-item"
+    },
+    {
+        regex: /(?=.*[@$!%*?&])/,
+        itemId: "special-char-item"
+    }
+]
+    if (!password)
+        return (false);
+    for (let idx = 0; idx < passwordRules.length; idx++)
+    {
+        let isValid= passwordRules[idx].regex.test(password);
+        if (!isValid)
+            return (false);
+    }
+    return (true);
+}
+
 export default {
 	createJWT,
     createTempJWT,
@@ -171,4 +205,5 @@ export default {
 	updatePassword,
 	sendTwoFactAuth,
     updateLanguage,
+    validPasswordPolicy,
 }

@@ -218,3 +218,4 @@ export function gameSettingsView(): string {
     </div>
 `
 }
+

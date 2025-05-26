@@ -29,7 +29,9 @@ const getToken = (req, reply) => {
 // User try to signup
 const signup = async (req, reply) => {
 	const { email, username, password, avatar } = getBody(req, reply)
-
+    const passwordPolicy = userService.validPasswordPolicy(password);
+    if (!passwordPolicy)
+        return reply.status(400).send({message: "Password does not meet requierements."});
 	try {
 		//create user
 		const id = await userService.createUser(email, password, avatar)

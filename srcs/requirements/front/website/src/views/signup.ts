@@ -53,8 +53,9 @@ function verifyInputs(data: formValues) {
         emailInput?.parentElement?.classList.add("incorrect");
     }
 
-    if (data.password === "" || data.password == null || !isValidPassword(data.password))
+    if (data.password === "" || data.password == null)
     {
+        // !isValidPassword(data.password)
         const passwordInput = document.getElementById("update-password-value");
 
         errors.push("Password is required");

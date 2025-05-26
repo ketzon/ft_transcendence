@@ -34,7 +34,7 @@ const signup = async (req, reply) => {
         return reply.status(400).send({message: "Password does not meet requierements."});
 	try {
 		//create user
-		const id = await userService.createUser(email, password, avatar)
+		const id = await userService.createUser(email, password, avatar, username)
 
 		//create auth token
 		const token = await userService.createJWT(req.server, id, email);

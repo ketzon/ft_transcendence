@@ -26,6 +26,8 @@ import gameRoutes from './routes/gameRoutes.js';
 // Prisma
 import prisma from './config/prismaClient.js';
 
+// Tournament
+import tournamentRoutes from './routes/tournamentRoutes.js';
 
 
 
@@ -83,6 +85,8 @@ fastify.register(fastifyJwt, {
 fastify.register(registerUserRoute, {prefix: "/user"});
 await fastify.register(statsRoutes);  //Stats
 await fastify.register(gameRoutes);  //Jeu
+await fastify.register(tournamentRoutes); //Tournois
+
 
 //demarre le serveur
 fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {

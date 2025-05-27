@@ -84,3 +84,9 @@ export function resetGameState(): void {
     pause = true;
     isBasic = true;
 }
+
+export let tournamentResults: { player1: string, player2: string, winner: string, score1: number, score2: number }[] = [];
+
+export function resetTournamentResults(): void {
+  tournamentResults = [];
+}

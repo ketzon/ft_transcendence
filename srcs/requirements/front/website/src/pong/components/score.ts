@@ -5,6 +5,8 @@ import { resetGame } from '../core/gameloop';
 import { setPause } from '../core/gamestate';
 import confetti  from 'canvas-confetti';
 import { gameSounds } from '../utils/audio';
+import { tournamentResults } from '../core/gamestate'; 
+import { sendTournamentToBackend } from './tournamentResults';
 
 export function resetScore(gameId: GameElements):void {
     if (gameId.scoreLeft || gameId.scoreLeft) {
@@ -25,38 +27,66 @@ export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void 
 }
 
 export function checkWinner(gameId: GameElements): void {
+
+  const isTournament = localStorage.getItem("tournamentPlayers") !== null;
   const player1Name = gameId.player1?.textContent || "Unknown";
   const player2Name = gameId.player2?.textContent || "Unknown";
-    if (gameState.scoreLeft >= WIN_SCORE) {
-      console.log("👀 Player2:", player1Name);
-        setPause(true);
-        gameSounds?.victorySound.play();
-        // fetch('/api/games', { 
-      fetch('http://localhost:3000/api/games', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-      player2Name: localStorage.getItem("Player2") || "player2👻",
+  
+  
+  if (gameState.scoreLeft >= WIN_SCORE)
+  {
+    setPause(true);
+    gameSounds?.victorySound.play();
+
+    if (isTournament) {
+    tournamentResults.push({
+      player1: player1Name,
+      player2: player2Name,
+      winner: player1Name,
       score1: gameState.scoreLeft,
       score2: gameState.scoreRight,
-      totalMoves: Math.floor(Math.random() * 50) + 30,
-      avgMoveTime: (Math.random() * 3).toFixed(1) + "s", // aléatoire ou calculé
-      duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}` // aléatoire ou calculé
+    });
+    console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
+    }
 
+    fetch('http://localhost:3000/api/games',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify  ({
+          player2Name: localStorage.getItem("Player2") || "player2👻",
+          score1: gameState.scoreLeft,
+          score2: gameState.scoreRight,
+          totalMoves: Math.floor(Math.random() * 50) + 30,
+          avgMoveTime: (Math.random() * 3).toFixed(1) + "s", // aléatoire ou calculé
+          duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}` // aléatoire ou calculé
+        })
       })
-    })
     .then(res => res.json())
     .then(data => console.log("✅ Partie enregistrée :", data))
     .catch(err => console.error("❌ Erreur enregistrement :", err));
 
     
     changeWinnerMsg(gameId, player1Name);
-    } else if (gameState.scoreRight >= WIN_SCORE) {
-        // confetti();
-        setPause(true);
-        gameSounds?.victorySound.play();
-        // fetch('/api/games', { 
+    }
+    
+    else if (gameState.scoreRight >= WIN_SCORE)
+    {
+      setPause(true);
+      gameSounds?.victorySound.play();
+
+    if (isTournament) {
+      tournamentResults.push({
+        player1: player1Name,
+        player2: player2Name,
+        winner: player2Name,
+        score1: gameState.scoreLeft,
+        score2: gameState.scoreRight,
+      });
+      console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
+    }
+
       fetch('http://localhost:3000/api/games', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -76,5 +106,10 @@ export function checkWinner(gameId: GameElements): void {
     .catch(err => console.error("❌ Erreur enregistrement :", err));
 
     changeWinnerMsg(gameId, player2Name);
+  }
+
+    if (tournamentResults.length >= 3) {
+    console.log("🎉 Tous les matchs sont terminés, envoi au backend...");
+    sendTournamentToBackend();
   }
 }

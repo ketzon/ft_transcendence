@@ -8,7 +8,8 @@ services:
       - transcendence
     volumes:
       - db:/usr/src/app/prisma
- 
+      - uploads:/usr/src/app/srcs/services/uploads
+
   front:
     build: requirements/front/.
     container_name: front
@@ -31,3 +32,11 @@ volumes:
       device: ./requirements/back/prisma
       o : bind
       type : none
+
+  uploads:
+    name: uploads
+    driver: local
+    driver_opts:
+      device: ./requirements/back/srcs/services/uploads
+      o: bind
+      type: none

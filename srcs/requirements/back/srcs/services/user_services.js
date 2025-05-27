@@ -56,12 +56,13 @@ const getUserByToken = async (app, token) => {
 }
 //
 
-const createUser =  async (email, password, avatar) => {
+const createUser =  async (email, password, avatar, username) => {
 	const salt = await bcrypt.genSalt(10);
 	const hashedPassword = await bcrypt.hash(password, salt);
-	const randomUsername = generateRandomUsername()
+    if (!username)
+	    username = generateRandomUsername()
 	const user = await prisma.user.create({
-		data: { email, username: randomUsername, password: hashedPassword}
+		data: { email, username: username, password: hashedPassword}
 	})
 	if (avatar) {
 		await prisma.user.update({

@@ -7,7 +7,8 @@ interface formValues {
     username: string,
     email: string,
     password: string,
-    repeatpassword: string
+    repeatpassword: string,
+    googleAuth: boolean
 }
 
 // Cette fonction reset la couleur rouge sur les inputs (class incorrect) lorsque l'user ecrit a nouveau dans un input precedemment faux.
@@ -55,7 +56,6 @@ function verifyInputs(data: formValues) {
 
     if (data.password === "" || data.password == null)
     {
-        // !isValidPassword(data.password)
         const passwordInput = document.getElementById("update-password-value");
 
         errors.push("Password is required");
@@ -138,6 +138,7 @@ export function handleCredentialResponse(response): void {
         email: responsePayload.email,
         password: responsePayload.sub,
         repeatpassword: responsePayload.sub,
+        googleAuth: true
     }
 
     //On recupere les donnees des inputs du form.
@@ -156,7 +157,8 @@ function getFormValues(): formValues {
         username: usernameInput?.value,
         email: emailInput?.value,
         password: passwordInput?.value,
-        repeatpassword: repeatPasswordInput?.value
+        repeatpassword: repeatPasswordInput?.value,
+        googleAuth: false
     }
     return (data);
 }

@@ -17,11 +17,34 @@ let state: State = {
     myId: 1,
     unknownPlayer: { id: 0, username: 'unknown', avatar: 'png/avatar.png' }
 };
+function normalizeTournament(t: any): Tournament {
+    const normalizedPlayers = (t.players || []).map((p: any, idx: number) =>
+        typeof p === 'string'
+            ? { id: idx + 1, username: p, avatar: `https://robohash.org/${p}?set=set4` }
+            : p
+    );
 
+    return {
+        ...t,
+        players: normalizedPlayers,
+        rounds: (t.rounds || []).map((r: any) => ({
+            ...r,
+            players: normalizedPlayers, // Ajoute cette ligne
+            games: r.games || [{
+                player1: { id: 0, username: r.player1 || 'unknown', avatar: '' },
+                player2: { id: 0, username: r.player2 || 'unknown', avatar: '' },
+                score1: r.score1, score2: r.score2,
+                is_completed: true
+            }]
+        }))
+    };
+}
 export async function initializeTournaments() {
     try {
         const res = await fetch("http://localhost:3000/api/tournaments", { credentials: "include" });
+        console.log("📌 State Tour", state.tours);
         const tournaments = await res.json();
+        state.tours = tournaments.map(normalizeTournament);
         state.tours = tournaments;
         state.loading = false;
         state.serverUrl = 'http://localhost:5173';
@@ -55,8 +78,10 @@ async function createTour() {
 async function showTour(tourId: string) {
     try {
         const res = await fetch(`http://localhost:3000/api/tournaments/${tourId}`, { credentials: "include" });
-        const tournament = await res.json();
+
+        const tournament = normalizeTournament(await res.json());
         state.selectedTourJson = tournament;
+        console.log("✅ Tournois ", tournament);
         updateTournamentDiv();
     } catch (error) {
         console.error("Error showing tour:", error);
@@ -178,6 +203,7 @@ function calculateRatings(tournament: Tournament): (Player & { rating: number })
 
 function updateTournamentDiv() {
     updateTournamentsList();
+    console.log("🎯 Les donnees dans UTDiv", state.selectedTourJson);
     const content = document.getElementById('tournament-content');
     if (!content) return;
     if (!state.selectedTourJson) {

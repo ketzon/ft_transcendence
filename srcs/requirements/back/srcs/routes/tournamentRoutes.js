@@ -46,16 +46,5 @@ fastify.get("/api/tournaments/:id", async (req, reply) => {
 }
 
 
-// fastify.get("/api/tournaments", async (req, reply) => {
-//   try {
-//     const tournaments = await fastify.prisma.tournament.findMany();
-//     reply.send(tournaments);
-//   } catch (error) {
-//     console.error("❌ Erreur récupération tournois :", error);
-//     reply.code(500).send({ success: false, error: error.message });
-//   }
-// });
-
-
 
 export default tournamentRoutes;

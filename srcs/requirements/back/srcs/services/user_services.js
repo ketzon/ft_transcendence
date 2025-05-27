@@ -158,6 +158,17 @@ const updateLanguage = async (user, newLanguage) => {
     })
 }
 
+const validUsernamePolicy = (username) => {
+    let usernameRules = /^[a-zA-Z0-9_-]{2,16}$/;
+
+    if (!username)
+        return false;
+    const isValid = usernameRules.test(username);
+    if (!isValid)
+        return false;
+    return (true);
+}
+
 const validPasswordPolicy = (password) => {
     let passwordRules = [
     {
@@ -185,7 +196,7 @@ const validPasswordPolicy = (password) => {
         return (false);
     for (let idx = 0; idx < passwordRules.length; idx++)
     {
-        let isValid= passwordRules[idx].regex.test(password);
+        let isValid = passwordRules[idx].regex.test(password);
         if (!isValid)
             return (false);
     }
@@ -207,4 +218,5 @@ export default {
 	sendTwoFactAuth,
     updateLanguage,
     validPasswordPolicy,
+    validUsernamePolicy,
 }

@@ -95,7 +95,6 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
         }
         toasts.success("Register successfull");
         printResponse("/signup", responseData);
-        errElement.innerText = responseData.message;
         setTimeout(() => {
             // window.history.pushState(null, "", "/twofa"); On peut direct rediriger vers le 2fa ?
             window.history.pushState(null, "", "/login");

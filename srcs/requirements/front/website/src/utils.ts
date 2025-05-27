@@ -11,9 +11,7 @@ export function resetInput(inputId: string): void {
 
 export function isEmptyString(str: string): boolean {
     const trimmedStr = str.trim();
-
-    console.log(trimmedStr);
-    console.log(trimmedStr.length);
+    
     if (trimmedStr.length === 0)
         return (true);
     return (false);

@@ -19,8 +19,8 @@ const getBody = (req, reply ) => {
 		return reply.status(400).send("Missing email in request-body.")
 	else if (!req.body.password || req.body.password.trim() === "")
 		return reply.status(400).send("Missing password in request-body.")
-	const { email, username, password, avatar } = req.body
-	return { email, username, password, avatar }
+	const { email, username, password, avatar, googleAuth } = req.body
+	return { email, username, password, avatar, googleAuth }
 }
 
 const getToken = (req, reply) => {
@@ -33,11 +33,17 @@ const getToken = (req, reply) => {
 
 // User try to signup
 const signup = async (req, reply) => {
-	const { email, username, password, avatar } = getBody(req, reply)
-
+	const { email, username, password, avatar, googleAuth } = getBody(req, reply)
+    console.log(googleAuth);
+    if (!googleAuth)
+    {
+        const passwordPolicy = userService.validPasswordPolicy(password);
+        if (!passwordPolicy)
+            return reply.status(400).send({message: "Password does not meet requierements."});
+    }
 	try {
 		//create user
-		const id = await userService.createUser(email, password, avatar)
+		const id = await userService.createUser(email, password, avatar, username)
 
 		//create auth token
 		const token = await userService.createJWT(req.server, id, email);

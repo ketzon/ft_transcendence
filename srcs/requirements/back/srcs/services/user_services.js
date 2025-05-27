@@ -56,12 +56,13 @@ const getUserByToken = async (app, token) => {
 }
 //
 
-const createUser =  async (email, password, avatar) => {
+const createUser =  async (email, password, avatar, username) => {
 	const salt = await bcrypt.genSalt(10);
 	const hashedPassword = await bcrypt.hash(password, salt);
-	const randomUsername = generateRandomUsername()
+    if (!username)
+	    username = generateRandomUsername()
 	const user = await prisma.user.create({
-		data: { email, username: randomUsername, password: hashedPassword}
+		data: { email, username: username, password: hashedPassword}
 	})
 	if (avatar) {
 		await prisma.user.update({
@@ -157,6 +158,40 @@ const updateLanguage = async (user, newLanguage) => {
     })
 }
 
+const validPasswordPolicy = (password) => {
+    let passwordRules = [
+    {
+        regex: /.{8,}/,   // min 8 letters
+        itemId : "min-len-item"
+    },
+    {
+        regex: /[0-9]/, // at least 1 number
+        itemId: "number-item"
+    },
+    {
+        regex: /[a-z]/, // at least one lowercase
+        itemId: "lowercase-item"
+    },
+    {
+        regex: /[A-Z]/,
+        itemId: "uppercase-item"
+    },
+    {
+        regex: /(?=.*[@$!%*?&])/,
+        itemId: "special-char-item"
+    }
+]
+    if (!password)
+        return (false);
+    for (let idx = 0; idx < passwordRules.length; idx++)
+    {
+        let isValid= passwordRules[idx].regex.test(password);
+        if (!isValid)
+            return (false);
+    }
+    return (true);
+}
+
 export default {
 	createJWT,
     createTempJWT,
@@ -171,4 +206,5 @@ export default {
 	updatePassword,
 	sendTwoFactAuth,
     updateLanguage,
+    validPasswordPolicy,
 }

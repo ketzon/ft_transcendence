@@ -17,6 +17,12 @@ let state: State = {
     myId: 1,
     unknownPlayer: { id: 0, username: 'unknown', avatar: 'png/avatar.png' }
 };
+
+document.getElementById('create-tour')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    createTour();
+});
+
 function normalizeTournament(t: any): Tournament {
     const normalizedPlayers = (t.players || []).map((p: any, idx: number) =>
         typeof p === 'string'
@@ -26,6 +32,8 @@ function normalizeTournament(t: any): Tournament {
 
     return {
         ...t,
+        start_time: t.start_time || t.date || '',
+        name: t.name || `Tournament ${t.id}`,
         players: normalizedPlayers,
         rounds: (t.rounds || []).map((r: any) => ({
             ...r,
@@ -49,7 +57,7 @@ export async function initializeTournaments() {
         state.loading = false;
         state.serverUrl = 'http://localhost:5173';
         state.selectedTourJson = null;
-        document.getElementById('create-tour')?.addEventListener('click', createTour);
+        // document.getElementById('create-tour')?.addEventListener('click', createTour);
         updateTournamentDiv();
     } catch (error) {
         console.error("Error initializing tournaments:", error);
@@ -69,7 +77,7 @@ async function createTour() {
         const newTour = await res.json();
         state.selectedTourJson = newTour;
         await initializeTournaments();
-        updateTournamentDiv();
+        // updateTournamentDiv();
     } catch (error) {
         console.error("Error creating tour:", error);
     }
@@ -91,6 +99,7 @@ async function showTour(tourId: string) {
 function updateTournamentsList() {
     const tournamentsList = document.getElementById('tournaments-list');
     if (!tournamentsList) return;
+    tournamentsList.innerHTML = '';
     tournamentsList.innerHTML = state.tours.slice().reverse().map((t: Tournament) => `
         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150 ${state.selectedTourJson?.id === t.id ? 'ring-2 ring-[#8672FF]' : ''}">
             <span class="text-gray-700 font-medium truncate">${t.name}</span>
@@ -219,7 +228,7 @@ function updateTournamentDiv() {
     let contentHtml = `
         <div class="space-y-6">
             <div class="border-b border-gray-200 pb-4">
-                <h2 class="text-2xl font-bold text-gray-800">${tour.name}</h2>
+                <h2 class="text-2xl font-bold text-gray-800">${tour.name || `Tournament ${tour.id}`}</h2>
                 <p class="text-gray-500 mt-2">Starts at ${new Date(tour.start_time).toLocaleString()}</p>
             </div>
             <div class="grid grid-cols-2 gap-6">

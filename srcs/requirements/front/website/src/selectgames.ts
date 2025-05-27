@@ -92,7 +92,7 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
-        players.push(localStorage.getItem('nickname'))
+        players.push(localStorage.getItem('nickname') || "player1👻"); //ajout du joueur 1 au tableau des joueurs
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
 
 
@@ -164,8 +164,8 @@ export function showBracket(): void {
           vantaEffect = null;
         }
         changingArea.innerHTML = pongView();
-        const gameId = getElements(); //26/05
-        gameLoop(gameId); //26/05
+        const gameId = getElements();
+        gameLoop(gameId);
 
         initGame(true);
       }

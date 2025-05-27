@@ -25,8 +25,6 @@ export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void 
 }
 
 export function checkWinner(gameId: GameElements): void {
-  console.log("🧪 checkWinner appelé");
-  console.log("🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪🧪 gameId object:", gameId);
   const player1Name = gameId.player1?.textContent || "Unknown";
   const player2Name = gameId.player2?.textContent || "Unknown";
     if (gameState.scoreLeft >= WIN_SCORE) {
@@ -64,7 +62,7 @@ export function checkWinner(gameId: GameElements): void {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
-      player1Id: gameState.player1Id, // Pour le passage en variable dynamique, enlerver les = 1 et = 3
+      player1Id: gameState.player1Id,
         score1: gameState.scoreLeft,
         score2: gameState.scoreRight,
         totalMoves: Math.floor(Math.random() * 50) + 30,

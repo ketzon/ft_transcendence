@@ -12,7 +12,6 @@ async function statsRoutes(fastify, opts) {
     const token = userController.getToken(request, reply);
     const user = await userService.getUserByToken(request.server, token);
     const userId = user.id;
-    // const userId = parseInt(request.params.id);
 
     try {
       const gamesFromDb = await fastify.prisma.game.findMany({
@@ -43,7 +42,7 @@ async function statsRoutes(fastify, opts) {
           score: game.score1 + '-' + game.score2,
           result: result,
           username: username,
-          player2Name: game.player2Name, //utilise dans dashboard.ts pour le gameHistory
+          player2Name: game.player2Name, 
           gameStats: {
             gameDuration: game.duration,
             score1: game.score1,
@@ -70,9 +69,6 @@ async function statsRoutes(fastify, opts) {
       const wins = games.filter(game => game.result === 'Win').length;
       const losses = gamesPlayed - wins;
       const winRate = gamesPlayed > 0 ? Math.round((wins / gamesPlayed) * 1000) / 10 : 0;
-      
-      console.log("🎯 maxStreak calculé dans le backend :", maxStreak);
-      console.log("🎯 total losses calculé dans le backend :", losses);
 
       return reply.send(toSerializable({
         userId,
@@ -92,10 +88,4 @@ async function statsRoutes(fastify, opts) {
 
 }
 
-// Export si tu es en module ESM :
 export default statsRoutes;
-
-// Ou, si tu es en CommonJS (avec `require`)
-/*
-module.exports = statsRoutes;
-*/

@@ -45,6 +45,4 @@ fastify.get("/api/tournaments/:id", async (req, reply) => {
 
 }
 
-
-
 export default tournamentRoutes;

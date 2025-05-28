@@ -34,12 +34,14 @@ const getToken = (req, reply) => {
 // User try to signup
 const signup = async (req, reply) => {
 	const { email, username, password, avatar, googleAuth } = getBody(req, reply)
-    console.log(googleAuth);
     if (!googleAuth)
     {
         const passwordPolicy = userService.validPasswordPolicy(password);
         if (!passwordPolicy)
             return reply.status(400).send({message: "Password does not meet requierements."});
+        const usernamePolicy = userService.validUsernamePolicy(username);
+        if (!usernamePolicy)
+            return reply.status(400).send({message: "Nickname does not meet requierements."});
     }
 	try {
 		//create user
@@ -153,6 +155,9 @@ const customUsername = async (req, reply) => {
 		const newUsername = req.body.newUsername
 		const token = getToken(req, reply)
 		const user = await userService.getUserByToken(req.server, token)
+        const usernamePolicy = userService.validUsernamePolicy(newUsername);
+        if (!usernamePolicy)
+            return reply.status(400).send({message: "Nickname does not meet requierements."});
 		const userUpdated = await userService.updateUsername(user, newUsername)
 		reply.status(200).send({message: "Username succesfully changed.", user: userUpdated})
 	}

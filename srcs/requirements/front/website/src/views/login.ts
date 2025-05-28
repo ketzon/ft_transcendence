@@ -88,7 +88,6 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
         }
         toasts.success("Signin successfull");
         printResponse("/signin", responseData);
-        errElement.innerText = responseData.message;
         if (changingArea)
         {
             changingArea.innerHTML = twofaView();

@@ -193,6 +193,38 @@ async function updateAvatar(formData: FormData): Promise<void> {
     }
 }
 
+async function deleteUser(string: username): Promise<void> {
+  try {
+    const res = await fetch("http://localhost:3000/user/deleteUser", {
+      method: "POST",
+      body: username,
+      credentials: "include"
+    });
+    if (!res.ok) {
+      const resMsg = await res.json();
+      printResponse("/deleteUser", resMsg);
+
+      toasts.error("Failed to delete user");
+      return ;
+    }
+    const resMsg = await res.json();
+    printResponse("/deleteUser", resMsg);
+    toasts.success("User deleted");
+  }
+  catch(error) {
+    console.error("Error deleting user");
+  }
+}
+
+function handleDeleteUser(): void {
+  const delBtn = document.getElementById("account-delete-btn");
+  if (delBtn) {
+    delBtn.addEventListener("click", (event) => {
+      deleteUser(localStorage.getItem("nickname"));
+    })
+  }
+}
+
 //Function that will listen to the submit button and call API to update in DB(need to edit this when we connect backend).
 function handleSubmitAvatar(): void {
     const avatarUploadForm = document.getElementById("upload-avatar-form");
@@ -317,6 +349,9 @@ export function settingsView(): string {
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="w-full flex justify-center">
+                                <button id="account-delete-btn" type="submit" class="i18n mb-4 hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-lg px-6 py-2 font-medium rounded-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">delete personal data</button>
                             </div>
                         </div>
                     </div>

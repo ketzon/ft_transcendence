@@ -62,7 +62,6 @@ export async function router(): Promise<void> {
         setInterval(async () => {
             try {
                 await fetch("http://localhost:3000/user/profil", {credentials: "include"});
-                console.log("heartbeat auto 20sec");
             } catch (error) {
                 console.log("heartbeat failed");
             }

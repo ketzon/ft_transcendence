@@ -236,6 +236,6 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
-    updateLanguage,
-    resendOtpCode,
+  updateLanguage,
+  resendOtpCode,
 }

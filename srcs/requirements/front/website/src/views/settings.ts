@@ -286,6 +286,7 @@ export function initSettings(): void {
     initNicknameForm();
     initPasswordForm();
     initAvatarUpload();
+    handleDeleteUser();
 }
 
 export function settingsView(): string {

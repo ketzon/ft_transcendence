@@ -29,5 +29,21 @@ export const toasts = {
             },
             // onClick: function(){} // Callback after click
           }).showToast();
+    },
+
+        orange(message:string): void {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: false, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #FFDDC9, #F9BB11)",
+              borderRadius: "10px"
+            },
+            // onClick: function(){} // Callback after click
+          }).showToast();
     }
 }
+

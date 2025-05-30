@@ -26,12 +26,15 @@ const fastify = Fastify({
     },
 });
 
+//change for production
 await fastify.register(fastifyCors, {
     // origin: "http://localhost:8080", //Use this if you want to allow requests to API using docker nginx instead of Vite
     // origin: "http://localhost:5173",
     origin: true, // equivalent a la wildcard * , toutes les origins sont accept
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']  
   });
+
 await fastify.register(multipart, {
     limits: {
         fileSize: 5 * 1024 * 1024 // Ajoute une limite de taille de fichier que peux gerer le serveur
@@ -69,5 +72,5 @@ fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {
 		fastify.log.error(err),
 		process.exit(1)
 	}
-	console.log(`Computer is transcending on : http://localhost:${PORT}`)
+	fastify.log.info(`Computer is transcending on : http://localhost:${PORT}`)
 })

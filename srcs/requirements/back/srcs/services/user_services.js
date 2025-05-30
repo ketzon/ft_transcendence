@@ -157,6 +157,18 @@ const updateLanguage = async (user, newLanguage) => {
     })
 }
 
+
+const updateLastActive = async (userId) => {
+    try {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { lastActive: new Date() }
+        });
+    } catch (error) {
+        console.error("Error updating lastActive:", error);
+    }
+};
+
 export default {
 	createJWT,
     createTempJWT,
@@ -171,4 +183,5 @@ export default {
 	updatePassword,
 	sendTwoFactAuth,
     updateLanguage,
+    updateLastActive,
 }

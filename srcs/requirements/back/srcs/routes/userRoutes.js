@@ -1,4 +1,5 @@
 import userManagement from "../controllers/users_controller.js"
+import friendsController from "../controllers/friends_controller.js";
 
 export default async function registerUserRoute(fastify) {
 	fastify.post("/signup", userManagement.signup)
@@ -11,4 +12,8 @@ export default async function registerUserRoute(fastify) {
 	fastify.get("/profil", userManagement.displayCurrentUser)
     fastify.post("/language", userManagement.updateLanguage);
     fastify.post("/resendOtpCode", userManagement.resendOtpCode);
+
+    fastify.post("/friends/add", friendsController.addFriend);
+    fastify.get("/friends/list", friendsController.getFriends);
+    fastify.delete("/friends/remove/:id", friendsController.removeFriend);
 }

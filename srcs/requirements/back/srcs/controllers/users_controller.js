@@ -114,6 +114,7 @@ const displayCurrentUser = async(req, reply) => {
 		if (!user || !user.id) {
 			return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
 		}
+        await userService.updateLastActive(user.id);
 		return user
 	}
 	catch (error) {
@@ -187,6 +188,7 @@ const updateLanguage = async (req, reply) => {
         const user = await userService.getUserByToken(req.server, token);
         const userUpdated = await userService.updateLanguage(user, language);
         reply.status(200).send({ message: "Language successfully changed", user: userUpdated });
+        reply.redirect("")
     } catch (error) {
         reply.status(500).send({ error: "updateLanguage internal error" });
     }

@@ -112,6 +112,7 @@ const updateUsername = async (user, newUsername) => {
 }
 
 const updateAvatar = async (user, newAvatar) => {
+    const fileBuffer = await newAvatar.toBuffer();
     const publicPath = `uploads/avatar-${user.id}.jpg`;
 
     const uploadDir = path.join(__dirname, 'uploads');
@@ -129,7 +130,6 @@ const updateAvatar = async (user, newAvatar) => {
                 fs.unlinkSync(oldFilePath);
         }
 
-    const fileBuffer = await newAvatar.toBuffer();
     await sharp(fileBuffer)
         .jpeg({quality: 80})
         .toFile(avatarPath);

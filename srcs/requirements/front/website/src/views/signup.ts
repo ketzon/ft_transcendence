@@ -11,6 +11,8 @@ interface formValues {
     googleAuth: boolean
 }
 
+let isSubmitting = false;
+
 // Cette fonction reset la couleur rouge sur les inputs (class incorrect) lorsque l'user ecrit a nouveau dans un input precedemment faux.
 function resetErrors(): void {
     const usernameInput = document.getElementById("username-input");
@@ -95,11 +97,8 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
         }
         toasts.success("Register successfull");
         printResponse("/signup", responseData);
-        setTimeout(() => {
-            // window.history.pushState(null, "", "/twofa"); On peut direct rediriger vers le 2fa ?
-            window.history.pushState(null, "", "/login");
-            router();
-        }, 1500);
+        window.history.pushState(null, "", "/login");
+        router();
     }
     catch(error)
     {
@@ -171,7 +170,9 @@ export function signupEvents(): void {
     resetErrors();
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        if (isSubmitting)
+            return ;
+        isSubmitting = true;
         //On recupere les donnees des inputs du form.
         const inputsValues: formValues = getFormValues();
         console.log("DATA TO BE SENT : ",inputsValues);
@@ -190,7 +191,8 @@ export function signupEvents(): void {
         }
         //Sinon on envoie les datas au back et on redirige vers /login en cas de success.
         console.log("FORM IS VALID");
-        sendForm(inputsValues, errElement);
+        await sendForm(inputsValues, errElement);
+        isSubmitting = false;
     })
 
 }

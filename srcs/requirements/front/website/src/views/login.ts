@@ -8,6 +8,8 @@ interface signinformValues {
     password: string,
 }
 
+let isSubmitting = false;
+
 // Cette fonction reset la couleur rouge sur les inputs (class incorrect) lorsque l'user ecrit a nouveau dans un input precedemment faux.
 function resetErrors(): void {
     const emailInput = document.getElementById("email-input");
@@ -154,7 +156,9 @@ export function loginEvents(): void {
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        if (isSubmitting)
+            return ;
+        isSubmitting = true;
         //On recup les donnees des inputs du form.
         const inputsValues: signinformValues = getFormValues();
         console.log("DATA TO BE SENT : ",inputsValues);
@@ -172,7 +176,8 @@ export function loginEvents(): void {
 
         //Si pas d'erreurs on envoie les datas du form au backend
         console.log("FORM IS VALID");
-        sendForm(inputsValues, errElement);
+        await sendForm(inputsValues, errElement);
+        isSubmitting = false;
     })
 }
 

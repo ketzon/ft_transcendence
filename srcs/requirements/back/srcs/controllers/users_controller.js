@@ -63,6 +63,24 @@ const signup = async (req, reply) => {
 	}
 }
 
+const deleteUser = async (req, reply) => {
+  const { username } = getBody(req, reply)
+  try {
+    const del = await userService.deleteUser(username)
+    return reply
+    .clearCookie("token", {
+		  path: "/",
+		  secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
+		  sameSite: 'strict',
+    })
+    .status(200)
+    .send({message: "User deleted", details: { username }})
+  }
+  catch (error) {
+    return reply.status(500).send({message: "Internal error", details: error.message})
+  }
+}
+
 const signin = async(req, reply) => {
 	const { email, username, password, avatar } = getBody(req, reply)
 	try {
@@ -230,6 +248,7 @@ const verify2FA = async (req, reply) => {
 export default {
 	signup,
 	signin,
+  deleteUser,
 	logout,
 	customUsername,
 	customAvatar,

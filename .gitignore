@@ -31,5 +31,5 @@ spa_tailwind/.vite/deps/_metadata.json
 spa_tailwind/.vite/deps/package.json
 
 tags
-transcendence.db
+# transcendence.db
 *.db

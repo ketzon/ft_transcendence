@@ -73,6 +73,14 @@ const createUser =  async (email, password, avatar, username) => {
 	return user.id
 }
 
+const deleteUser = async(username) => {
+  const del = await prisma.user.delete({
+    where: {
+      username: username,
+    },
+  })
+}
+
 const getUserByEmail = async (email) => {
 	return await prisma.user.findFirst({ //DEVELOPMENT - then change for findUnique
 		where: {email: email}

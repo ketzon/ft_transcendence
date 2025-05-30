@@ -8,7 +8,6 @@ import { pongView } from "./views/pong";
 import { selectView } from "./views/select";
 import { execSelect} from "./selectgames";
 
-
 import { initLogoutButton, isUserAuth } from "./auth";
 import { initSettings, settingsView } from "./views/settings";
 import { signupView, signupEvents } from "./views/signup";
@@ -20,7 +19,7 @@ import { initVersusFight } from "./versus/initGame";
 import { stopVersusGame } from "./versus/cleanUp.js";
 
 import { gameSettingsView, initGameSettings } from "./pongCustomization.js";
-
+import { friendsView, initFriends } from "./views/friends";
 
 const routes = {
     indexhtml : "/index.html/",
@@ -33,7 +32,8 @@ const routes = {
     signup : "/signup",
     twofa: "/twofa",
     settings: "/settings",
-    pongSettings: "/pongSettings"
+    pongSettings: "/pongSettings",
+    friends: "/friends"  
 }
 
 // Gestion des boutons forward et backward
@@ -45,16 +45,28 @@ function redirectTo(view: string) {
     window.history.pushState(null, "", view);
     router();
 }
+
 export let changingArea: HTMLElement | null;
+
 //On injecte le contenu selon le path sur lequel on se trouve.
 export async function router(): Promise<void> {
     //On injecte dans changingArea pour garder la navbar sur la gauche dans le body.
     changingArea = document.getElementById("changingArea");
     const isAuth: boolean = await isUserAuth()// Test if user is logged to protect access to views (just testing).
+
     if(isAuth) {
         initLogoutButton();
+        //pour recuperer signal apres l'auth
+        initFriends();
+        //pour envoyer signal
+        setInterval(async () => {
+            try {
+                await fetch("http://localhost:3000/user/profil", {credentials: "include"});
+            } catch (error) {
+                console.log("heartbeat failed");
+            }
+        }, 20000); 
     }
-
     if (!changingArea)
     {
         console.log("Could not find changingArea");
@@ -64,13 +76,10 @@ export async function router(): Promise<void> {
     console.log("Current path = " + location.pathname);
     switch (location.pathname) {
 
-        // case routes.pongSettings:
-        //     changingArea.innerHTML = gameSettingsView();
-        //     initGameSettings();
-        //     break ;
         case routes.versus:
             stopVersusGame();
             changingArea.innerHTML = combatView();
+            stopGame();
             initVersusFight();
             break ;
 
@@ -86,7 +95,6 @@ export async function router(): Promise<void> {
             }
             changingArea.innerHTML = loginView();
             loginEvents();
-            // stopPong();
             break;
 
         case routes.login:
@@ -136,10 +144,15 @@ export async function router(): Promise<void> {
             initGameSettings();
             break ;
 
-        // case routes.twofa:
-        //     changingArea.innerHTML = twofaView();
-        //     init2fa("lol@gmail.com");
-        //     break ;
+        case routes.friends:
+            if (isAuth === false) {
+                redirectTo("/");
+                return;
+            }
+            changingArea.innerHTML = friendsView();
+            initFriends();
+            stopGame(); 
+            break;
 
         case routes.settings:
             if (isAuth === false)

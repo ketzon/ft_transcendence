@@ -32,3 +32,4 @@ spa_tailwind/.vite/deps/package.json
 
 tags
 transcendence.db
+*.db

@@ -193,26 +193,27 @@ async function updateAvatar(formData: FormData): Promise<void> {
     }
 }
 
-async function deleteUser(string: username): Promise<void> {
+async function deleteUser(email: string): Promise<void> {
   try {
-    const res = await fetch("http://localhost:3000/user/deleteUser", {
+    const res = await fetch("http://localhost:3000/user/delusr", {
       method: "POST",
-      body: username,
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({email}),
       credentials: "include"
     });
     if (!res.ok) {
       const resMsg = await res.json();
-      printResponse("/deleteUser", resMsg);
+      printResponse("/delusr", resMsg);
 
       toasts.error("Failed to delete user");
       return ;
     }
     const resMsg = await res.json();
-    printResponse("/deleteUser", resMsg);
+    printResponse("/delusr", resMsg);
     toasts.success("User deleted");
   }
   catch(error) {
-    console.error("Error deleting user");
+    console.error("Error deleting user: " + error);
   }
 }
 
@@ -220,7 +221,7 @@ function handleDeleteUser(): void {
   const delBtn = document.getElementById("account-delete-btn");
   if (delBtn) {
     delBtn.addEventListener("click", (event) => {
-      deleteUser(localStorage.getItem("nickname"));
+      deleteUser(localStorage.getItem("email"));
     })
   }
 }

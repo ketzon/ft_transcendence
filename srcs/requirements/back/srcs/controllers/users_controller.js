@@ -64,9 +64,10 @@ const signup = async (req, reply) => {
 }
 
 const deleteUser = async (req, reply) => {
-  const { username } = getBody(req, reply)
+  const email = req.body.email;
+  const user = await userService.getUserByEmail(email);
   try {
-    const del = await userService.deleteUser(username)
+    const del = await userService.deleteUser(user);
     return reply
     .clearCookie("token", {
 		  path: "/",
@@ -74,10 +75,10 @@ const deleteUser = async (req, reply) => {
 		  sameSite: 'strict',
     })
     .status(200)
-    .send({message: "User deleted", details: { username }})
+    .send({message: "User deleted", details: { username }, token: req.cookies});
   }
   catch (error) {
-    return reply.status(500).send({message: "Internal error", details: error.message})
+    return reply.status(500).send({message: "Internal error", details: error.message});
   }
 }
 

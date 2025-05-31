@@ -73,10 +73,10 @@ const createUser =  async (email, password, avatar, username) => {
 	return user.id
 }
 
-const deleteUser = async(username) => {
+const deleteUser = async(user) => {
   const del = await prisma.user.delete({
     where: {
-      username: username,
+      id: user.id,
     },
   })
 }
@@ -239,4 +239,5 @@ export default {
     validPasswordPolicy,
     validUsernamePolicy,
     updateLastActive,
+  deleteUser,
 }

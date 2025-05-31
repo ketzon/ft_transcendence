@@ -169,3 +169,7 @@ export async function router(): Promise<void> {
             break ;
     }
 }
+
+export default {
+  redirectTo,
+}

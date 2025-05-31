@@ -3,7 +3,7 @@ import { printResponse, resetInput, isEmptyString } from "../utils";
 import { handleChecklist, isValidPassword } from "../passwordValidation";
 import { updateI18nTranslations } from '../i18next';
 import { isUserAuth } from "../auth";
-
+import router from "../router.ts"
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -209,6 +209,7 @@ async function deleteUser(email: string): Promise<void> {
       toasts.error("Failed to delete user");
       return ;
     }
+    router.redirectTo("/login")
     const resMsg = await res.json();
     printResponse("/delusr", resMsg);
     toasts.success("User deleted");

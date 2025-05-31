@@ -85,7 +85,10 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
         {
             toasts.error("Signin failed");
             printResponse("/signin", responseData);
-            errElement.innerText = responseData.message;
+            if (responseData.details)
+                errElement.innerText = responseData.details;
+            else
+                errElement.innerText = responseData.message;
             return ;
         }
         toasts.success("Signin successfull");

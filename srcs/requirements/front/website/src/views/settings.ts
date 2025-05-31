@@ -92,7 +92,8 @@ async function updateNickname(newUsername: string): Promise<void> {
         if (!res.ok)
         {
             printResponse("/customUsername", resMsg);
-            toasts.error("Failed to update nickname");
+            toasts.error(resMsg.message);
+            // toasts.error("Failed to update nickname");
             return ;
         }
         printResponse("/customUsername", resMsg);
@@ -114,13 +115,13 @@ export async function updateLanguage(language: string): Promise<void> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: "include", 
+            credentials: "include",
             body: JSON.stringify({ language}),
         });
         const resMsg = await res.json();
         console.log(resMsg);
         if (!res.ok) {
-            printResponse("/language", resMsg); 
+            printResponse("/language", resMsg);
             toasts.error("Failed to update language")
             return;
         }
@@ -172,8 +173,8 @@ async function updateAvatar(formData: FormData): Promise<void> {
         {
             const resMsg = await res.json();
             printResponse("/customAvatar", resMsg);
-
-            toasts.error("Failed to update avatar");
+            toasts.error(resMsg.details);
+            // toasts.error("Failed to update avatar");
             loadProfileCard();
             return ;
         }

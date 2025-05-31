@@ -66,11 +66,12 @@ const signup = async (req, reply) => {
 const deleteUser = async (req, reply) => {
   const email = req.body.email;
   const user = await userService.getUserByEmail(email);
+  const username = user.username;
   try {
     const del = await userService.deleteUser(user);
     return reply
     .clearCookie("token", {
-		  path: "/",
+		  path: "/settings",
 		  secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
 		  sameSite: 'strict',
     })

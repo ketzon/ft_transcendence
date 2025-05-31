@@ -11,7 +11,7 @@ export function selectView(): string {
           type="text" 
           id="prompt-input" 
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
-          placeholder="Your username"
+          placeholder="Enter a name"
         >
         <button 
           id="prompt-submit"

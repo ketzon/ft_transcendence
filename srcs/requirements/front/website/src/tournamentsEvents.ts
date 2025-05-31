@@ -53,7 +53,6 @@ export async function initializeTournaments() {
         console.log("📌 State Tour", state.tours);
         const tournaments = await res.json();
         state.tours = tournaments.map(normalizeTournament);
-        state.tours = tournaments;
         state.loading = false;
         state.serverUrl = 'http://localhost:5173';
         state.selectedTourJson = null;

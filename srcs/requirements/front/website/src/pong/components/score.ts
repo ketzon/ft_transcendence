@@ -108,8 +108,6 @@ export function checkWinner(gameId: GameElements): void {
     changeWinnerMsg(gameId, player2Name);
   }
 
-    if (tournamentResults.length >= 3) {
-    console.log("🎉 Tous les matchs sont terminés, envoi au backend...");
-    sendTournamentToBackend();
-  }
+    if (tournamentResults.length >= 3)
+          sendTournamentToBackend();
 }

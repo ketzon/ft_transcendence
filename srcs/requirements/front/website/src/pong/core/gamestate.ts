@@ -8,7 +8,8 @@ export let isResetting: boolean = false;
 export let isScoring: boolean = false;
 export let colorChangeTimer: number | undefined;
 export let animationFrameId: number = -1;
-export let tournamentMode: boolean = false
+export let tournamentMode: boolean = false;
+export let isLooping: boolean = false;
 
 
 export function setTournamentMode(value: boolean): void {
@@ -38,6 +39,10 @@ export function setIsBasic(value: boolean): void {
 
 export function setAnimationFrameId(value: number) {
     animationFrameId = value;
+}
+
+export function setIsLooping(value: boolean): void {
+    isLooping = value;
 }
 
 //touche du jeu

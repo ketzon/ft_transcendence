@@ -1,11 +1,12 @@
 
 async function tournamentRoutes(fastify, options) {
   fastify.post("/api/tournaments", async (req, reply) => {
-    const { players, results, date } = req.body;
+    const { tournamentName, players, results, date } = req.body;
 
     try {
       const tournament = await fastify.prisma.tournament.create({
         data: {
+          tournamentName,
           players: JSON.stringify(players),
           results: JSON.stringify(results),
           date: date ? new Date(date) : new Date(),
@@ -21,6 +22,7 @@ async function tournamentRoutes(fastify, options) {
 
   fastify.get("/api/tournaments", async (req, reply) => {
   const tournaments = await fastify.prisma.tournament.findMany();
+  console.log(" 📍 Tournaments fetched:", tournaments.length);
   const parsedTournaments = tournaments.map(t => ({
     ...t,
     players: JSON.parse(t.players || '[]'),

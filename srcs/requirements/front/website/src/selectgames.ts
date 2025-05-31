@@ -10,6 +10,7 @@ import { combatView} from "./views/combat";
 import { setGameSettings, setChoosenBackground } from "./pongCustomization";
 import { selectView } from "./views/select";
 import { gameLoop } from "./pong/core/gameloop";
+import { setIsLooping, isLooping } from "./pong/core/gamestate";  
 
 
 export type BracketElements = {
@@ -62,6 +63,7 @@ export function execSelect(): void {
         setChoosenBackground();
         changingArea.innerHTML = selectView();
         let player2 = await customPrompt("Enter Player 2 username:");
+        
         if (player2 === "") { 
             player2 = "player2👻";
         }
@@ -71,6 +73,7 @@ export function execSelect(): void {
         setPause(true);
         changingArea.innerHTML = pongView();
         const gameId = getElements(); //26/05 
+        setIsLooping(true) //ines fix
         gameLoop(gameId); //26/05
 
         // setGameMode(true);
@@ -85,6 +88,7 @@ export function execSelect(): void {
         setChoosenBackground();
         setPause(true);
         changingArea.innerHTML = selectView();
+        let tournamentName = await customPrompt("Enter tournament name:");
         for (let i = 2; i <= 4; i++) { //tournament for 4 person
             let playerName = await customPrompt(`Enter name for Player ${i}:`);
             if (playerName === "") {
@@ -94,6 +98,7 @@ export function execSelect(): void {
         }
         players.push(localStorage.getItem('nickname') || "player1👻"); //ajout du joueur 1 au tableau des joueurs
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
+        localStorage.setItem("tournamentName", tournamentName);
 
 
         const randomizedPlayer = shufflePlayers(players);
@@ -165,6 +170,7 @@ export function showBracket(): void {
         }
         changingArea.innerHTML = pongView();
         const gameId = getElements();
+        setIsLooping(true)//ines fix
         gameLoop(gameId);
 
         initGame(true);

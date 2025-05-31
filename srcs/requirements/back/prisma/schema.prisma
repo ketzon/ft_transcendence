@@ -58,6 +58,7 @@ model Tournament {
   players  String
   results  String
   date     DateTime @default(now())
+  tournamentName String @default("Tournament")
 }
 
 // model Friends {

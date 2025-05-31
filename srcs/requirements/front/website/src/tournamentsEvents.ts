@@ -33,7 +33,7 @@ function normalizeTournament(t: any): Tournament {
     return {
         ...t,
         start_time: t.start_time || t.date || '',
-        name: t.name || `Tournament ${t.id}`,
+        name: t.tournamentName || `Tournament ${t.id}`,
         players: normalizedPlayers,
         rounds: (t.rounds || []).map((r: any) => ({
             ...r,
@@ -101,7 +101,7 @@ function updateTournamentsList() {
     tournamentsList.innerHTML = '';
     tournamentsList.innerHTML = state.tours.slice().reverse().map((t: Tournament) => `
         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-150 ${state.selectedTourJson?.id === t.id ? 'ring-2 ring-[#8672FF]' : ''}">
-            <span class="text-gray-700 font-medium truncate">${t.name}</span>
+            <span class="text-gray-700 font-medium truncate">${t.tournamentName}</span>
             <button class="show-tour ml-2 px-3 py-1 text-sm bg-[#8672FF] text-white rounded hover:bg-[#6a5acc]" data-id="${t.id}">
                 Show
             </button>

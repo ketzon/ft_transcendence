@@ -13,7 +13,7 @@ export function resetScore(gameId: GameElements):void {
     }
 }
 
-export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void {
+export function changeWinnerMsg(gameId: GameElements, winnerName:string | null) : void {
     if (gameId.winnerMsg) {
          setTimeout(() => {
             gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;

@@ -106,7 +106,7 @@ export function dashboardView(): string {
             tbody.innerHTML = "";
 
             games.forEach((game) => {
-                const opponent = game.player2Name;
+                const opponent = game.opponent;
                 console.log("Opponent:");
                 console.log("Opponent:", opponent);
                 const resultColor = game.result === "Win" ? "text-green-600" : "text-red-500";

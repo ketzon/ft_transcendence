@@ -31,14 +31,14 @@ export function checkWinner(gameId: GameElements): void {
   const isTournament = localStorage.getItem("tournamentPlayers") !== null;
   const player1Name = gameId.player1?.textContent || "Unknown";
   const player2Name = gameId.player2?.textContent || "Unknown";
+  const isPlayer1User = player1Name === localStorage.getItem("nickname");
   
-  
-  if (gameState.scoreLeft >= WIN_SCORE)
+  if (gameState.scoreLeft >= WIN_SCORE) //Si le joueur de gauche (player1) a gagné
   {
     setPause(true);
     gameSounds?.victorySound.play();
 
-    if (isTournament) {
+    if (isTournament) { //Si c'est un tournoi, ajooute le resulatat dans le tableau local tournamentsResults
     tournamentResults.push({
       player1: player1Name,
       player2: player2Name,
@@ -48,6 +48,7 @@ export function checkWinner(gameId: GameElements): void {
     });
     console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
+    // const isPlayer1ConnectedUser = (gameState.player1Id === connectedUserId); // ou une condition équivalente
 
     fetch('http://localhost:3000/api/games',
       {
@@ -55,12 +56,15 @@ export function checkWinner(gameId: GameElements): void {
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify  ({
-          player2Name: localStorage.getItem("Player2") || "player2👻",
+          // player2Name: localStorage.getItem("Player2") || "player2👻",
+          player1Name,
+          player2Name,
           score1: gameState.scoreLeft,
           score2: gameState.scoreRight,
           totalMoves: Math.floor(Math.random() * 50) + 30,
           avgMoveTime: (Math.random() * 3).toFixed(1) + "s", // aléatoire ou calculé
           duration: `${Math.floor(Math.random() * 10)}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}` // aléatoire ou calculé
+          // ...(isPlayer1ConnectedUser && { player1Id: gameState.player1Id })
         })
       })
     .then(res => res.json())
@@ -92,7 +96,10 @@ export function checkWinner(gameId: GameElements): void {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
       body: JSON.stringify({
-      player1Id: gameState.player1Id,
+        // player2Name: localStorage.getItem("Player2") || "player2👻",
+        // player1Id: gameState.player1Id,
+        player1Name,
+        player2Name,
         score1: gameState.scoreLeft,
         score2: gameState.scoreRight,
         totalMoves: Math.floor(Math.random() * 50) + 30,

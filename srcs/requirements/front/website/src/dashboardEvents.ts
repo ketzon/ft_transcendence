@@ -48,7 +48,7 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">General Information</h3>
                 <p class="mb-2"><span class="font-medium">Date:</span> ${game.date}</p>
-                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.player2Name || 'Unknown'}</p>
+                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.opponent || 'Unknown'}</p>
                 <p class="mb-2"><span class="font-medium">Final Score:</span> ${game.score}</p>
                 <p class="mb-2"><span class="font-medium">Result:</span> <span class="${
                     game.result === 'Win' ? 'text-green-600' :
@@ -60,7 +60,7 @@ function showGameDetails(game: Game) {
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">Game Statistics</h3>
                 <p class="mb-2"><span class="font-medium">Total Duration:</span> ${game.gameStats.gameDuration}</p>
                 <p class="mb-2"><span class="font-medium">Points ${game.player1?.username || 'Player 1'}:</span> ${game.gameStats.score1}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.player2Name|| 'Player 2'}:</span> ${game.gameStats.score2}</p>
+                <p class="mb-2"><span class="font-medium">Points ${game.opponent || 'Player 2'}:</span> ${game.gameStats.score2}</p>
                 <p class="mb-2"><span class="font-medium">Total Moves:</span> ${game.gameStats.totalMoves}</p>
                 <p class="mb-2"><span class="font-medium">Average Move Time:</span> ${game.gameStats.avgMoveTime}</p>
             </div>
@@ -205,7 +205,7 @@ async function updateGameHistory() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.date}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.player2Name || 'Unknown'}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.opponent || 'Unknown'}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.score}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm ${
                 game.result === 'Win' ? 'text-green-600' :
@@ -290,6 +290,13 @@ fetch('http://localhost:3000/api/stats/user', {
     })  // à adapter dynamiquement plus tard
   .then(res => res.json())
   .then(data => {
+    // const userId = data.userId;
+    // const username = data.username; // 👈 tu dois renvoyer ça depuis le backend si ce n’est pas déjà le cas
+
+    // const filteredGames = data.games.filter((game: Game) =>
+    // game.player1.id === userId || game.player2Name === username
+    // );
+
     document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
     document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
     document.getElementById('total-wins')!.textContent = data.wins.toString();

@@ -107,6 +107,7 @@ export function execSelect(): void {
         player2 = randomizedPlayer[1]; 
         player3 = randomizedPlayer[2]; 
         player4 = randomizedPlayer[3]; 
+        localStorage.setItem("Player2", player2);
         showBracket();
     });
 }

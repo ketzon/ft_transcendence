@@ -12,6 +12,7 @@ async function gameRoutes(fastify, opts) {
 
   try {
     const {
+      player1Name, // Valeur par défaut si player1Name n'est pas fourni
       player2Name = "Player2", // Valeur par défaut si player2Name n'est pas fourni
       score1,
       score2,
@@ -22,15 +23,34 @@ async function gameRoutes(fastify, opts) {
     
   const token = userController.getToken(request, reply);
   const user = await userService.getUserByToken(request.server, token);
-  const player1Id = user.id;
+  // let player1Id = null;
+  // if (player1Name === user.username) {
+  //   player1Id = user.id;
+  // }
 
-  const player1 = await fastify.prisma.user.findUnique({ where: { id: player1Id } });
-  if (!player1) {
-    return reply.code(400).send({ error: "One or both players do not exist" });
-  }
+  // const player1 = await fastify.prisma.user.findUnique({ where: { id: player1Id } });
+  // if (!player1) {
+  //   return reply.code(400).send({ error: "One or both players do not exist" });
+  // }
+      let player1Id = null;
+      let player2Id = null;
+    if (player1Name === user.username) {
+        player1Id = user.id;
+      }
+    if (player2Name === user.username) {
+        player2Id = user.id;
+      }
+    let player1 = null;
+    if (player1Id) {
+      player1 = await fastify.prisma.user.findUnique({ where: { id: player1Id } });
+      if (!player1) {
+        return reply.code(400).send({ error: "Player 1 does not exist" });
+      }
+    }
     const data = {
     date: new Date(),
-    player1Id,
+    // player1Id,
+    player1Name,
     player2Name, 
     score1,
     score2,
@@ -38,6 +58,12 @@ async function gameRoutes(fastify, opts) {
     avgMoveTime,
     duration
   };
+  if (player1Id) {
+    data.player1 = { connect: { id: player1Id } };
+  }
+  if (player2Id) {
+    data.player2 = { connect: { id: player2Id } };
+  }
 
     console.log("📤 Données envoyées à Prisma :", data);
 

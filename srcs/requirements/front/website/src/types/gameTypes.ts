@@ -15,6 +15,7 @@ export interface Game {
     totalMoves: number;       // Total number of moves
     avgMoveTime: string;      // Average time between moves
     totalGames?: number;      // Total number of games played
+    opponent?: string;
 }
 
 export interface Player {

@@ -12,53 +12,58 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    //@unique uncomment post dev
-  username  String    //@unique uncomment post dev
-  password  String
-  avatar    String    @default("public/avatar.png")
-  language  String    @default("en")
+  id       Int    @id @default(autoincrement())
+  email    String //@unique uncomment post dev
+  username String //@unique uncomment post dev
+  password String
+  avatar   String @default("public/avatar.png")
+  language String @default("en")
 
   otp        Int?
   otp_expire BigInt?
 
-  stats     Stats?    @relation
+  stats          Stats? @relation
   // friend    Friendship[]  @relation("Friendship")
   gamesAsPlayer1 Game[] @relation("Player1")
-
+  gamesAsPlayer2 Game[] @relation("Player2") //car en tournoi je peux etre a droite donc player2
 }
 
 model Stats {
-  id      Int @id @default(autoincrement())
-  game    Int @default(0)
-  wins    Int @default(0)
-  looses  Int @default(0)
+  id     Int @id @default(autoincrement())
+  game   Int @default(0)
+  wins   Int @default(0)
+  looses Int @default(0)
 
-  User    User  @relation(onDelete: Cascade, fields: [userId], references: [id])
-  userId  Int  @unique
-
+  User   User @relation(onDelete: Cascade, fields: [userId], references: [id])
+  userId Int  @unique
 }
 
 model Game {
-  id           Int      @id @default(autoincrement())
-  player1Id    Int
-  player2Name    String @default("Player2schema")
-  score1       Int
-  score2       Int
-  totalMoves   Int
-  avgMoveTime  String
-  duration     String
-  date         DateTime @default(now())
-  player1      User     @relation("Player1", fields: [player1Id], references: [id])
-  // player2      User     @relation("Player2", fields: [player2Id], references: [id])
+  id Int @id @default(autoincrement())
+
+  player1Id   Int?
+  player1Name String @default("Player1schema")
+
+  player2Id   Int?
+  player2Name String @default("Player2schema")
+
+  player1 User? @relation("Player1", fields: [player1Id], references: [id])
+  player2 User? @relation("Player2", fields: [player2Id], references: [id])
+
+  score1      Int
+  score2      Int
+  totalMoves  Int
+  avgMoveTime String
+  duration    String
+  date        DateTime @default(now())
 }
 
 model Tournament {
-  id       Int      @id @default(autoincrement())
-  players  String
-  results  String
-  date     DateTime @default(now())
-  tournamentName String @default("Tournament")
+  id             Int      @id @default(autoincrement())
+  players        String
+  results        String
+  date           DateTime @default(now())
+  tournamentName String   @default("Tournament")
 }
 
 // model Friends {

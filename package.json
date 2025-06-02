@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/i18next": "^13.0.0"
+  }
+}

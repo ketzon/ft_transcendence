@@ -3,8 +3,19 @@ import { toasts } from "../toasts";
 import { isUserAuth } from '../auth';
 import {updateLanguage} from '../views/settings'
 
+
+interface Translations {
+  [key: string]: string;
+}
+
+interface Resources {
+  fr: { translation: Translations };
+  en: { translation: Translations };
+  ja: { translation: Translations };
+}
+
 //la valeur du DOM charge dans les view EN (default) est utilisee comme clef pour les autres langues
-const resources = {
+const resources: Resources = {
   fr: {
     translation: {
       "HOME": "ACCUEIL",
@@ -66,7 +77,7 @@ const userLng = (() => {
     if (!stored || stored === 'undefined' || stored === 'null') {
         return 'en';
     }
-    if (resources[stored]) {
+    if (resources[stored as keyof Resources]) {
         return stored;
     }
     return 'en';
@@ -80,16 +91,16 @@ i18next.init({
     interpolation: { //interpolation pour inserer des variables dynamique dans mes ressources
         escapeValue: true //echape les valeur pour eviter les injections XSS
     }
-}).then(() => {
+}as any).then(() => {
     updateI18nTranslations();
     const selector = document.getElementById('language-selector') as HTMLSelectElement;
     if (selector) {
         selector.value = userLng;
     }
-});
+})
 
 export function changeLanguage(lang: string): void {
-    if (resources[lang]) {
+    if (resources[lang as keyof Resources]) {
         const selector = document.getElementById('language-selector') as HTMLSelectElement;
         if (selector) {
             selector.value = lang;

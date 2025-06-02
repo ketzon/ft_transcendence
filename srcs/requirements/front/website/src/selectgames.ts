@@ -91,7 +91,6 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
-        // Au lieu de :
         const user1 = localStorage.getItem('nickname') || 'player1👻';
         players.push(user1);
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));

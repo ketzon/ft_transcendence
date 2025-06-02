@@ -44,8 +44,8 @@ export function setAnimationFrameId(value: number) {
 export let keys: Keys = {
     w: false,
     s: false,
-    i: false,
-    k: false
+    ArrowUp: false,
+    ArrowDown: false
 };
 
 // game state

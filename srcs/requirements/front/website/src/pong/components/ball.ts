@@ -158,7 +158,7 @@ export function changeBall(gameId: GameElements): void {
     }
     gameId.ball.style.backgroundColor = randomColor;
     if (!mute && ballProperties[randomColor].sound) {
-        ballProperties[randomColor].sound(gameSounds);
+        (ballProperties as any)[randomColor].sound(gameSounds);
     }
   }
 }

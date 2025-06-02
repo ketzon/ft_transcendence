@@ -3,7 +3,7 @@ import { gameState } from '../core/gamestate';
 import { WIN_SCORE } from '../utils/constants';
 import { resetGame } from '../core/gameloop';
 import { setPause } from '../core/gamestate';
-import confetti  from 'canvas-confetti';
+// import confetti  from 'canvas-confetti';
 import { gameSounds } from '../utils/audio';
 
 export function resetScore(gameId: GameElements):void {

@@ -36,7 +36,15 @@ function showGameDetails(game: Game) {
 
     const modalContent = document.createElement('div');
     modalContent.className = 'bg-white rounded-lg p-8 max-w-2xl w-full mx-4 relative';
+      const playerName = game.player1?.username && game.player1.username !== 'Playernull'
+    ? game.player1.username
+    : game.player2Name || 'Unknown';
+    const playerIsPlayer1 = playerName === game.player1?.username;
 
+    const playerScore = playerIsPlayer1 ? game.gameStats.score1 : game.gameStats.score2;
+    const opponentScore = playerIsPlayer1 ? game.gameStats.score2 : game.gameStats.score1;
+
+    
     modalContent.innerHTML = `
         <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" onclick="document.getElementById('gameDetailsModal').remove()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +56,7 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">General Information</h3>
                 <p class="mb-2"><span class="font-medium">Date:</span> ${game.date}</p>
-                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.opponent || 'Unknown'}</p>
+                <p class="mb-2"><span class="font-medium">Players:</span> ${playerName} vs ${game.opponent || 'Unknown'}</p>
                 <p class="mb-2"><span class="font-medium">Final Score:</span> ${game.score}</p>
                 <p class="mb-2"><span class="font-medium">Result:</span> <span class="${
                     game.result === 'Win' ? 'text-green-600' :
@@ -59,8 +67,8 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">Game Statistics</h3>
                 <p class="mb-2"><span class="font-medium">Total Duration:</span> ${game.gameStats.gameDuration}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.player1?.username || 'Player 1'}:</span> ${game.gameStats.score1}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.opponent || 'Player 2'}:</span> ${game.gameStats.score2}</p>
+                <p class="mb-2"><span class="font-medium">Points ${playerName || 'Player 1'}:</span> ${playerScore}</p>
+                <p class="mb-2"><span class="font-medium">Points ${game.opponent || 'Player 2'}:</span> ${opponentScore}</p>
                 <p class="mb-2"><span class="font-medium">Total Moves:</span> ${game.gameStats.totalMoves}</p>
                 <p class="mb-2"><span class="font-medium">Average Move Time:</span> ${game.gameStats.avgMoveTime}</p>
             </div>

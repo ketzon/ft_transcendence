@@ -8,9 +8,6 @@ export function tournamentsView(): string {
                 <div class="col-span-1">
                     <div class="bg-white p-6 rounded-lg shadow-sm">
                         <h3 class="text-lg font-semibold text-gray-700 mb-4">Available Tournaments</h3>
-                        <button id="create-tour" class="w-full bg-[#8672FF] text-white px-4 py-2 rounded hover:bg-[#6a5acc] transition-colors duration-150 mb-4">
-                            Start new Tournament
-                        </button>
                         <div id="tournaments-list" class="space-y-2">
                             <!-- Tournaments will be inserted here by JS -->
                         </div>

@@ -7,7 +7,6 @@ export function dashboardView(): string {
             <img id="profile-avatar" src="" class="w-16 h-16 rounded-full border border-gray-300" alt="avatar">
             <div>
                 <h2 id="profile-username" class="text-xl font-semibold text-gray-800">Player</h2>
-                <p id="profile-rank" class="text-sm text-gray-500">Rang : -</p>
                 <p id="profile-status" class="text-xs text-green-600 mt-1">🟢 En ligne</p>
             </div>
         </div>
@@ -30,9 +29,6 @@ export function dashboardView(): string {
                     <div class="stat-card">✨ <strong>Total Wins</strong><p id="total-wins" class="stat-value">0</p></div>
                     <div class="stat-card">❌ <strong>Total Defeats</strong><p id="total-defeats" class="stat-value">0</p></div>
                     <div class="stat-card">🔥 <strong>Best Win Streak</strong><p id="max-streak" class="stat-value">0</p></div>
-                    <div class="stat-card">⚔️ <strong>Most Played Opponent</strong><p id="top-opponent" class="stat-value text-sm text-gray-700 mt-2">-</p></div>
-                    <div class="stat-card">🎯 <strong>Avg Score</strong><p id="avg-score" class="stat-value">0</p></div>
-                    <div class="stat-card">⏱ <strong>Avg Game Duration</strong><p id="avg-duration" class="stat-value">0s</p></div>
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-md transition duration-500 hover:shadow-lg">

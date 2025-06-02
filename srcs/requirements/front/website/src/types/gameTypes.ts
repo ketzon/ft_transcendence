@@ -39,6 +39,7 @@ export interface Tournament {
     rounds: Round[];
     isInvitationPhase?: boolean;
     tournamentName: string;
+    creatorId: number;
 }
 
 // Declare global window interface augmentation

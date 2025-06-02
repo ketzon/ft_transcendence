@@ -3,7 +3,7 @@ import { tournamentResults, resetTournamentResults } from '../core/gamestate';
 export async function sendTournamentToBackend(): Promise<void> {
   const players = JSON.parse(localStorage.getItem("tournamentPlayers") || "[]");
   const tournamentName = localStorage.getItem("tournamentName") || "Unnamed Tournament";
-
+  const creatorId = localStorage.getItem("creatorId");
   try {
     const res = await fetch("http://localhost:3000/api/tournaments", {
       method: "POST",
@@ -14,6 +14,7 @@ export async function sendTournamentToBackend(): Promise<void> {
         results: tournamentResults,
         date: new Date().toISOString(),
         tournamentName,
+        creatorId,
       }),
     });
 

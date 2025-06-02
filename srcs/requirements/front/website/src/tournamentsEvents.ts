@@ -123,6 +123,7 @@ function renderGameHtml(game: Game): string {
             <img src="${player?.avatar || 'png/avatar.png'}"
                 class="w-12 h-12 rounded-full object-cover ${isWinner ? 'ring-4 ring-yellow-400' : 'opacity-75'}"
                 alt="${player?.username || 'Unknown'}">
+
             <div class="mt-2 text-sm font-medium ${isWinner ? 'text-green-600' : 'text-gray-500'}">
                 ${player?.username || 'Unknown'}
             </div>
@@ -169,7 +170,7 @@ function renderGamesHtml(tournament: Tournament): string {
         return '<div class="text-gray-500 bg-gray-50 p-4 rounded-lg">No rounds found</div>';
     return rounds.map((round: Round, index: number) => `
         <div class="mb-6">
-            <h3 class="text-lg font-semibold text-[#8672FF] mb-3">Round ${index + 1} (${round.players.length} players)</h3>
+            <h3 class="text-lg font-semibold text-[#8672FF] mb-3">Round ${index + 1}</h3>
             <div class="space-y-3">
                 ${round.games?.length > 0
                     ? roundGames(round.games)
@@ -182,30 +183,35 @@ function renderGamesHtml(tournament: Tournament): string {
 
 function calculateRatings(tournament: Tournament): (Player & { rating: number })[] {
     if (!tournament.rounds) return [];
-    const ratingsMap = new Map<number, Player & { rating: number }>();
+    const ratingsMap = new Map<string, Player & { rating: number }>();
     tournament.rounds.forEach((round: Round) => {
         if (!round.games || !round.players) return;
         const roundRatings = new Map(
-            round.players.map((player: Player) => [player.id, { ...player, rating: 0 }])
+            round.players.map((player: Player) => [player.username, { ...player, rating: 0 }])
         );
         round.games.forEach((game: Game) => {
             if (game.score1 > game.score2 && game.player1) {
-                const player = roundRatings.get(game.player1.id);
+                const player = roundRatings.get(typeof game.player1 === 'string' ? game.player1 : game.player1.username);
                 if (player) player.rating++;
-            } else if (game.score2 > game.score1 && game.player2) {
-                const player = roundRatings.get(game.player2.id);
+            } else if (game.score2 > game.score1 && game.player2Name) {
+                const player = roundRatings.get(game.player2Name);
                 if (player) player.rating++;
             }
         });
-        roundRatings.forEach((player, id) => {
-            const existingPlayer = ratingsMap.get(id);
+        roundRatings.forEach((player, username) => {
+            const existingPlayer = ratingsMap.get(username);
             if (existingPlayer)
                 existingPlayer.rating += player.rating;
             else
-                ratingsMap.set(id, player);
+                ratingsMap.set(username, player);
         });
     });
-    return Array.from(ratingsMap.values()).sort((a, b) => b.rating - a.rating);
+    const sortedPlayers= Array.from(ratingsMap.values()).sort((a, b) => b.rating - a.rating);
+      sortedPlayers.forEach((player, index) => {
+    (player as Player & { rank: number }).rank = index + 1;
+  });
+
+  return sortedPlayers;
 }
 
 
@@ -224,6 +230,8 @@ function updateTournamentDiv() {
     }
 
     const tour = state.selectedTourJson;
+    console.log("Tour sélectionné :", tour);
+    
     let contentHtml = `
         <div class="space-y-6">
             <div class="border-b border-gray-200 pb-4">
@@ -239,15 +247,18 @@ function updateTournamentDiv() {
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Tournament Ratings</h3>
                     <p class="text-sm text-gray-500 mb-4">(${tour.players.length} players)</p>
                     <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                        ${calculateRatings(tour).map(user => `
+                        ${calculateRatings(tour).map(user => {
+                            const userWithRank = user as Player & { rank: number };
+                            return `
                             <div class="flex items-center space-x-3">
-                                <img src="${user.avatar}" class="w-10 h-10 rounded-full object-cover" alt="${user.username}">
+                                <img src="${user.avatar || 'https://via.placeholder.com/40'}" class="w-10 h-10 rounded-full object-cover" alt="${user.username}">
                                 <div class="flex-1">
-                                    <div class="text-sm font-medium text-gray-900">${user.username}</div>
-                                    <div class="text-sm text-gray-500">Rating: ${user.rating}</div>
-                                </div>
+                                    <div class="text-sm font-medium text-gray-900">${userWithRank.username}</div>
+                                    <div class="text-sm text-gray-500">Rank: ${userWithRank.rank} | Victories: ${user.rating}</div>
+
+                                 </div>
                             </div>
-                        `).join('')}
+                        `;}).join('')}
                     </div>
                 </div>
             </div>

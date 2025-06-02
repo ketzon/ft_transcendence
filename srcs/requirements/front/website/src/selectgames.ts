@@ -89,6 +89,7 @@ export function execSelect(): void {
         setPause(true);
         changingArea.innerHTML = selectView();
         let tournamentName = await customPrompt("Enter tournament name:");
+       // let creatorId = localStorage.getItem('userID') ?? "";
         for (let i = 2; i <= 4; i++) { //tournament for 4 person
             let playerName = await customPrompt(`Enter name for Player ${i}:`);
             if (playerName === "") {
@@ -99,6 +100,7 @@ export function execSelect(): void {
         players.push(localStorage.getItem('nickname') || "player1👻"); //ajout du joueur 1 au tableau des joueurs
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
         localStorage.setItem("tournamentName", tournamentName);
+      //  localStorage.setItem("creatorId", creatorId);
 
 
         const randomizedPlayer = shufflePlayers(players);

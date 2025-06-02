@@ -33,7 +33,7 @@ export async function isUserAuth():Promise<boolean> {
 }
 
 let isFirstLoop:boolean = false;
-function checkLocalStorage(user)
+function checkLocalStorage(user: any)
 {
     // if (!localStorage.getItem("email") || !localStorage.getItem("nickname") || !localStorage.getItem("avatar"))
     // {

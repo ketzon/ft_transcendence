@@ -1,5 +1,5 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
-import { Game, Game } from './types/gameTypes';
+import { Game } from './types/gameTypes';
 
 function formatDateFR(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {

@@ -11,6 +11,9 @@ import { setGameSettings, setChoosenBackground } from "./pongCustomization";
 import { selectView } from "./views/select";
 
 
+declare const VANTA: any; //typescript
+
+
 export type BracketElements = {
   player1Name: HTMLElement;
   player1Score: HTMLElement;
@@ -88,7 +91,9 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
-        players.push(localStorage.getItem('nickname'))
+        // Au lieu de :
+        const user1 = localStorage.getItem('nickname') || 'player1👻';
+        players.push(user1);
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
 
 
@@ -124,8 +129,13 @@ export function showBracket(): void {
       vantaEffect.destroy();
       vantaEffect = null;
     }
+
+
     changingArea.innerHTML = bracketView();
-    document.getElementById('match-title').textContent = `${player1} vs ${player2}`;
+    const matchTitle = document.getElementById('match-title');
+    if (matchTitle) {
+        matchTitle.textContent = `${player1} vs ${player2}`;
+    }
     let start = document.getElementById("start-game");
     if (!start) return;
     if (typeof VANTA !== 'undefined') {

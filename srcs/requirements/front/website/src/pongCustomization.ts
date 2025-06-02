@@ -2,15 +2,15 @@ let toggleSettings: HTMLFormElement;
 let settingsPopup: HTMLDivElement;
 
 import { setWinningScore, setPaddleSpeed } from "./pong/utils/constants";
-import { changingArea } from "./router";
-import { initGame } from "./ponggame";
-import { pongView } from "./views/pong";
+// import { changingArea } from "./router";
+// import { initGame } from "./ponggame";
+// import { pongView } from "./views/pong";
 import { setGameMode } from "./ponggame";
 import { stopPong } from "./pong/core/gameloop";
 import { setPongBackground } from "./views/pong";
 import { execSelect} from "./selectgames";
-import { selectView } from "./views/select";
-import { setPause, setTournamentMode } from "./pong/core/gamestate";
+// import { selectView } from "./views/select";
+// import { setPause, setTournamentMode } from "./pong/core/gamestate";
 import { setStage } from "./pong/core/gameloop";
 
 function setCustomSettings(): void {

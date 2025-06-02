@@ -9,7 +9,8 @@ import { __dirname } from './services/user_services.js';
 import Fastify from "fastify"
 
 //Config
-import {PORT, _SITE_NAME} from "./config/config.mjs"
+// import {PORT, _SITE_NAME} from "./config/config.mjs"
+import {PORT} from "./config/config.mjs"
 import registerUserRoute from "./routes/userRoutes.js"
 
 //Auth

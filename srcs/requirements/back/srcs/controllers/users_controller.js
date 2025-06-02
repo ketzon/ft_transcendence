@@ -57,7 +57,10 @@ const signup = async (req, reply) => {
 	}
 	catch (error) {
 		if (error.code === "P2002")
-			return reply.status(409).send({message: "Username already used.", details: error.message})
+        {
+            const problem = error.meta.target[0]; // We will know which field is the problem in prisma.
+		    return reply.status(409).send({message: problem + " already used", details: error.message})
+        }
 		else
 			return reply.status(500).send({message: "Internal error", details: error.message})
 	}
@@ -177,6 +180,11 @@ const customUsername = async (req, reply) => {
 		reply.status(200).send({message: "Username succesfully changed.", user: userUpdated})
 	}
 	catch (error) {
+        if (error.code === "P2002")
+        {
+            const problem = error.meta.target[0];
+            return reply.status(409).send({message: problem + " already used", details: error.message})
+        }
 		reply.status(500).send({message: "customUsername internal error", details: error.message})
 	}
 }

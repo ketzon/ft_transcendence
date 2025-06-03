@@ -5,6 +5,7 @@ import { updateI18nTranslations } from '../i18next';
 import { isUserAuth } from "../auth";
 import router from "../router.ts"
 import { hideNavbar } from "../utils";
+import { API_URL } from "../main";
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -32,7 +33,7 @@ async function updatePassword(newPassword: string): Promise<void> {
 
     try
     {
-        const res = await fetch("http://localhost:3000/user/modifyPassword", {
+        const res = await fetch(`${API_URL}/user/modifyPassword`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({password, newPassword}),
@@ -80,7 +81,7 @@ function initPasswordForm(): void {
 async function updateNickname(newUsername: string): Promise<void> {
     try
     {
-        const res = await fetch ("http://localhost:3000/user/customUsername", {
+        const res = await fetch (`${API_URL}/user/customUsername`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ async function updateNickname(newUsername: string): Promise<void> {
 export async function updateLanguage(language: string): Promise<void> {
     console.log(`mon language selectionne est ${language}`)
     try {
-        const res = await fetch("http://localhost:3000/user/language", {
+        const res = await fetch(`${API_URL}/user/language`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -164,7 +165,7 @@ function initNicknameForm(): void {
 async function updateAvatar(formData: FormData): Promise<void> {
     try
     {
-        const res = await fetch("http://localhost:3000/user/customAvatar", {
+        const res = await fetch(`${API_URL}/user/customAvatar`, {
             // headers: {'Content-Type': 'multipart/form-data'},
             method: "POST",
             body: formData,
@@ -181,7 +182,7 @@ async function updateAvatar(formData: FormData): Promise<void> {
         }
         const resMsg = await res.json();
         printResponse("/customAvatar", resMsg);
-        localStorage.setItem("avatar", "http://localhost:3000/" + resMsg.user.avatar);
+        localStorage.setItem("avatar", API_URL + "/" + resMsg.user.avatar);
 
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
         submitBtn.classList.add("hidden");
@@ -197,7 +198,7 @@ async function updateAvatar(formData: FormData): Promise<void> {
 
 async function deleteUser(email: string): Promise<void> {
   try {
-    const res = await fetch("http://localhost:3000/user/delusr", {
+    const res = await fetch(`${API_URL}/user/delusr`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email}),

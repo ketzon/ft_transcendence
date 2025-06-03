@@ -2,6 +2,7 @@ import { changingArea, router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse } from "../utils";
 import { init2fa, twofaView } from "./2fa";
+import { API_URL } from "../main";
 
 interface signinformValues {
     email: string,
@@ -71,7 +72,7 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     try
     {
         //changer l'url par celle de l'api
-        const res = await fetch ("http://localhost:3000/user/signin", {
+        const res = await fetch (`${API_URL}/user/signin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

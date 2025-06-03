@@ -2,6 +2,7 @@ import { router } from "../router.ts";
 import { printResponse } from "../utils.ts";
 import { toasts } from "../toasts.ts";
 import { handleChecklist, isValidPassword } from "../passwordValidation.js";
+import { API_URL } from "../main.js";
 
 interface formValues {
     username: string,
@@ -78,7 +79,7 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
     try
     {
         //changer l'url par celle de l'api
-        const res = await fetch ("http://localhost:3000/user/signup", {
+        const res = await fetch (`${API_URL}/user/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

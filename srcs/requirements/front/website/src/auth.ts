@@ -1,24 +1,22 @@
 import { changeLanguage } from "./i18next";
 import { router } from "./router";
 import { printResponse } from "./utils";
+import { API_URL } from "./main";
 
 export async function isUserAuth():Promise<boolean> {
     try
     {
-        const res = await fetch("http://localhost:3000/user/profil", {
+        const res = await fetch(`${API_URL}/user/profil`, {
             method: "GET",
             headers: {},
             credentials: "include"
         });
         const user = await res.json();
-
         if (!res.ok)
         {
-            console.log("User is NOT LOGGED");
             printResponse("/profil", user);
             return (false);
         }
-        console.log("USER IS LOGGED");
         printResponse("/profil", user);
         checkLocalStorage(user);
         initLogoutButton();
@@ -27,7 +25,6 @@ export async function isUserAuth():Promise<boolean> {
     catch(error)
     {
         console.error("Error while Auth fecthing API");
-        // localStorage.clear();
         return (false);
     }
 }
@@ -39,7 +36,7 @@ function checkLocalStorage(user: any)
     // {
         localStorage.setItem("email", user.email);
         localStorage.setItem("nickname", user.username);
-        localStorage.setItem("avatar", "http://localhost:3000/" + user.avatar);
+        localStorage.setItem("avatar", API_URL + "/" + user.avatar);
     // }
     //recup par defaut en et init le site en anglais, si le user a deja change son language alors on use le language dans la db
         if(user.language && !isFirstLoop) {
@@ -56,14 +53,14 @@ export async function initLogoutButton(): Promise<void> {
     const navbarElem = document.getElementById("navbar-box");
 
     if (navbarElem) {
-        navbarElem.classList.remove('hidden'); 
+        navbarElem.classList.remove('hidden');
         navbarElem.style.display = 'flex'
     }
 
     //si bouton existe deja (deuxieme connexion)
     if (logoutBtn && selectLanguage) {
-       selectLanguage.classList.remove('hidden'); 
-       selectLanguage.style.display = 'block' 
+       selectLanguage.classList.remove('hidden');
+       selectLanguage.style.display = 'block'
        logoutBtn.style.display = 'block'
     }
     //si bouton existe pas (premiere connexion)
@@ -90,7 +87,7 @@ export async function initLogoutButton(): Promise<void> {
         //Ici faire le call a l'API pour vraiment deconnecter et clear les cookies.
         try
         {
-            const res = await fetch("http://localhost:3000/user/logout", {
+            const res = await fetch(`${API_URL}/user/logout`, {
                 method: "POST",
                 headers: {},
                 credentials: "include" // Rajouter pour le vrai call.

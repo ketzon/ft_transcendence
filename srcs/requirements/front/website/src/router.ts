@@ -20,6 +20,7 @@ import { stopVersusGame } from "./versus/cleanUp.js";
 
 import { gameSettingsView, initGameSettings } from "./pongCustomization.js";
 import { friendsView, initFriends } from "./views/friends";
+import { API_URL } from "./main";
 
 const routes = {
     indexhtml : "/index.html/",
@@ -33,7 +34,7 @@ const routes = {
     twofa: "/twofa",
     settings: "/settings",
     pongSettings: "/pongSettings",
-    friends: "/friends"  
+    friends: "/friends"
 }
 
 // Gestion des boutons forward et backward
@@ -61,11 +62,11 @@ export async function router(): Promise<void> {
         //pour envoyer signal
         setInterval(async () => {
             try {
-                await fetch("http://localhost:3000/user/profil", {credentials: "include"});
+                await fetch(`${API_URL}/user/profil`, {credentials: "include"});
             } catch (error) {
                 console.log("heartbeat failed");
             }
-        }, 20000); 
+        }, 20000);
     }
     if (!changingArea)
     {
@@ -151,7 +152,7 @@ export async function router(): Promise<void> {
             }
             changingArea.innerHTML = friendsView();
             initFriends();
-            stopGame(); 
+            stopGame();
             break;
 
         case routes.settings:

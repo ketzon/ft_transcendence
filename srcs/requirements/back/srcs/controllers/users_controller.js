@@ -277,12 +277,7 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
-<<<<<<< HEAD
     updateLanguage,
     resendOtpCode,
 	getToken,
-=======
-  updateLanguage,
-  resendOtpCode,
->>>>>>> develop
 }

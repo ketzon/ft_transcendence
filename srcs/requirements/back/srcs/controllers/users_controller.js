@@ -33,7 +33,7 @@ const signup = async (req, reply) => {
     {
         const passwordPolicy = userService.validPasswordPolicy(password);
         if (!passwordPolicy)
-            return reply.status(400).send({message: "Password does not meet requierements."});
+            return reply.status(400).send({message: "Password does not meet requirements."});
         const usernamePolicy = userService.validUsernamePolicy(username);
         if (!usernamePolicy)
             return reply.status(400).send({message: "Nickname does not meet requirements."});
@@ -175,7 +175,7 @@ const customUsername = async (req, reply) => {
 		const user = await userService.getUserByToken(req.server, token)
         const usernamePolicy = userService.validUsernamePolicy(newUsername);
         if (!usernamePolicy)
-            return reply.status(400).send({message: "Nickname does not meet requierements."});
+            return reply.status(400).send({message: "Nickname does not meet requirements."});
 		const userUpdated = await userService.updateUsername(user, newUsername)
 		reply.status(200).send({message: "Username succesfully changed.", user: userUpdated})
 	}

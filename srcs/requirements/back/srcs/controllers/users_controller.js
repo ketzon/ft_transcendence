@@ -1,5 +1,5 @@
 import userService from "../services/user_services.js"
-import fastifyMultipart from 'fastify-multipart';
+//import fastifyMultipart from 'fastify-multipart';
 
 BigInt.prototype.toJSON = function () {
     return this.toString(); // Convert to string for serialization
@@ -38,10 +38,10 @@ const signup = async (req, reply) => {
     {
         const passwordPolicy = userService.validPasswordPolicy(password);
         if (!passwordPolicy)
-            return reply.status(400).send({message: "Password does not meet requierements."});
+            return reply.status(400).send({message: "Password does not meet requirements."});
         const usernamePolicy = userService.validUsernamePolicy(username);
         if (!usernamePolicy)
-            return reply.status(400).send({message: "Nickname does not meet requierements."});
+            return reply.status(400).send({message: "Nickname does not meet requirements."});
     }
 	try {
 		//create user
@@ -62,10 +62,38 @@ const signup = async (req, reply) => {
 	}
 	catch (error) {
 		if (error.code === "P2002")
-			return reply.status(409).send({message: "Username already used.", details: error.message})
+        {
+            const problem = error.meta.target[0]; // We will know which field is the problem in prisma.
+		    return reply.status(409).send({message: problem + " already used", details: error.message})
+        }
 		else
 			return reply.status(500).send({message: "Internal error", details: error.message})
 	}
+}
+
+const deleteUser = async (req, reply) => {
+  try {
+	const token = req.cookies?.token;
+	if (!token) {
+		return reply.status(401).send({message: "Token Authentification missing"})
+	}
+	const user = await userService.getUserByToken(req.server, token);
+	if (!user || !user.id) {
+		return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
+	}
+    const del = await userService.deleteUser(user);
+    return reply
+    .clearCookie("token", {
+		  path: "/",
+		  secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
+		  sameSite: 'strict',
+    })
+    .status(200)
+    .send({message: "User deleted", details: user.username, token: req.cookies});
+  }
+  catch (error) {
+    return reply.status(500).send({message: "Internal error", details: error.message});
+  }
 }
 
 const signin = async(req, reply) => {
@@ -127,8 +155,10 @@ const displayCurrentUser = async(req, reply) => {
 		if (!user || !user.id) {
 			return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
 		}
-		// return user
+		
+        await userService.updateLastActive(user.id);
 		return reply.send(toSerializable(user));
+		// return user
 	}
 	catch (error) {
 		reply.status(500).send({message: "Internal error displaying user", details: error.message})
@@ -157,11 +187,16 @@ const customUsername = async (req, reply) => {
 		const user = await userService.getUserByToken(req.server, token)
         const usernamePolicy = userService.validUsernamePolicy(newUsername);
         if (!usernamePolicy)
-            return reply.status(400).send({message: "Nickname does not meet requierements."});
+            return reply.status(400).send({message: "Nickname does not meet requirements."});
 		const userUpdated = await userService.updateUsername(user, newUsername)
 		reply.status(200).send({message: "Username succesfully changed.", user: userUpdated})
 	}
 	catch (error) {
+        if (error.code === "P2002")
+        {
+            const problem = error.meta.target[0];
+            return reply.status(409).send({message: problem + " already used", details: error.message})
+        }
 		reply.status(500).send({message: "customUsername internal error", details: error.message})
 	}
 }
@@ -204,6 +239,7 @@ const updateLanguage = async (req, reply) => {
         const user = await userService.getUserByToken(req.server, token);
         const userUpdated = await userService.updateLanguage(user, language);
         reply.status(200).send({ message: "Language successfully changed", user: userUpdated });
+        reply.redirect("")
     } catch (error) {
         reply.status(500).send({ error: "updateLanguage internal error" });
     }
@@ -234,13 +270,19 @@ const verify2FA = async (req, reply) => {
 export default {
 	signup,
 	signin,
+  deleteUser,
 	logout,
 	customUsername,
 	customAvatar,
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
+<<<<<<< HEAD
     updateLanguage,
     resendOtpCode,
 	getToken,
+=======
+  updateLanguage,
+  resendOtpCode,
+>>>>>>> develop
 }

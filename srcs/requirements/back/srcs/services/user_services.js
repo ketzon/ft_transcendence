@@ -73,6 +73,14 @@ const createUser =  async (email, password, avatar, username) => {
 	return user.id
 }
 
+const deleteUser = async(user) => {
+  const del = await prisma.user.delete({
+    where: {
+      id: user.id,
+    },
+  })
+}
+
 const getUserByEmail = async (email) => {
 	return await prisma.user.findFirst({ //DEVELOPMENT - then change for findUnique
 		where: {email: email}
@@ -112,6 +120,7 @@ const updateUsername = async (user, newUsername) => {
 }
 
 const updateAvatar = async (user, newAvatar) => {
+    const fileBuffer = await newAvatar.toBuffer();
     const publicPath = `uploads/avatar-${user.id}.jpg`;
 
     const uploadDir = path.join(__dirname, 'uploads');
@@ -129,7 +138,6 @@ const updateAvatar = async (user, newAvatar) => {
                 fs.unlinkSync(oldFilePath);
         }
 
-    const fileBuffer = await newAvatar.toBuffer();
     await sharp(fileBuffer)
         .jpeg({quality: 80})
         .toFile(avatarPath);
@@ -203,6 +211,17 @@ const validPasswordPolicy = (password) => {
     return (true);
 }
 
+const updateLastActive = async (userId) => {
+    try {
+        await prisma.user.update({
+            where: { id: userId },
+            data: { lastActive: new Date() }
+        });
+    } catch (error) {
+        console.error("Error updating lastActive:", error);
+    }
+};
+
 export default {
 	createJWT,
     createTempJWT,
@@ -219,4 +238,6 @@ export default {
     updateLanguage,
     validPasswordPolicy,
     validUsernamePolicy,
+    updateLastActive,
+  deleteUser,
 }

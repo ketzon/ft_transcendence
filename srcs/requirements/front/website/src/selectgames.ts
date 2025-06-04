@@ -13,6 +13,9 @@ import { gameLoop } from "./pong/core/gameloop";
 import { setIsLooping, isLooping } from "./pong/core/gamestate";  
 
 
+declare const VANTA: any; //typescript
+
+
 export type BracketElements = {
   player1Name: HTMLElement;
   player1Score: HTMLElement;
@@ -97,7 +100,8 @@ export function execSelect(): void {
             }
             players.push(playerName);
         }
-        players.push(localStorage.getItem('nickname') || "player1👻"); //ajout du joueur 1 au tableau des joueurs
+        const user1 = localStorage.getItem('nickname') || 'player1👻';
+        players.push(user1);
         localStorage.setItem("tournamentPlayers", JSON.stringify(players));
         localStorage.setItem("tournamentName", tournamentName);
       //  localStorage.setItem("creatorId", creatorId);
@@ -136,8 +140,13 @@ export function showBracket(): void {
       vantaEffect.destroy();
       vantaEffect = null;
     }
+
+
     changingArea.innerHTML = bracketView();
-    document.getElementById('match-title').textContent = `${player1} vs ${player2}`;
+    const matchTitle = document.getElementById('match-title');
+    if (matchTitle) {
+        matchTitle.textContent = `${player1} vs ${player2}`;
+    }
     let start = document.getElementById("start-game");
     if (!start) return;
     if (typeof VANTA !== 'undefined') {

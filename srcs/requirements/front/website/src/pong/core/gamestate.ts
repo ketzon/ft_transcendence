@@ -49,8 +49,8 @@ export function setIsLooping(value: boolean): void {
 export let keys: Keys = {
     w: false,
     s: false,
-    i: false,
-    k: false
+    ArrowUp: false,
+    ArrowDown: false
 };
 
 // game state

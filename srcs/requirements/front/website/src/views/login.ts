@@ -2,11 +2,14 @@ import { changingArea, router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse } from "../utils";
 import { init2fa, twofaView } from "./2fa";
+import { API_URL } from "../main";
 
 interface signinformValues {
     email: string,
     password: string,
 }
+
+let isSubmitting = false;
 
 // Cette fonction reset la couleur rouge sur les inputs (class incorrect) lorsque l'user ecrit a nouveau dans un input precedemment faux.
 function resetErrors(): void {
@@ -69,7 +72,7 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
     try
     {
         //changer l'url par celle de l'api
-        const res = await fetch ("http://localhost:3000/user/signin", {
+        const res = await fetch (`${API_URL}/user/signin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -83,7 +86,10 @@ async function sendForm(data: signinformValues, errElement: HTMLElement): Promis
         {
             toasts.error("Signin failed");
             printResponse("/signin", responseData);
-            errElement.innerText = responseData.message;
+            if (responseData.details)
+                errElement.innerText = responseData.details;
+            else
+                errElement.innerText = responseData.message;
             return ;
         }
         toasts.success("Signin successfull");
@@ -154,7 +160,9 @@ export function loginEvents(): void {
 
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        if (isSubmitting)
+            return ;
+        isSubmitting = true;
         //On recup les donnees des inputs du form.
         const inputsValues: signinformValues = getFormValues();
         console.log("DATA TO BE SENT : ",inputsValues);
@@ -168,11 +176,14 @@ export function loginEvents(): void {
             if(errElement)
                 errElement.innerText = errors.join(". ");
             console.log("FORM NOT VALID");
+            isSubmitting = false;
+            return;
         }
 
         //Si pas d'erreurs on envoie les datas du form au backend
         console.log("FORM IS VALID");
-        sendForm(inputsValues, errElement);
+        await sendForm(inputsValues, errElement);
+        isSubmitting = false;
     })
 }
 

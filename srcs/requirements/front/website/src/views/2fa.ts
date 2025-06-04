@@ -1,11 +1,12 @@
 import { router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse, resetAllInputs } from "../utils";
+import { API_URL } from "../main";
 
 async function sendCode(userEmail: string, code: string): Promise<void> {
     try
     {
-        const res = await fetch("http://localhost:3000/user/verify-2FA", {
+        const res = await fetch(`${API_URL}/user/verify-2FA`, {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
@@ -109,7 +110,7 @@ function handleResendBtn(userEmail: string): void {
     resendBtn?.addEventListener("click", async (event) => {
         try
         {
-            const res = await fetch("http://localhost:3000/user/resendOtpCode", {
+            const res = await fetch(`${API_URL}/user/resendOtpCode`, {
                 method: "POST",
                 credentials: "include",
             })

@@ -3,7 +3,9 @@ import { printResponse, resetInput, isEmptyString } from "../utils";
 import { handleChecklist, isValidPassword } from "../passwordValidation";
 import { updateI18nTranslations } from '../i18next';
 import { isUserAuth } from "../auth";
-
+import router from "../router.ts"
+import { hideNavbar } from "../utils";
+import { API_URL } from "../main";
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -31,7 +33,7 @@ async function updatePassword(newPassword: string): Promise<void> {
 
     try
     {
-        const res = await fetch("http://localhost:3000/user/modifyPassword", {
+        const res = await fetch(`${API_URL}/user/modifyPassword`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({password, newPassword}),
@@ -79,7 +81,7 @@ function initPasswordForm(): void {
 async function updateNickname(newUsername: string): Promise<void> {
     try
     {
-        const res = await fetch ("http://localhost:3000/user/customUsername", {
+        const res = await fetch (`${API_URL}/user/customUsername`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -92,7 +94,8 @@ async function updateNickname(newUsername: string): Promise<void> {
         if (!res.ok)
         {
             printResponse("/customUsername", resMsg);
-            toasts.error("Failed to update nickname");
+            toasts.error(resMsg.message);
+            // toasts.error("Failed to update nickname");
             return ;
         }
         printResponse("/customUsername", resMsg);
@@ -109,18 +112,18 @@ async function updateNickname(newUsername: string): Promise<void> {
 export async function updateLanguage(language: string): Promise<void> {
     console.log(`mon language selectionne est ${language}`)
     try {
-        const res = await fetch("http://localhost:3000/user/language", {
+        const res = await fetch(`${API_URL}/user/language`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            credentials: "include", 
+            credentials: "include",
             body: JSON.stringify({ language}),
         });
         const resMsg = await res.json();
         console.log(resMsg);
         if (!res.ok) {
-            printResponse("/language", resMsg); 
+            printResponse("/language", resMsg);
             toasts.error("Failed to update language")
             return;
         }
@@ -162,7 +165,7 @@ function initNicknameForm(): void {
 async function updateAvatar(formData: FormData): Promise<void> {
     try
     {
-        const res = await fetch("http://localhost:3000/user/customAvatar", {
+        const res = await fetch(`${API_URL}/user/customAvatar`, {
             // headers: {'Content-Type': 'multipart/form-data'},
             method: "POST",
             body: formData,
@@ -172,14 +175,14 @@ async function updateAvatar(formData: FormData): Promise<void> {
         {
             const resMsg = await res.json();
             printResponse("/customAvatar", resMsg);
-
-            toasts.error("Failed to update avatar");
+            toasts.error(resMsg.details);
+            // toasts.error("Failed to update avatar");
             loadProfileCard();
             return ;
         }
         const resMsg = await res.json();
         printResponse("/customAvatar", resMsg);
-        localStorage.setItem("avatar", "http://localhost:3000/" + resMsg.user.avatar);
+        localStorage.setItem("avatar", API_URL + "/" + resMsg.user.avatar);
 
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
         submitBtn.classList.add("hidden");
@@ -191,6 +194,42 @@ async function updateAvatar(formData: FormData): Promise<void> {
     {
         console.error("ERROR REACH UPLOAD AVATAR ENDPOINT");
     }
+}
+
+async function deleteUser(email: string): Promise<void> {
+  try {
+    const res = await fetch(`${API_URL}/user/delusr`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({email}),
+      credentials: "include"
+    });
+    if (!res.ok) {
+      const resMsg = await res.json();
+      printResponse("/delusr", resMsg);
+
+      toasts.error("Failed to delete user");
+      return ;
+    }
+    localStorage.clear();
+    hideNavbar();
+    router.redirectTo("/login")
+    const resMsg = await res.json();
+    printResponse("/delusr", resMsg);
+    toasts.success("User deleted");
+  }
+  catch(error) {
+    console.error("Error deleting user: " + error);
+  }
+}
+
+function handleDeleteUser(): void {
+  const delBtn = document.getElementById("account-delete-btn");
+  if (delBtn) {
+    delBtn.addEventListener("click", (event) => {
+      deleteUser(localStorage.getItem("email"));
+    })
+  }
 }
 
 //Function that will listen to the submit button and call API to update in DB(need to edit this when we connect backend).
@@ -254,6 +293,7 @@ export function initSettings(): void {
     initNicknameForm();
     initPasswordForm();
     initAvatarUpload();
+    handleDeleteUser();
 }
 
 export function settingsView(): string {
@@ -317,6 +357,9 @@ export function settingsView(): string {
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="w-full flex justify-center">
+                                <button id="account-delete-btn" type="submit" class="i18n mb-4 hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-lg px-6 py-2 font-medium rounded-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">delete personal data</button>
                             </div>
                         </div>
                     </div>

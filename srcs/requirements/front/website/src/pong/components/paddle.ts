@@ -10,10 +10,10 @@ export function updatePaddles(gameId: GameElements): void {
     if (keys.s && gameState.paddleLeftY < GAME_HEIGHT - PADDLE_HEIGHT) {
         gameState.paddleLeftY += PADDLE_SPEED;
     }
-    if (keys.i && gameState.paddleRightY > 0) {
+    if (keys.ArrowUp && gameState.paddleRightY > 0) {
         gameState.paddleRightY -= PADDLE_SPEED;
     }
-    if (keys.k && gameState.paddleRightY < GAME_HEIGHT - PADDLE_HEIGHT) {
+    if (keys.ArrowDown && gameState.paddleRightY < GAME_HEIGHT - PADDLE_HEIGHT) {
         gameState.paddleRightY += PADDLE_SPEED;
     }
     if (gameId.paddleLeft) {

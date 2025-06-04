@@ -47,8 +47,8 @@ export type GameState = {
 export type Keys = {
   w: boolean;
   s: boolean;
-  i: boolean;
-  k: boolean;
+  ArrowUp: boolean;
+  ArrowDown: boolean;
 }
 
 export type BallColorProperties = {

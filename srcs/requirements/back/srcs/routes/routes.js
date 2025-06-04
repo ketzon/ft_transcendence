@@ -1,8 +1,8 @@
 import User from "../User.js"
 
-fastify.get('/', (req, res) => res.send("Display main page")) //GET
+fastify.get('/', (_req, res) => res.send("Display main page")) //GET
 
-fastify.post('/signup', async (req, reply) => {
+fastify.post('/signup', async ( req, reply) => {
 	console.log("entré")
 	const { name, password, avatar} = req.body;
 
@@ -32,7 +32,7 @@ fastify.post('/signup', async (req, reply) => {
 })
 
 
-fastify.post('/signin', (req, res) => res.send("Verify if log exist, verify if pasword is correct for this account. If yes, refresh page with user data, if not send message."))
+fastify.post('/signin', (_req, res) => res.send("Verify if log exist, verify if pasword is correct for this account. If yes, refresh page with user data, if not send message."))
 
-fastify.get('/user', (req, res) => res.send("Display user data"))
+fastify.get('/user', (_req, res) => res.send("Display user data"))
 

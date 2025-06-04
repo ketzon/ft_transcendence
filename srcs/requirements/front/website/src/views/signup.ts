@@ -2,6 +2,7 @@ import { router } from "../router.ts";
 import { printResponse } from "../utils.ts";
 import { toasts } from "../toasts.ts";
 import { handleChecklist, isValidPassword } from "../passwordValidation.js";
+import { API_URL } from "../main.js";
 
 interface formValues {
     username: string,
@@ -10,6 +11,8 @@ interface formValues {
     repeatpassword: string,
     googleAuth: boolean
 }
+
+let isSubmitting = false;
 
 // Cette fonction reset la couleur rouge sur les inputs (class incorrect) lorsque l'user ecrit a nouveau dans un input precedemment faux.
 function resetErrors(): void {
@@ -76,7 +79,7 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
     try
     {
         //changer l'url par celle de l'api
-        const res = await fetch ("http://localhost:3000/user/signup", {
+        const res = await fetch (`${API_URL}/user/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,11 +98,8 @@ async function sendForm(data: formValues, errElement: HTMLElement): Promise<void
         }
         toasts.success("Register successfull");
         printResponse("/signup", responseData);
-        setTimeout(() => {
-            // window.history.pushState(null, "", "/twofa"); On peut direct rediriger vers le 2fa ?
-            window.history.pushState(null, "", "/login");
-            router();
-        }, 1500);
+        window.history.pushState(null, "", "/login");
+        router();
     }
     catch(error)
     {
@@ -171,7 +171,9 @@ export function signupEvents(): void {
     resetErrors();
     form?.addEventListener("submit", async (e) => {
         e.preventDefault();
-
+        if (isSubmitting)
+            return ;
+        isSubmitting = true;
         //On recupere les donnees des inputs du form.
         const inputsValues: formValues = getFormValues();
         console.log("DATA TO BE SENT : ",inputsValues);
@@ -185,12 +187,13 @@ export function signupEvents(): void {
             if (errElement)
                 errElement.innerText = errors.join(". ");
             console.log("FORM NOT VALID");
-
+            isSubmitting = false;
             return ;
         }
         //Sinon on envoie les datas au back et on redirige vers /login en cas de success.
         console.log("FORM IS VALID");
-        sendForm(inputsValues, errElement);
+        await sendForm(inputsValues, errElement);
+        isSubmitting = false;
     })
 
 }

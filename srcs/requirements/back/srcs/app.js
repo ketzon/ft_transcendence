@@ -3,13 +3,14 @@ import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import { __dirname } from './services/user_services.js';
-import fs from 'fs';
+// import fs from 'fs';
 
 //Tools
 import Fastify from "fastify"
 
 //Config
-import {PORT, SITE_NAME} from "./config/config.mjs"
+// import {PORT, _SITE_NAME} from "./config/config.mjs"
+import {PORT} from "./config/config.mjs"
 import registerUserRoute from "./routes/userRoutes.js"
 
 //Auth
@@ -49,8 +50,10 @@ await fastify.register(fastifyCors, {
     // origin: "http://localhost:8080", //Use this if you want to allow requests to API using docker nginx instead of Vite
     // origin: "http://localhost:5173",
     origin: true, // equivalent a la wildcard * , toutes les origins sont accept
-    credentials: true
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']  
   });
+
 await fastify.register(multipart, {
     limits: {
         fileSize: 5 * 1024 * 1024 // Ajoute une limite de taille de fichier que peux gerer le serveur
@@ -88,11 +91,10 @@ await fastify.register(gameRoutes);  //Jeu
 await fastify.register(tournamentRoutes); //Tournois
 
 
-//demarre le serveur
-fastify.listen({port: PORT, host: "0.0.0.0"}, (err, address) => {
+fastify.listen({port: PORT, host: "0.0.0.0"}, (err, _address) => {
 	if (err) {
 		fastify.log.error(err),
 		process.exit(1)
 	}
-	console.log(`Computer is transcending on : http://localhost:${PORT}`)
+	fastify.log.info(`Computer is transcending on : http://localhost:${PORT}`)
 })

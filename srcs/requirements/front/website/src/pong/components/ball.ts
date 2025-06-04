@@ -80,8 +80,8 @@ export function updateBall(gameId: GameElements): void {
         gameId.ball.style.top = `${gameState.ballY}px`;
     }
     //--------------------------DEBUG--------------------------------------
-    console.log(`la vitesse de la balle ${ballColors} en Y: ${gameState.ballSpeedY}`);
-    console.log(`la vitesse de la balle ${ballColors} en X: ${gameState.ballSpeedX}`);
+    // console.log(`la vitesse de la balle ${ballColors} en Y: ${gameState.ballSpeedY}`);
+    // console.log(`la vitesse de la balle ${ballColors} en X: ${gameState.ballSpeedX}`);
     //--------------------------DEBUG--------------------------------------
     if (gameState.ballX < 0) {
         if (!isScoring) {
@@ -158,8 +158,8 @@ export function changeBall(gameId: GameElements): void {
         randomColor = colors[Math.floor(Math.random() * colors.length)];
     }
     gameId.ball.style.backgroundColor = randomColor;
-    if (!mute && ballProperties[randomColor]?.sound) {
-        ballProperties[randomColor].sound(gameSounds);
+    if (!mute && ballProperties[randomColor].sound) {
+        (ballProperties as any)[randomColor].sound(gameSounds);
     }
   }
 }

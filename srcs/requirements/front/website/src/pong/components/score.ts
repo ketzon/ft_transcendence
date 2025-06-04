@@ -3,7 +3,7 @@ import { gameState } from '../core/gamestate';
 import { WIN_SCORE } from '../utils/constants';
 import { resetGame } from '../core/gameloop';
 import { setPause } from '../core/gamestate';
-import confetti  from 'canvas-confetti';
+// import confetti  from 'canvas-confetti';
 import { gameSounds } from '../utils/audio';
 import { tournamentResults } from '../core/gamestate'; 
 import { sendTournamentToBackend } from './tournamentResults';
@@ -15,7 +15,7 @@ export function resetScore(gameId: GameElements):void {
     }
 }
 
-export function changeWinnerMsg(gameId: GameElements, winnerName:string) : void {
+export function changeWinnerMsg(gameId: GameElements, winnerName:string | null) : void {
     if (gameId.winnerMsg) {
          setTimeout(() => {
             gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;

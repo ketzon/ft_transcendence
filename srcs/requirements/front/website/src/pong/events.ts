@@ -1,5 +1,5 @@
 import { changePause, resetGame, setBasicMode } from './core/gameloop';
-import { GameElements } from '../types/index';
+import { GameElements } from './types'; 
 import { changeAudioStatus } from './utils/audio';
 
 

@@ -36,7 +36,7 @@ const signup = async (req, reply) => {
             return reply.status(400).send({message: "Password does not meet requierements."});
         const usernamePolicy = userService.validUsernamePolicy(username);
         if (!usernamePolicy)
-            return reply.status(400).send({message: "Nickname does not meet requierements."});
+            return reply.status(400).send({message: "Nickname does not meet requirements."});
     }
 	try {
 		//create user

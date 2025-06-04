@@ -187,7 +187,7 @@ export function signupEvents(): void {
             if (errElement)
                 errElement.innerText = errors.join(". ");
             console.log("FORM NOT VALID");
-
+            isSubmitting = false;
             return ;
         }
         //Sinon on envoie les datas au back et on redirige vers /login en cas de success.

@@ -176,6 +176,8 @@ export function loginEvents(): void {
             if(errElement)
                 errElement.innerText = errors.join(". ");
             console.log("FORM NOT VALID");
+            isSubmitting = false;
+            return;
         }
 
         //Si pas d'erreurs on envoie les datas du form au backend

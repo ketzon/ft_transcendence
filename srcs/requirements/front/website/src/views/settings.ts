@@ -211,6 +211,7 @@ async function deleteUser(email: string): Promise<void> {
       toasts.error("Failed to delete user");
       return ;
     }
+    localStorage.clear();
     hideNavbar();
     router.redirectTo("/login")
     const resMsg = await res.json();

@@ -67,19 +67,24 @@ const signup = async (req, reply) => {
 }
 
 const deleteUser = async (req, reply) => {
-  const email = req.body.email;
-  const user = await userService.getUserByEmail(email);
-  const username = user.username;
   try {
+	const token = req.cookies?.token;
+	if (!token) {
+		return reply.status(401).send({message: "Token Authentification missing"})
+	}
+	const user = await userService.getUserByToken(req.server, token);
+	if (!user || !user.id) {
+		return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
+	}
     const del = await userService.deleteUser(user);
     return reply
     .clearCookie("token", {
-		  path: "/settings",
+		  path: "/",
 		  secure: process.env.NODE_ENV === "development", //change for production when project finished (https)
 		  sameSite: 'strict',
     })
     .status(200)
-    .send({message: "User deleted", details: { username }, token: req.cookies});
+    .send({message: "User deleted", details: user.username, token: req.cookies});
   }
   catch (error) {
     return reply.status(500).send({message: "Internal error", details: error.message});

@@ -182,7 +182,9 @@ async function updateAvatar(formData: FormData): Promise<void> {
         }
         const resMsg = await res.json();
         printResponse("/customAvatar", resMsg);
-        localStorage.setItem("avatar", API_URL + "/" + resMsg.user.avatar);
+        // localStorage.setItem("avatar", API_URL + "/" + resMsg.user.avatar); //avant
+        const uploadedAvatarUrl = `${API_URL}/${resMsg.user.avatar}`; // ines : pour récuperer l'avatar
+        localStorage.setItem("avatar", uploadedAvatarUrl);
 
         const submitBtn = document.getElementById("submit-avatar-btn") as HTMLButtonElement;
         submitBtn.classList.add("hidden");

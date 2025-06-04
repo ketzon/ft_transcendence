@@ -250,7 +250,12 @@ export function initializeDashboard() {
     const historyTab = document.getElementById('historyTab');
     const statsContent = document.getElementById('stats-content');
     const historyContent = document.getElementById('history-content');
+    const avatarUrl = localStorage.getItem('avatarUrl');
+    const avatarImg = document.getElementById('profile-avatar') as HTMLImageElement;
 
+    if (avatarUrl && avatarImg) {
+        avatarImg.src = avatarUrl;
+    }
     if (!statsTab || !historyTab || !statsContent || !historyContent) {
         console.error('Could not find dashboard elements');
         return;

@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id             Int       @id @default(autoincrement())
   email          String    @unique
@@ -20,8 +21,12 @@ model User {
   lastActive     DateTime  @default(now())
   friendsAsUser2 Friends[] @relation("FriendsUser2")
   friendsAsUser1 Friends[] @relation("FriendsUser1")
-  stats          Stats?
+  gamesAsPlayer1 Game[] @relation("Player1")
+  gamesAsPlayer2 Game[] @relation("Player2") //car en tournoi je peux etre a droite donc player2
+  stats          Stats? //@relation
 }
+
+
 
 model Stats {
   id     Int  @id @default(autoincrement())
@@ -32,6 +37,7 @@ model Stats {
   User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+
 model Friends {
   id        Int      @id @default(autoincrement())
   user1_id  Int
@@ -41,4 +47,33 @@ model Friends {
   user1     User     @relation("FriendsUser1", fields: [user1_id], references: [id], onDelete: Cascade)
 
   @@unique([user1_id, user2_id])
+}
+
+model Game {
+  id Int @id @default(autoincrement())
+
+  player1Id   Int?
+  player1Name String @default("Player1schema")
+
+  player2Id   Int?
+  player2Name String @default("Player2schema")
+
+  player1 User? @relation("Player1", fields: [player1Id], references: [id])
+  player2 User? @relation("Player2", fields: [player2Id], references: [id])
+
+  score1      Int
+  score2      Int
+  totalMoves  Int
+  avgMoveTime String
+  duration    String
+  date        DateTime @default(now())
+}
+
+model Tournament {
+  id             Int      @id @default(autoincrement())
+  players        String
+  results        String
+  date           DateTime @default(now())
+  tournamentName String   @default("Tournament")
+  creatorId      Int  @default(0)
 }

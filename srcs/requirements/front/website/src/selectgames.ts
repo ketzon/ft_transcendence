@@ -83,39 +83,60 @@ export function execSelect(): void {
         initGame(false);
     });
 
-    pongTournament.addEventListener("click", async () => {
-        console.log("im in tournament mode")
-        if(!changingArea) return;
-        const players: string[] = [];
-        setGameSettings();
-        setChoosenBackground();
-        setPause(true);
-        changingArea.innerHTML = selectView();
-        let tournamentName = await customPrompt("Enter tournament name:");
-       // let creatorId = localStorage.getItem('userID') ?? "";
-        for (let i = 2; i <= 4; i++) { //tournament for 4 person
-            let playerName = await customPrompt(`Enter name for Player ${i}:`);
+pongTournament.addEventListener("click", async () => {
+    console.log("im in tournament mode")
+    if (!changingArea) return;
+
+    const connectedUser = localStorage.getItem('nickname') || 'player1👻';
+    const players: string[] = [];
+
+    setGameSettings();
+    setChoosenBackground();
+    setPause(true);
+    changingArea.innerHTML = selectView();
+
+    const tournamentName = await customPrompt("Enter tournament name:");
+
+    // Collecte des pseudos uniques
+    for (let i = 2; i <= 4; i++) {
+        let playerName = "";
+        let isValid = false;
+
+        while (!isValid) {
+            playerName = await customPrompt(`Enter name for Player ${i}:`);
             if (playerName === "") {
-                playerName = "player" + `${i}` + "👻" 
+                playerName = `player${i}👻`;
             }
-            players.push(playerName);
+
+            const nameTaken =
+                playerName === connectedUser ||
+                players.includes(playerName);
+
+            if (nameTaken) {
+                alert(`⚠️ The name "${playerName}" is already taken. Please choose another.`);
+            } else {
+                isValid = true;
+            }
         }
-        const user1 = localStorage.getItem('nickname') || 'player1👻';
-        players.push(user1);
-        localStorage.setItem("tournamentPlayers", JSON.stringify(players));
-        localStorage.setItem("tournamentName", tournamentName);
-      //  localStorage.setItem("creatorId", creatorId);
 
+        players.push(playerName);
+    }
 
-        const randomizedPlayer = shufflePlayers(players);
+    // Ajouter le joueur connecté à la fin
+    players.push(connectedUser);
+    localStorage.setItem("tournamentPlayers", JSON.stringify(players));
+    localStorage.setItem("tournamentName", tournamentName);
 
-        player1 = randomizedPlayer[0]; 
-        player2 = randomizedPlayer[1]; 
-        player3 = randomizedPlayer[2]; 
-        player4 = randomizedPlayer[3]; 
-        localStorage.setItem("Player2", player2);
-        showBracket();
-    });
+    const randomizedPlayer = shufflePlayers(players);
+    player1 = randomizedPlayer[0];
+    player2 = randomizedPlayer[1];
+    player3 = randomizedPlayer[2];
+    player4 = randomizedPlayer[3];
+
+    localStorage.setItem("Player2", player2); // Pour le dashboard
+    showBracket();
+});
+
 }
 
 function shufflePlayers(array: string[]): string[] { 

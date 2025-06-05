@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "darwin"]
@@ -11,70 +9,36 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String //@unique uncomment post dev
-  username String //@unique uncomment post dev
-  password String
-  avatar   String @default("public/avatar.png")
-  language String @default("en")
-
-  otp        Int?
-  otp_expire BigInt?
-
-  stats          Stats? @relation
-  // friend    Friendship[]  @relation("Friendship")
-  gamesAsPlayer1 Game[] @relation("Player1")
-  gamesAsPlayer2 Game[] @relation("Player2") //car en tournoi je peux etre a droite donc player2
-  lastActive DateTime  @default(now())
-  friendsAsUser1 Friends[] @relation("FriendsUser1")
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  username       String    @unique
+  password       String
+  avatar         String    @default("public/avatar.png")
+  language       String    @default("en")
+  otp            Int?
+  otp_expire     BigInt?
+  lastActive     DateTime  @default(now())
   friendsAsUser2 Friends[] @relation("FriendsUser2")
+  friendsAsUser1 Friends[] @relation("FriendsUser1")
+  stats          Stats?
 }
 
 model Stats {
-  id     Int @id @default(autoincrement())
-  game   Int @default(0)
-  wins   Int @default(0)
-  looses Int @default(0)
-
-  User   User @relation(onDelete: Cascade, fields: [userId], references: [id])
+  id     Int  @id @default(autoincrement())
+  game   Int  @default(0)
+  wins   Int  @default(0)
+  looses Int  @default(0)
   userId Int  @unique
-}
-
-model Game {
-  id Int @id @default(autoincrement())
-
-  player1Id   Int?
-  player1Name String @default("Player1schema")
-
-  player2Id   Int?
-  player2Name String @default("Player2schema")
-
-  player1 User? @relation("Player1", fields: [player1Id], references: [id])
-  player2 User? @relation("Player2", fields: [player2Id], references: [id])
-
-  score1      Int
-  score2      Int
-  totalMoves  Int
-  avgMoveTime String
-  duration    String
-  date        DateTime @default(now())
-}
-
-model Tournament {
-  id             Int      @id @default(autoincrement())
-  players        String
-  results        String
-  date           DateTime @default(now())
-  tournamentName String   @default("Tournament")
-  creatorId      Int  @default(0)
+  User   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Friends {
-  id       Int @id @default(autoincrement())
-  user1_id Int
-  user2_id Int
-  user1    User @relation("FriendsUser1", fields: [user1_id], references: [id], onDelete: Cascade)
-  user2    User @relation("FriendsUser2", fields: [user2_id], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  user1_id  Int
+  user2_id  Int
   createdAt DateTime @default(now())
+  user2     User     @relation("FriendsUser2", fields: [user2_id], references: [id], onDelete: Cascade)
+  user1     User     @relation("FriendsUser1", fields: [user1_id], references: [id], onDelete: Cascade)
+
   @@unique([user1_id, user2_id])
 }

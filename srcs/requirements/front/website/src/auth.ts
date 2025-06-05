@@ -1,7 +1,7 @@
 import { changeLanguage } from "./i18next";
 import { router } from "./router";
 import { printResponse } from "./utils";
-import { API_URL } from "./main";
+import { API_URL } from "./config";
 
 export async function isUserAuth():Promise<boolean> {
     try

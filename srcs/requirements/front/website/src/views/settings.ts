@@ -5,7 +5,7 @@ import { updateI18nTranslations } from '../i18next';
 import { isUserAuth } from "../auth";
 import router from "../router.ts"
 import { hideNavbar } from "../utils";
-import { API_URL } from "../main";
+import { API_URL } from "../config";
 
 //Load the users infos on profile card using the localStorage infos when user land on this page.
 function loadProfileCard(): void {
@@ -359,7 +359,7 @@ export function settingsView(): string {
                                 </div>
                             </div>
                             <div class="w-full flex justify-center">
-                                <button id="account-delete-btn" type="submit" class="i18n mb-4 hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white text-lg px-6 py-2 font-medium rounded-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">delete personal data</button>
+                                <button id="account-delete-btn" type="submit" class="i18n mb-4 hover:opacity-80 cursor-pointer bg-red-400 text-white text-lg px-6 py-2 font-medium rounded-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">Delete Account</button>
                             </div>
                         </div>
                     </div>

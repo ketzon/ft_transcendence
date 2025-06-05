@@ -20,7 +20,7 @@ import { stopVersusGame } from "./versus/cleanUp.js";
 
 import { gameSettingsView, initGameSettings } from "./pongCustomization.js";
 import { friendsView, initFriends } from "./views/friends";
-import { API_URL } from "./main";
+import { API_URL } from "./config";
 
 const routes = {
     indexhtml : "/index.html/",

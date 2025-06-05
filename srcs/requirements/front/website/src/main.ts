@@ -1,9 +1,6 @@
 import { router } from "./router";
 import { initI18n } from './i18next';
 
-//On vient charger la variable qui est dans le .env
-export const API_URL = import.meta.env.VITE_API_URL;
-
 //init i18n apres le chargement du DOM pour recup original data
 document.addEventListener('DOMContentLoaded', () => {
   initI18n();

@@ -2,7 +2,7 @@ import { router } from "../router.ts";
 import { printResponse } from "../utils.ts";
 import { toasts } from "../toasts.ts";
 import { handleChecklist, isValidPassword } from "../passwordValidation.js";
-import { API_URL } from "../main.js";
+import { API_URL } from "../config";
 
 interface formValues {
     username: string,

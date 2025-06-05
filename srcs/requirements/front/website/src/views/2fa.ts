@@ -1,7 +1,7 @@
 import { router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse, resetAllInputs } from "../utils";
-import { API_URL } from "../main";
+import { API_URL } from "../config";
 
 async function sendCode(userEmail: string, code: string): Promise<void> {
     try

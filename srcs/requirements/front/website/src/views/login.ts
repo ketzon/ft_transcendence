@@ -2,7 +2,7 @@ import { changingArea, router } from "../router";
 import { toasts } from "../toasts";
 import { printResponse } from "../utils";
 import { init2fa, twofaView } from "./2fa";
-import { API_URL } from "../main";
+import { API_URL } from "../config";
 
 interface signinformValues {
     email: string,

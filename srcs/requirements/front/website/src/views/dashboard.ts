@@ -135,22 +135,13 @@ export function dashboardView(): string {
                 document.getElementById("profile-username").textContent = username;
                 // document.getElementById("profile-avatar").src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username; //marche pas 
                 const profileAvatar = document.getElementById("profile-avatar") as HTMLImageElement;
-                const storedAvatar = localStorage.getItem("avatar");
-
-                if (storedAvatar) {
-                    profileAvatar.src = storedAvatar + "?ts=" + Date.now(); // force refresh pour éviter le cache
+                const avatar = data.user.avatar; // ines 
+                if (avatar) {
+                    profileAvatar.src = avatar + "?ts=" + Date.now();
                 } else {
                     profileAvatar.src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username;
                 }
-
-                // let rank = "-";
-                // if (data.winRate >= 90) rank = "🏆 Légende";
-                // else if (data.winRate >= 70) rank = "🥇 Pro";
-                // else if (data.winRate >= 50) rank = "🥈 Confirmé";
-                // else if (data.winRate > 0) rank = "🥉 Débutant";
-                // else rank = "👾 Novice";
-                // document.getElementById("profile-rank").textContent = "Rank : " + rank;
-
+                console.log("📛📛📛📛Avatar URL:", profileAvatar.src);
                 // Stats
                 document.getElementById("total-matches").textContent = data.gamesPlayed;
                 document.getElementById("win-rate").textContent = data.winRate + "%";
@@ -232,10 +223,7 @@ export function dashboardView(): string {
             });
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            setupTabs();
-            loadStats();
-        });
+       
         </script>
 
         <!-- Styles -->

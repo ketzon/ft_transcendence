@@ -42,14 +42,6 @@ async function statsRoutes(fastify, opts) {
         const player1Username = game.player1 && game.player1.username ? game.player1.username : 'Player' + game.player1Id;
         // const username = isPlayer1 ? player1Username : game.player2Name;
         // const username = isCurrentUser ? (isPlayer1 ? player1DisplayName : player2DisplayName) : 'Unknown';
-        console.log("=== Partie ===");
-        console.log("player1Id:", game.player1Id, "player1.username:", game.player1?.username, "player1Name:", game.player1Name);
-        console.log("player2Id:", game.player2Id, "player2.username:", game.player2?.username, "player2Name:", game.player2Name);
-        console.log("isPlayer1:", isPlayer1, "isPlayer2:", isPlayer2);
-        console.log("player1DisplayName:", player1DisplayName);
-        console.log("player2DisplayName:", player2DisplayName);
-        console.log("username (current user):", username);
-        console.log("opponentName:", opponentName);
         return {
           date: game.date.toISOString().slice(0, 16).replace('T', ' '),
           player1: { id: game.player1Id, username: player1Username },
@@ -99,8 +91,11 @@ async function statsRoutes(fastify, opts) {
       const winRate = gamesPlayed > 0 ? Math.round((wins / gamesPlayed) * 1000) / 10 : 0;
 
       return reply.send(toSerializable({
-        userId,
-        username: user.username,
+        user: {
+          id: userId,
+          username: user.username,
+          avatar: user.avatar
+        },
         gamesPlayed,
         wins,
         losses,

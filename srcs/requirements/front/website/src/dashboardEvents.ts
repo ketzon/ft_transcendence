@@ -1,6 +1,57 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
 
+
+function setupTabs() {
+    const statsTab = document.getElementById('statsTab');
+    const historyTab = document.getElementById('historyTab');
+    const statsContent = document.getElementById('stats-content');
+    const historyContent = document.getElementById('history-content');
+
+    if (!statsTab || !historyTab || !statsContent || !historyContent) {
+        console.error('❌ Tabs or content sections not found');
+        return;
+    }
+
+    const switchTab = (
+        activeTab: HTMLElement,
+        inactiveTab: HTMLElement,
+        showContent: HTMLElement,
+        hideContent: HTMLElement
+    ) => {
+        // Styles
+        activeTab.classList.add('text-[#8672FF]', 'border-b-2', 'border-[#8672FF]');
+        activeTab.classList.remove('text-gray-500');
+
+        inactiveTab.classList.remove('text-[#8672FF]', 'border-b-2', 'border-[#8672FF]');
+        inactiveTab.classList.add('text-gray-500');
+
+        // Contenus
+        showContent.classList.remove('hidden');
+        showContent.classList.add('animate-fade-in');
+        hideContent.classList.add('hidden');
+        hideContent.classList.remove('animate-fade-in');
+
+        // Action conditionnelle
+        if (showContent.id === 'history-content') {
+            updateGameHistory();
+        }
+    };
+
+    statsTab.addEventListener('click', () => {
+        switchTab(statsTab, historyTab, statsContent, historyContent);
+    });
+
+    historyTab.addEventListener('click', () => {
+        switchTab(historyTab, statsTab, historyContent, statsContent);
+    });
+
+    // Initialisation selon l'état actuel
+    if (!historyContent.classList.contains('hidden')) {
+        updateGameHistory();
+    }
+}
+
 function formatDateFR(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
         day: '2-digit',
@@ -246,81 +297,42 @@ async function updateGameHistory() {
 }
 
 export function initializeDashboard() {
-    const statsTab = document.getElementById('statsTab');
-    const historyTab = document.getElementById('historyTab');
-    const statsContent = document.getElementById('stats-content');
-    const historyContent = document.getElementById('history-content');
     const avatarUrl = localStorage.getItem('avatarUrl');
     const avatarImg = document.getElementById('profile-avatar') as HTMLImageElement;
-
+    
     if (avatarUrl && avatarImg) {
         avatarImg.src = avatarUrl;
     }
-    if (!statsTab || !historyTab || !statsContent || !historyContent) {
-        console.error('Could not find dashboard elements');
-        return;
-    }
+    
+    setupTabs(); // 👈 gère tous les onglets maintenant
+    // Initialiser les stats dès l’ouverture
+    getGameHistory().then((games) => {
+        fetch('http://localhost:3000/api/stats/user', {
+            cache: 'no-store',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.user && data.user.avatar) {
+                localStorage.setItem('avatarUrl', data.user.avatar);
+            const rawAvatar = localStorage.getItem('avatarUrl'); // Récupère l'URL de l'avatar depuis le localStorage
+            if (rawAvatar && avatarImg) {
+                const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
+                // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
+                const avatarUrl = isFullUrl ? rawAvatar : `http://localhost:3000/${rawAvatar}`;
+                avatarImg.src = avatarUrl;
+            }
+            }
+            document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
+            document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
+            document.getElementById('total-wins')!.textContent = data.wins.toString();
+            document.getElementById('max-streak')!.textContent = data.maxStreak.toString();
+            document.getElementById('total-defeats')!.textContent = data.losses.toString();
+        })
+        .catch(err => {
+            console.error('❌ Erreur récupération stats :', err);
+        });
 
-    // Function to switch tabs
-    function switchTab(activeTab: HTMLElement, inactiveTab: HTMLElement,
-                      showContent: HTMLElement, hideContent: HTMLElement) {
-        // Update tab styles
-        activeTab.classList.add('text-[#8672FF]', 'border-[#8672FF]', 'border-b-2');
-        activeTab.classList.remove('text-gray-500', 'border-transparent');
-
-        inactiveTab.classList.remove('text-[#8672FF]', 'border-[#8672FF]', 'border-b-2');
-        inactiveTab.classList.add('text-gray-500', 'border-transparent');
-
-        // Show/hide content
-        showContent.classList.remove('hidden');
-        hideContent.classList.add('hidden');
-
-        // Update game history if switching to history tab
-        if (showContent === historyContent) {
-            updateGameHistory();
-        }
-    }
-
-    // Event handler for Stats tab
-    statsTab.addEventListener('click', () => {
-        switchTab(statsTab, historyTab, statsContent, historyContent);
+        createPerformanceGraph(games);
     });
-
-    // Event handler for History tab
-    historyTab.addEventListener('click', () => {
-        switchTab(historyTab, statsTab, historyContent, statsContent);
-    });
-
-    // Initialize game history if starting on history tab
-    if (!historyContent.classList.contains('hidden')) {
-        updateGameHistory();
-    } else {
-        // Otherwise, initialize just the graph with data
-         getGameHistory().then((games) => { //getGameHistory() is async, then permet d'agir quand la promesse est resolue
-fetch('http://localhost:3000/api/stats/user', {
-    cache: 'no-store', 
-    credentials: 'include'  // Include cookies for authentication ETAPE 1
-    })  // à adapter dynamiquement plus tard
-  .then(res => res.json())
-  .then(data => {
-    // const userId = data.userId;
-    // const username = data.username; // 👈 tu dois renvoyer ça depuis le backend si ce n’est pas déjà le cas
-
-    // const filteredGames = data.games.filter((game: Game) =>
-    // game.player1.id === userId || game.player2Name === username
-    // );
-
-    document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
-    document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
-    document.getElementById('total-wins')!.textContent = data.wins.toString();
-    document.getElementById('max-streak')!.textContent = data.maxStreak.toString();
-    document.getElementById('total-defeats')!.textContent = data.losses.toString();
-
-  })
-  .catch(err => {
-    console.error('❌ Erreur récupération stats :', err);
-  });
-            createPerformanceGraph(games);
-    });
-    }
 }

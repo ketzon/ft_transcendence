@@ -131,6 +131,7 @@ export function resetBall(gameId: GameElements):void {
         gameId.ball.style.top = `${gameState.ballY}px`;
     }
     setTimeout(() => {
+        // const baseSpeed = 7 + Math.random() * 4;
         const baseSpeed = 7 + Math.random() * 4;
         const angle = (Math.random() * Math.PI / 2) - Math.PI / 4;
         const direction = Math.random() > 0.5 ? 1 : -1;

@@ -17,6 +17,20 @@ import registerUserRoute from "./routes/userRoutes.js"
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 
+//Stats 
+import statsRoutes from './routes/statsRoutes.js';
+//await fastify.register(statsRoutes);
+
+//Jeu
+import gameRoutes from './routes/gameRoutes.js';
+
+// Prisma
+import prisma from './config/prismaClient.js';
+
+// Tournament
+import tournamentRoutes from './routes/tournamentRoutes.js';
+
+
 
 const fastify = Fastify({
     logger: {
@@ -27,7 +41,11 @@ const fastify = Fastify({
     },
 });
 
-//change for production
+
+//On Attache Prisma
+fastify.decorate('prisma', prisma);  
+
+
 await fastify.register(fastifyCors, {
     // origin: "http://localhost:8080", //Use this if you want to allow requests to API using docker nginx instead of Vite
     // origin: "http://localhost:5173",
@@ -65,7 +83,12 @@ fastify.register(fastifyJwt, {
   }
 });
 
+
+//On declare les routes qui utilisent prisma
 fastify.register(registerUserRoute, {prefix: "/user"});
+await fastify.register(statsRoutes);  //Stats
+await fastify.register(gameRoutes);  //Jeu
+await fastify.register(tournamentRoutes); //Tournois
 
 
 fastify.listen({port: PORT, host: "0.0.0.0"}, (err, _address) => {

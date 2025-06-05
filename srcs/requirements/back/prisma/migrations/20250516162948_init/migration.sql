@@ -1,0 +1,12 @@
+-- CreateTable
+CREATE TABLE "Game" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "player1Id" INTEGER NOT NULL,
+    "player2Id" INTEGER NOT NULL,
+    "score1" INTEGER NOT NULL,
+    "score2" INTEGER NOT NULL,
+    "totalMoves" INTEGER NOT NULL,
+    "avgMoveTime" TEXT NOT NULL,
+    "duration" TEXT NOT NULL,
+    "date" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

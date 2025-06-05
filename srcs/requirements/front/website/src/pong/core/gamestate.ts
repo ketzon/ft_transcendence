@@ -8,7 +8,8 @@ export let isResetting: boolean = false;
 export let isScoring: boolean = false;
 export let colorChangeTimer: number | undefined;
 export let animationFrameId: number = -1;
-export let tournamentMode: boolean = false
+export let tournamentMode: boolean = false;
+export let isLooping: boolean = false;
 
 
 export function setTournamentMode(value: boolean): void {
@@ -40,6 +41,10 @@ export function setAnimationFrameId(value: number) {
     animationFrameId = value;
 }
 
+export function setIsLooping(value: boolean): void {
+    isLooping = value;
+}
+
 //touche du jeu
 export let keys: Keys = {
     w: false,
@@ -57,7 +62,8 @@ export let gameState: GameState = {
     paddleLeftY: 160,
     paddleRightY: 160,
     scoreRight: 0,
-    scoreLeft: 0
+    scoreLeft: 0,
+    player1Id: null
 };
 
 // config touches
@@ -82,4 +88,10 @@ export function resetGameState(): void {
     gameState.paddleLeftY = 160;
     pause = true;
     isBasic = true;
+}
+
+export let tournamentResults: { player1: string, player2: string, winner: string, score1: number, score2: number }[] = [];
+
+export function resetTournamentResults(): void {
+  tournamentResults = [];
 }

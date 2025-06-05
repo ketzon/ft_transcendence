@@ -6,6 +6,11 @@ BigInt.prototype.toJSON = function () {
   };
 
 //tools
+const toSerializable = (obj) => 
+  JSON.parse(JSON.stringify(obj, (key, value) =>
+    typeof value === 'bigint' ? Number(value) : value
+  ));
+
 const getBody = (req, reply ) => {
 	if (!req.body) {
 		return reply.status(400).send("Missing body in request.")
@@ -150,8 +155,10 @@ const displayCurrentUser = async(req, reply) => {
 		if (!user || !user.id) {
 			return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
 		}
+		
         await userService.updateLastActive(user.id);
-		return user
+		return reply.send(toSerializable(user));
+		// return user
 	}
 	catch (error) {
 		reply.status(500).send({message: "Internal error displaying user", details: error.message})
@@ -270,6 +277,7 @@ export default {
 	displayCurrentUser,
 	modifyPassword,
 	verify2FA,
-  updateLanguage,
-  resendOtpCode,
+    updateLanguage,
+    resendOtpCode,
+	getToken,
 }

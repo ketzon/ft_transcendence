@@ -1,6 +1,57 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
 
+
+function setupTabs() {
+    const statsTab = document.getElementById('statsTab');
+    const historyTab = document.getElementById('historyTab');
+    const statsContent = document.getElementById('stats-content');
+    const historyContent = document.getElementById('history-content');
+
+    if (!statsTab || !historyTab || !statsContent || !historyContent) {
+        console.error('❌ Tabs or content sections not found');
+        return;
+    }
+
+    const switchTab = (
+        activeTab: HTMLElement,
+        inactiveTab: HTMLElement,
+        showContent: HTMLElement,
+        hideContent: HTMLElement
+    ) => {
+        // Styles
+        activeTab.classList.add('text-[#8672FF]', 'border-b-2', 'border-[#8672FF]');
+        activeTab.classList.remove('text-gray-500');
+
+        inactiveTab.classList.remove('text-[#8672FF]', 'border-b-2', 'border-[#8672FF]');
+        inactiveTab.classList.add('text-gray-500');
+
+        // Contenus
+        showContent.classList.remove('hidden');
+        showContent.classList.add('animate-fade-in');
+        hideContent.classList.add('hidden');
+        hideContent.classList.remove('animate-fade-in');
+
+        // Action conditionnelle
+        if (showContent.id === 'history-content') {
+            updateGameHistory();
+        }
+    };
+
+    statsTab.addEventListener('click', () => {
+        switchTab(statsTab, historyTab, statsContent, historyContent);
+    });
+
+    historyTab.addEventListener('click', () => {
+        switchTab(historyTab, statsTab, historyContent, statsContent);
+    });
+
+    // Initialisation selon l'état actuel
+    if (!historyContent.classList.contains('hidden')) {
+        updateGameHistory();
+    }
+}
+
 function formatDateFR(date: Date): string {
     const options: Intl.DateTimeFormatOptions = {
         day: '2-digit',
@@ -21,22 +72,6 @@ function formatShortDateFR(date: Date): string {
     return new Intl.DateTimeFormat('fr-FR', options).format(date);
 }
 
-// Function to generate random stats
-function generateRandomStats(): Game {
-    const player1Points = Math.floor(Math.random() * 11);
-    const player2Points = Math.floor(Math.random() * 11);
-    const totalMoves = Math.floor(Math.random() * 100) + 50;
-    const avgSeconds = (Math.random() * 2 + 0.5).toFixed(2); // Between 0.5 and 2.5 seconds
-
-    return {
-        gameDuration: `${Math.floor(Math.random() * 10) + 2}:${String(Math.floor(Math.random() * 60)).padStart(2, '0')}`,
-        score1: player1Points,
-        score2: player2Points,
-        totalMoves: totalMoves,
-        avgMoveTime: `${avgSeconds}s`
-    };
-}
-
 // Function to display game details modal
 function showGameDetails(game: Game) {
     // Remove existing modal if any
@@ -52,7 +87,15 @@ function showGameDetails(game: Game) {
 
     const modalContent = document.createElement('div');
     modalContent.className = 'bg-white rounded-lg p-8 max-w-2xl w-full mx-4 relative';
+      const playerName = game.player1?.username && game.player1.username !== 'Playernull'
+    ? game.player1.username
+    : game.player2Name || 'Unknown';
+    const playerIsPlayer1 = playerName === game.player1?.username;
 
+    const playerScore = playerIsPlayer1 ? game.gameStats.score1 : game.gameStats.score2;
+    const opponentScore = playerIsPlayer1 ? game.gameStats.score2 : game.gameStats.score1;
+
+    
     modalContent.innerHTML = `
         <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" onclick="document.getElementById('gameDetailsModal').remove()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,7 +107,7 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">General Information</h3>
                 <p class="mb-2"><span class="font-medium">Date:</span> ${game.date}</p>
-                <p class="mb-2"><span class="font-medium">Players:</span> ${game.player1?.username || 'Unknown'} vs ${game.player2?.username || 'Unknown'}</p>
+                <p class="mb-2"><span class="font-medium">Players:</span> ${playerName} vs ${game.opponent || 'Unknown'}</p>
                 <p class="mb-2"><span class="font-medium">Final Score:</span> ${game.score}</p>
                 <p class="mb-2"><span class="font-medium">Result:</span> <span class="${
                     game.result === 'Win' ? 'text-green-600' :
@@ -75,8 +118,8 @@ function showGameDetails(game: Game) {
             <div>
                 <h3 class="text-lg font-semibold mb-4 text-gray-700">Game Statistics</h3>
                 <p class="mb-2"><span class="font-medium">Total Duration:</span> ${game.gameStats.gameDuration}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.player1?.username || 'Player 1'}:</span> ${game.gameStats.score1}</p>
-                <p class="mb-2"><span class="font-medium">Points ${game.player2?.username || 'Player 2'}:</span> ${game.gameStats.score2}</p>
+                <p class="mb-2"><span class="font-medium">Points ${playerName || 'Player 1'}:</span> ${playerScore}</p>
+                <p class="mb-2"><span class="font-medium">Points ${game.opponent || 'Player 2'}:</span> ${opponentScore}</p>
                 <p class="mb-2"><span class="font-medium">Total Moves:</span> ${game.gameStats.totalMoves}</p>
                 <p class="mb-2"><span class="font-medium">Average Move Time:</span> ${game.gameStats.avgMoveTime}</p>
             </div>
@@ -94,72 +137,24 @@ function showGameDetails(game: Game) {
     });
 }
 
-// Function to generate mock game history
-function getMockGameHistory(): Game[] {
-    const players = [
-        { id: 1, username: 'IOK', avatar: 'https://robohash.org/IOK?set=set4' },
-        { id: 2, username: 'Screaky', avatar: 'https://robohash.org/Screaky?set=set4' },
-        { id: 3, username: 'Æther', avatar: 'https://robohash.org/Aether?set=set4' },
-        { id: 4, username: 'ketzon', avatar: 'https://robohash.org/ketzon?set=set4' },
-        { id: 5, username: 'Anna', avatar: 'https://robohash.org/Anna?set=set4' }
-    ];
-    const games: Game[] = [];
-    const today = new Date();
+async function getGameHistory(): Promise<Game[]> {
+  try {
+    const res = await fetch('http://localhost:3000/api/stats/user', { 
+        cache: 'no-store', 
+        credentials: 'include' // Include cookies for authentication ETAPE 1
+    }); 
+    if (!res.ok) throw new Error('Erreur HTTP');
 
-    // For the last 10 days
-    for (let i = 0; i < 10; i++) {
-        const date = new Date(today);
-        date.setDate(date.getDate() - i);
-
-        // Generate between 0 and 5 games for each day
-        const gamesPerDay = Math.floor(Math.random() * 6);
-
-        for (let j = 0; j < gamesPerDay; j++) {
-            const hours = 9 + Math.floor(Math.random() * 15);
-            const minutes = Math.floor(Math.random() * 60);
-            date.setHours(hours, minutes);
-
-            // Select two different random players
-            const player1Index = Math.floor(Math.random() * players.length);
-            let player2Index;
-            do {
-                player2Index = Math.floor(Math.random() * players.length);
-            } while (player2Index === player1Index);
-
-            // Generate random score (0-10)
-            const score1 = Math.floor(Math.random() * 11);
-            const score2 = Math.floor(Math.random() * 11);
-
-            // Determine result
-            let result: 'Win' | 'Loss';
-            result = score1 > score2 ? 'Win' : 'Loss';
-
-            games.push({
-                date: formatDateFR(date),
-                player1: players[player1Index],
-                player2: players[player2Index],
-                score: `${score1}-${score2}`,
-                result: result,
-                gameStats: generateRandomStats()
-            });
-        }
-    }
-
-    // Sort games by date and time
-    games.sort((a, b) => {
-        const [dateA, timeA] = a.date.split(' ');
-        const [dateB, timeB] = b.date.split(' ');
-
-        const [dayA, monthA, yearA] = dateA.split('/');
-        const [dayB, monthB, yearB] = dateB.split('/');
-        const fullDateA = new Date(`${yearA}-${monthA}-${dayA}T${timeA}`);
-        const fullDateB = new Date(`${yearB}-${monthB}-${dayB}T${timeB}`);
-
-        return fullDateB.getTime() - fullDateA.getTime();
-    });
-
-    return games;
+    const data = await res.json();
+    console.log('📊 Historique des parties récupéré :', data);
+    return data.games;
+  } catch (err) {
+    console.error('Erreur lors de la récupération de l’historique :', err);
+    return [];
+  }
 }
+
+
 
 // Function to create performance graph
 function createPerformanceGraph(games: Game[]) {
@@ -183,7 +178,9 @@ function createPerformanceGraph(games: Game[]) {
 
     // Count games and wins by day
     games.forEach(game => {
-        const dateStr = game.date.split(' ')[0]; // Take just the date without time
+        // const dateStr = game.date.split(' ')[0]; // Take just the date without time
+        const dateObj = new Date(game.date);
+        const dateStr = formatShortDateFR(dateObj); // ✅ ex : "17/05"
         const stats = gamesByDate.get(dateStr) || { total: 0, wins: 0 };
         stats.total++;
         if (game.result === 'Win') {
@@ -227,7 +224,8 @@ function createPerformanceGraph(games: Game[]) {
                     beginAtZero: true,
                     ticks: {
                         stepSize: 1
-                    }
+                    },
+                    suggestedMax: Math.max(...totalGames, ...totalWins) + 1
                 }
             },
             plugins: {
@@ -249,8 +247,8 @@ function createPerformanceGraph(games: Game[]) {
 }
 
 // Function to update game history table
-function updateGameHistory() {
-    const games = getMockGameHistory();
+async function updateGameHistory() {
+    const games = await getGameHistory();
     const tableBody = document.querySelector('#history-content table tbody');
 
     if (!tableBody) {
@@ -266,7 +264,7 @@ function updateGameHistory() {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.date}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.player2?.username || 'Unknown'}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${game.opponent || 'Unknown'}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${game.score}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm ${
                 game.result === 'Win' ? 'text-green-600' :
@@ -289,56 +287,60 @@ function updateGameHistory() {
         tableBody.appendChild(row);
     });
 
-    // Update performance graph
+    console.log("📊 Résultats des parties :", games.map(g => g.result));
+    console.log("📅 Dates des parties :", games.map(g => g.date));
+    console.log("👤 Joueurs des parties :", games.map(g => `${g.player1?.username || 'Unknown'} vs ${g.player2Name || 'Unknown'}`));
+    console.log("🏆 Scores des parties :", games.map(g => g.score));
+    console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
+
     createPerformanceGraph(games);
 }
 
 export function initializeDashboard() {
-    const statsTab = document.getElementById('statsTab');
-    const historyTab = document.getElementById('historyTab');
-    const statsContent = document.getElementById('stats-content');
-    const historyContent = document.getElementById('history-content');
-
-    if (!statsTab || !historyTab || !statsContent || !historyContent) {
-        console.error('Could not find dashboard elements');
-        return;
+    const avatarUrl = localStorage.getItem('avatarUrl');
+    const avatarImg = document.getElementById('profile-avatar') as HTMLImageElement;
+    
+    if (avatarUrl && avatarImg) {
+        avatarImg.src = avatarUrl;
     }
+    
+    setupTabs(); // 👈 gère tous les onglets maintenant
+    // Initialiser les stats dès l’ouverture
+    getGameHistory().then((games) => {
+        fetch('http://localhost:3000/api/stats/user', {
+            cache: 'no-store',
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.user && data.user.avatar) {
+                localStorage.setItem('avatarUrl', data.user.avatar);
+            const rawAvatar = localStorage.getItem('avatarUrl'); // Récupère l'URL de l'avatar depuis le localStorage
+            if (rawAvatar && avatarImg) {
+                const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
+                // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
+                const avatarUrl = isFullUrl ? rawAvatar : `http://localhost:3000/${rawAvatar}`;
+                avatarImg.src = avatarUrl;
+            }
+            const usernameSpan = document.getElementById('profile-username');
+            if (usernameSpan && data.user.username) {
+                usernameSpan.textContent = data.user.username;
+                console.log('✅ Username mis à jour dans le DOM :', data.user.username);
+                } else {
+                console.warn('⚠️ Élément #profile-username non trouvé ou username absent');
+                }
 
-    // Function to switch tabs
-    function switchTab(activeTab: HTMLElement, inactiveTab: HTMLElement,
-                      showContent: HTMLElement, hideContent: HTMLElement) {
-        // Update tab styles
-        activeTab.classList.add('text-[#8672FF]', 'border-[#8672FF]', 'border-b-2');
-        activeTab.classList.remove('text-gray-500', 'border-transparent');
+            }
+            document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
+            document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';
+            document.getElementById('total-wins')!.textContent = data.wins.toString();
+            document.getElementById('max-streak')!.textContent = data.maxStreak.toString();
+            document.getElementById('total-defeats')!.textContent = data.losses.toString();
+        })
+        .catch(err => {
+            console.error('❌ Erreur récupération stats :', err);
+        });
 
-        inactiveTab.classList.remove('text-[#8672FF]', 'border-[#8672FF]', 'border-b-2');
-        inactiveTab.classList.add('text-gray-500', 'border-transparent');
-
-        // Show/hide content
-        showContent.classList.remove('hidden');
-        hideContent.classList.add('hidden');
-
-        // Update game history if switching to history tab
-        if (showContent === historyContent) {
-            updateGameHistory();
-        }
-    }
-
-    // Event handler for Stats tab
-    statsTab.addEventListener('click', () => {
-        switchTab(statsTab, historyTab, statsContent, historyContent);
+        createPerformanceGraph(games);
     });
-
-    // Event handler for History tab
-    historyTab.addEventListener('click', () => {
-        switchTab(historyTab, statsTab, historyContent, statsContent);
-    });
-
-    // Initialize game history if starting on history tab
-    if (!historyContent.classList.contains('hidden')) {
-        updateGameHistory();
-    } else {
-        // Otherwise, initialize just the graph with data
-        createPerformanceGraph(getMockGameHistory());
-    }
 }

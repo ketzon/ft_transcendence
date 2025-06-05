@@ -2,7 +2,7 @@ export interface Game {
     date: string;
     starts_at: string,
     player1: Player | null;
-    player2: Player | null;
+    player2Name : string;
     score: string;
     score1?: number;
     score2?: number;
@@ -15,6 +15,7 @@ export interface Game {
     totalMoves: number;       // Total number of moves
     avgMoveTime: string;      // Average time between moves
     totalGames?: number;      // Total number of games played
+    opponent?: string;
 }
 
 export interface Player {
@@ -37,6 +38,8 @@ export interface Tournament {
     players: Player[];
     rounds: Round[];
     isInvitationPhase?: boolean;
+    tournamentName: string;
+    creatorId: number;
 }
 
 // Declare global window interface augmentation

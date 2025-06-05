@@ -63,6 +63,28 @@
                 </div>
             </nav>
             <div id="changingArea" class="h-full w-full bg-[#fdf8e1]">
+                            <div id="stats-content" class="p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+                    <div class="stat-card">🎮 <strong>Total Matches</strong>
+                        <p id="total-matches" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card">🏆 <strong>Win Rate</strong>
+                        <p id="win-rate" class="stat-value">0%</p>
+                    </div>
+                    <div class="stat-card">✨ <strong>Total Wins</strong>
+                        <p id="total-wins" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card">🔥 <strong>Best Win Streak</strong>
+                        <p id="max-streak" class="stat-value">0</p>
+                    </div>
+                    <div class="stat-card">❌ <strong>Total Defeats</strong>
+                        <p id="total-defeats" class="stat-value">0</p>
+                    </div>
+                </div>
+
+                <canvas id="performance-graph" class="w-full h-64 bg-white rounded-lg shadow"></canvas>
+            </div>
+
             </div>
         </div>
     </body>

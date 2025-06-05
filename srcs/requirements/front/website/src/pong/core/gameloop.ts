@@ -16,9 +16,11 @@ import { bracketView } from '../../views/bracket';
 import { BracketElements, getBracketElements, showBracket, player1, player2, player3, player4 } from  "../../selectgames"
 import { settingsView } from '../../views/settings';
 import { winnerView } from '../../views/winner';
+import { isLooping, setIsLooping } from './gamestate';// import { player1, player2, player3, player4 } from '../../selectgames';
 
 //main loop
-function gameLoop(gameId: GameElements): void {
+export function gameLoop(gameId: GameElements): void {
+    if (!isLooping) return; //ines fix
     if (pause === false) {
         updatePaddles(gameId)
         updateBall(gameId);
@@ -259,6 +261,10 @@ export function resetGame(gameId: GameElements): void {
     resetPaddles(gameId);
     resetScore(gameId);
     resetAllsounds();
+    cancelAnimationFrame(animationFrameId); //ines fix
+    setAnimationFrameId(-1); //ines fix
+    setIsLooping(false); //ines fix
+
     if (gameId.basicButton === null) return; //fix temporaire
     gameId.basicButton.textContent = "features-mode";
     gameId.ball.style.backgroundColor = "white";
@@ -287,3 +293,4 @@ export function setBasicMode(gameId: GameElements):void {
         }
     }
 }
+

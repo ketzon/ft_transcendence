@@ -322,6 +322,14 @@ export function initializeDashboard() {
                 const avatarUrl = isFullUrl ? rawAvatar : `http://localhost:3000/${rawAvatar}`;
                 avatarImg.src = avatarUrl;
             }
+            const usernameSpan = document.getElementById('profile-username');
+            if (usernameSpan && data.user.username) {
+                usernameSpan.textContent = data.user.username;
+                console.log('✅ Username mis à jour dans le DOM :', data.user.username);
+                } else {
+                console.warn('⚠️ Élément #profile-username non trouvé ou username absent');
+                }
+
             }
             document.getElementById('total-matches')!.textContent = data.gamesPlayed.toString();
             document.getElementById('win-rate')!.textContent = data.winRate.toFixed(1) + '%';

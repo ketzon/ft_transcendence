@@ -18,6 +18,9 @@ let state: State = {
     unknownPlayer: { id: 0, username: 'unknown', avatar: 'png/avatar.png' }
 };
 
+const currentUser = localStorage.getItem("nickname") || "";
+const currentAvatar = localStorage.getItem("avatar") || "png/avatar.png";
+
 document.getElementById('create-tour')?.addEventListener('click', (e) => {
     e.preventDefault();
     createTour();
@@ -116,49 +119,68 @@ function updateTournamentsList() {
     });
 }
 
-function renderGameHtml(game: Game): string {
-    const getPlayerHtml = (player: Player | null, isWinner: boolean, badge: string) => `
-        <div class="flex flex-col items-center relative">
-            ${badge ? `<div class="absolute -top-8 left-1/2 transform -translate-x-1/2 text-2xl" style="text-shadow: 0 0 5px #FFD700;">${badge}</div>` : ''}
-            <img src="${player?.avatar || 'png/avatar.png'}"
-                class="w-12 h-12 rounded-full object-cover ${isWinner ? 'ring-4 ring-yellow-400' : 'opacity-75'}"
-                alt="${player?.username || 'Unknown'}">
+function getFullPlayer(player: Player | null, playersList: Player[]): Player {
+    if (!player) return { username: "unknown", avatar: "png/avatar.png", id: 0 };
+    if (player.avatar) return player;
 
-            <div class="mt-2 text-sm font-medium ${isWinner ? 'text-green-600' : 'text-gray-500'}">
-                ${player?.username || 'Unknown'}
-            </div>
-        </div>`;
+    const found = playersList.find(p => p.username === player.username);
+    return found || { username: player.username, avatar: `https://robohash.org/${player.username}?set=set4`, id: 0 };
+}
+
+function renderGameHtml(game: Game): string {
+    const playersList = state.selectedTourJson?.players || [];
+
+    const player1 = getFullPlayer(game.player1, playersList);
+    const player2 = getFullPlayer(game.player2, playersList);
+ const getPlayerHtml = (player: Player | null, isWinner: boolean, badge: string) => {
+        const isCurrentUser = player?.username === currentUser;
+        const avatarSrc = isCurrentUser
+            ? currentAvatar
+            : player?.avatar || 'https://via.placeholder.com/40';
+
+        return `
+            <div class="flex flex-col items-center relative">
+                ${badge ? `<div class="absolute -top-8 left-1/2 transform -translate-x-1/2 text-2xl" style="text-shadow: 0 0 5px #FFD700;">${badge}</div>` : ''}
+                <img src="${avatarSrc}"
+                    class="w-12 h-12 rounded-full object-cover ${isWinner ? 'ring-4 ring-yellow-400' : 'opacity-75'}"
+                    alt="${player?.username || 'Unknown'}">
+                <div class="mt-2 text-sm font-medium ${isWinner ? 'text-green-600' : 'text-gray-500'}">
+                    ${player?.username || 'Unknown'}
+                </div>
+            </div>`;
+    };
+
     if (game.is_bye) {
         return `
             <div class="flex items-center p-4 bg-blue-50 rounded-lg mb-3 border border-blue-200">
-                ${getPlayerHtml(game.player1, true, '')}
+                ${getPlayerHtml(player1, true, '')}
                 <div class="flex-1 ml-4">
-                    <div class="text-blue-600 font-medium">${game.player1?.username} automatically advances</div>
+                    <div class="text-blue-600 font-medium">${player1.username} automatically advances</div>
                     <div class="text-sm text-blue-500">Qualified for next round</div>
                 </div>
                 <div class="text-2xl font-bold text-blue-400 ml-4">BYE</div>
             </div>
         `;
     }
+
     const player1Wins = game.score1 > game.score2;
     const player2Wins = game.score2 > game.score1;
+
     return `
         <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg mb-3">
-            ${getPlayerHtml(game.player1, player1Wins, game.is_completed && player1Wins ? '👑' : '')}
+            ${getPlayerHtml(player1, player1Wins, game.is_completed && player1Wins ? '👑' : '')}
             <div class="flex flex-col items-center justify-center mx-4">
                 <div class="text-2xl font-bold text-gray-700">
                     ${game.is_completed ? game.score1 : '...'} - ${game.is_completed ? game.score2 : '...'}
                 </div>
                 ${game.is_completed ? 
                     `<div class="text-sm text-gray-500 mt-1">Completed</div>` : 
-                    `<div class="text-sm text-yellow-600 mt-1">In Progress</div>`
-                }
+                    `<div class="text-sm text-yellow-600 mt-1">In Progress</div>`}
             </div>
-            ${getPlayerHtml(game.player2, player2Wins, game.is_completed && player2Wins ? '👑' : '')}
+            ${getPlayerHtml(player2, player2Wins, game.is_completed && player2Wins ? '👑' : '')}
         </div>
     `;
 }
-
 function renderGamesHtml(tournament: Tournament): string {
     const roundGames = (games: Game[]) => {
         return games.length > 0
@@ -251,7 +273,7 @@ function updateTournamentDiv() {
                             const userWithRank = user as Player & { rank: number };
                             return `
                             <div class="flex items-center space-x-3">
-                                <img src="${user.avatar || 'https://via.placeholder.com/40'}" class="w-10 h-10 rounded-full object-cover" alt="${user.username}">
+                                <img src="${user.username === currentUser ? currentAvatar : (user.avatar || 'https://via.placeholder.com/40')}" class="w-10 h-10 rounded-full object-cover" alt="${user.username}">
                                 <div class="flex-1">
                                     <div class="text-sm font-medium text-gray-900">${userWithRank.username}</div>
                                     <div class="text-sm text-gray-500">Rank: ${userWithRank.rank} | Victories: ${user.rating}</div>

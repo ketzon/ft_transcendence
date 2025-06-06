@@ -17,5 +17,6 @@ COPY --from=builder /app/dist /etc/nginx/html
 COPY website/images /etc/nginx/html/images
 COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
+EXPOSE 443
 COPY --from=builder /app/dist /etc/nginx/html
 CMD ["nginx", "-g", "daemon off;"]

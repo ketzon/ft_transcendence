@@ -5,7 +5,7 @@ export async function sendTournamentToBackend(): Promise<void> {
   const tournamentName = localStorage.getItem("tournamentName") || "Unnamed Tournament";
   const creatorId = localStorage.getItem("creatorId");
   try {
-    const res = await fetch("http://localhost:3000/api/tournaments", {
+    const res = await fetch("http://back:3000/api/tournaments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

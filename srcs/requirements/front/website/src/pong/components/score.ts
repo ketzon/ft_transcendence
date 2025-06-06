@@ -50,7 +50,7 @@ export function checkWinner(gameId: GameElements): void {
     }
     // const isPlayer1ConnectedUser = (gameState.player1Id === connectedUserId); // ou une condition équivalente
 
-    fetch('http://localhost:3000/api/games',
+    fetch('http://back:3000/api/games',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,7 +91,7 @@ export function checkWinner(gameId: GameElements): void {
       console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
 
-      fetch('http://localhost:3000/api/games', {
+      fetch('http://back:3000/api/games', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

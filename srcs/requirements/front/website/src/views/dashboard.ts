@@ -126,7 +126,7 @@ export function dashboardView(): string {
         async function loadStats(userId = 1) {
         console.log("✅ loadStats called");
             try {
-                const res = await fetch('http://localhost:3000/api/stats/user', { cache: 'no-store', credentials: 'include'})
+                const res = await fetch('http://back:3000/api/stats/user', { cache: 'no-store', credentials: 'include'})
                 if (!res.ok) throw new Error('Erreur API');
                 const data = await res.json();
 

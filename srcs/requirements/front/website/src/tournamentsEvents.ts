@@ -52,7 +52,7 @@ function normalizeTournament(t: any): Tournament {
 }
 export async function initializeTournaments() {
     try {
-        const res = await fetch("http://localhost:3000/api/tournaments", { credentials: "include" });
+        const res = await fetch("http://back:3000/api/tournaments", { credentials: "include" });
         console.log("📌 State Tour", state.tours);
         const tournaments = await res.json();
         state.tours = tournaments.map(normalizeTournament);
@@ -70,7 +70,7 @@ async function createTour() {
     try {
         const name = prompt("Enter tournament name:");
         if (!name) return;
-        const res = await fetch("http://localhost:3000/api/tournaments", {
+        const res = await fetch("http://back:3000/api/tournaments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -87,7 +87,7 @@ async function createTour() {
 
 async function showTour(tourId: string) {
     try {
-        const res = await fetch(`http://localhost:3000/api/tournaments/${tourId}`, { credentials: "include" });
+        const res = await fetch(`http://back:3000/api/tournaments/${tourId}`, { credentials: "include" });
 
         const tournament = normalizeTournament(await res.json());
         state.selectedTourJson = tournament;

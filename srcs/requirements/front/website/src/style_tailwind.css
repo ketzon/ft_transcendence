@@ -8,6 +8,12 @@
     --error-color: #f06272;
 }
 
+@layer base {
+    dialog {
+        margin: auto;
+    }
+}
+
 .incorrect label {
     @apply bg-[#f06272];
 }

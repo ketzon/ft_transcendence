@@ -1,3 +1,5 @@
+import { API_URL } from "../config";
+
 export function dashboardView(): string {
     return /*html*/ `
     <div class="flex flex-col h-full bg-[#fdf8e1] transition-all duration-500 ease-in-out">
@@ -126,16 +128,16 @@ export function dashboardView(): string {
         async function loadStats(userId = 1) {
         console.log("✅ loadStats called");
             try {
-                const res = await fetch('http://localhost:3000/api/stats/user', { cache: 'no-store', credentials: 'include'})
+                const res = await fetch(${API_URL}/api/stats/user, { cache: 'no-store', credentials: 'include'})
                 if (!res.ok) throw new Error('Erreur API');
                 const data = await res.json();
 
                 // 📛 Profil
                 const username = data.user.username || "Player";
                 document.getElementById("profile-username").textContent = username;
-                // document.getElementById("profile-avatar").src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username; //marche pas 
+                // document.getElementById("profile-avatar").src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username; //marche pas
                 const profileAvatar = document.getElementById("profile-avatar") as HTMLImageElement;
-                const avatar = data.user.avatar; // ines 
+                const avatar = data.user.avatar; // ines
                 if (avatar) {
                     profileAvatar.src = avatar + "?ts=" + Date.now();
                 } else {
@@ -223,7 +225,7 @@ export function dashboardView(): string {
             });
         }
 
-       
+
         </script>
 
         <!-- Styles -->

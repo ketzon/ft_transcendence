@@ -1,6 +1,7 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
 import { updateI18nTranslations } from './i18next';
+import { API_URL } from './config';
 
 
 function setupTabs() {
@@ -96,7 +97,7 @@ function showGameDetails(game: Game) {
     const playerScore = playerIsPlayer1 ? game.gameStats.score1 : game.gameStats.score2;
     const opponentScore = playerIsPlayer1 ? game.gameStats.score2 : game.gameStats.score1;
 
-    
+
     modalContent.innerHTML = `
         <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" onclick="document.getElementById('gameDetailsModal').remove()">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,10 +141,10 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('http://localhost:3000/api/stats/user', { 
-        cache: 'no-store', 
+    const res = await fetch(`${API_URL}/api/stats/user`, {
+        cache: 'no-store',
         credentials: 'include' // Include cookies for authentication ETAPE 1
-    }); 
+    });
     if (!res.ok) throw new Error('Erreur HTTP');
 
     const data = await res.json();
@@ -301,15 +302,15 @@ export function initializeDashboard() {
     updateI18nTranslations(); //traduction automatique
     const avatarUrl = localStorage.getItem('avatarUrl');
     const avatarImg = document.getElementById('profile-avatar') as HTMLImageElement;
-    
+
     if (avatarUrl && avatarImg) {
         avatarImg.src = avatarUrl;
     }
-    
+
     setupTabs(); // 👈 gère tous les onglets maintenant
     // Initialiser les stats dès l’ouverture
     getGameHistory().then((games) => {
-        fetch('http://localhost:3000/api/stats/user', {
+        fetch(`${API_URL}/api/stats/user`, {
             cache: 'no-store',
             credentials: 'include'
         })

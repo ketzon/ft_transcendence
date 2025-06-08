@@ -5,8 +5,9 @@ import { resetGame } from '../core/gameloop';
 import { setPause } from '../core/gamestate';
 // import confetti  from 'canvas-confetti';
 import { gameSounds } from '../utils/audio';
-import { tournamentResults } from '../core/gamestate'; 
+import { tournamentResults } from '../core/gamestate';
 import { sendTournamentToBackend } from './tournamentResults';
+import { API_URL } from '../../config';
 
 export function resetScore(gameId: GameElements):void {
     if (gameId.scoreLeft || gameId.scoreLeft) {
@@ -32,7 +33,7 @@ export function checkWinner(gameId: GameElements): void {
   const player1Name = gameId.player1?.textContent || "Unknown";
   const player2Name = gameId.player2?.textContent || "Unknown";
   const isPlayer1User = player1Name === localStorage.getItem("nickname");
-  
+
   if (gameState.scoreLeft >= WIN_SCORE) //Si le joueur de gauche (player1) a gagné
   {
     setPause(true);
@@ -50,7 +51,7 @@ export function checkWinner(gameId: GameElements): void {
     }
     // const isPlayer1ConnectedUser = (gameState.player1Id === connectedUserId); // ou une condition équivalente
 
-    fetch('http://localhost:3000/api/games',
+    fetch(`${API_URL}/api/games`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,10 +72,10 @@ export function checkWinner(gameId: GameElements): void {
     .then(data => console.log("✅ Partie enregistrée :", data))
     .catch(err => console.error("❌ Erreur enregistrement :", err));
 
-    
+
     changeWinnerMsg(gameId, player1Name);
     }
-    
+
     else if (gameState.scoreRight >= WIN_SCORE)
     {
       setPause(true);
@@ -91,7 +92,7 @@ export function checkWinner(gameId: GameElements): void {
       console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
 
-      fetch('http://localhost:3000/api/games', {
+      fetch(`${API_URL}/api/games`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

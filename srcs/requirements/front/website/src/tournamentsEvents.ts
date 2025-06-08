@@ -1,5 +1,6 @@
 import { updateI18nTranslations } from './i18next';
 import { Player, Game, Round, Tournament } from './types/gameTypes';
+import { API_URL } from './config';
 
 interface State {
     loading: boolean;
@@ -54,7 +55,7 @@ function normalizeTournament(t: any): Tournament {
 export async function initializeTournaments() {
     updateI18nTranslations();
     try {
-        const res = await fetch("http://localhost:3000/api/tournaments", { credentials: "include" });
+        const res = await fetch(`${API_URL}/api/tournaments`, { credentials: "include" });
         console.log("📌 State Tour", state.tours);
         const tournaments = await res.json();
         state.tours = tournaments.map(normalizeTournament);
@@ -72,7 +73,7 @@ async function createTour() {
     try {
         const name = prompt("Enter tournament name:");
         if (!name) return;
-        const res = await fetch("http://localhost:3000/api/tournaments", {
+        const res = await fetch(`${API_URL}/api/tournaments`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -89,7 +90,7 @@ async function createTour() {
 
 async function showTour(tourId: string) {
     try {
-        const res = await fetch(`http://localhost:3000/api/tournaments/${tourId}`, { credentials: "include" });
+        const res = await fetch(`${API_URL}/api/tournaments/${tourId}`, { credentials: "include" });
 
         const tournament = normalizeTournament(await res.json());
         state.selectedTourJson = tournament;
@@ -175,8 +176,8 @@ function renderGameHtml(game: Game): string {
                 <div class="text-2xl font-bold text-gray-700">
                     ${game.is_completed ? game.score1 : '...'} - ${game.is_completed ? game.score2 : '...'}
                 </div>
-                ${game.is_completed ? 
-                    `<div class="text-sm text-gray-500 mt-1">Completed</div>` : 
+                ${game.is_completed ?
+                    `<div class="text-sm text-gray-500 mt-1">Completed</div>` :
                     `<div class="text-sm text-yellow-600 mt-1">In Progress</div>`}
             </div>
             ${getPlayerHtml(player2, player2Wins, game.is_completed && player2Wins ? '👑' : '')}
@@ -255,7 +256,7 @@ function updateTournamentDiv() {
 
     const tour = state.selectedTourJson;
     console.log("Tour sélectionné :", tour);
-    
+
     let contentHtml = `
         <div class="space-y-6">
             <div class="border-b border-gray-200 pb-4">

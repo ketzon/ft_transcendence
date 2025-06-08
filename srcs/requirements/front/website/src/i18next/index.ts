@@ -42,6 +42,9 @@ const resources: Resources = {
       "friends": "amis",
       "add friend": "ajouter un ami" ,
       "my friends": "mes amis",
+      "Game Settings": "paramètres du jeu",
+      "Custom Settings": "paramètres personnalisés",
+      "Custom Map": "carte personnalisée",
     }
   },
   en: {
@@ -69,6 +72,9 @@ const resources: Resources = {
       "friends": "friends",
       "add friend": "add friend" ,
       "my friends": "my friends",
+      "Game Settings": "Game Settings",
+      "Custom Settings": "Custom Settings",
+      "Custom Map": "Custom Map",
     }
   },
   ja: {
@@ -97,6 +103,9 @@ const resources: Resources = {
       "friends": "フレンズ",
       "add friend": "友達を増やす" ,
       "my friends": "わが友",
+      "Game Settings": "ゲーム設定",
+      "Custom Settings": "カスタム設定",
+      "Custom Map": "カスタムマップ",
     }
   }
 };

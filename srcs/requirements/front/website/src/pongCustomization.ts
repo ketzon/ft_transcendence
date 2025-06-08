@@ -99,11 +99,11 @@ export function gameSettingsView(): string {
     <div class="flex justify-center items-center h-full gap-2"> <!-- Wrapper !-->
         <div class="flex flex-col  bg-white rounded-2xl"> <!-- Main box !-->
             <div class="flex flex-col items-center m-3 bg-violet-100 rounded-2xl">
-                <h2 class="bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Game Settings</h2>
+                <h2 class="i18n bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Game Settings</h2>
                 <div class="m-3">
                     <form id="toggleCustomForm">
                         <fieldset>
-                        <div class="text-center font-semibold my-2">Custom Settings</div>
+                        <div class="i18n text-center font-semibold my-2">Custom Settings</div>
                             <div class="flex flex-wrap justify-center my-2 gap-5">
                                 <label>
                                     <input class="hidden peer" type="radio" id="OFF" name="custom_toggle" value="OFF" checked/>
@@ -178,7 +178,7 @@ export function gameSettingsView(): string {
                 </div>
             </div>
             <div class="flex flex-col items-center m-3 bg-violet-100 rounded-2xl">
-                <h2 class="bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
+                <h2 class="i18n bg-violet-300 w-full text-center p-4 rounded-t-2xl font-semibold text-lg">Custom Map</h2>
                     <form id="mapSelection" class="flex flex-wrap justify-center gap-5 mx-10">
                         <label class="cursor-pointer my-5">
                             <input class="hidden peer" type="radio" name="map" value="bg-map-classic" checked/>

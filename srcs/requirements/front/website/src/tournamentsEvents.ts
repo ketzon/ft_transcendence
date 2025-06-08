@@ -1,3 +1,4 @@
+import { updateI18nTranslations } from './i18next';
 import { Player, Game, Round, Tournament } from './types/gameTypes';
 
 interface State {
@@ -51,6 +52,7 @@ function normalizeTournament(t: any): Tournament {
     };
 }
 export async function initializeTournaments() {
+    updateI18nTranslations();
     try {
         const res = await fetch("http://localhost:3000/api/tournaments", { credentials: "include" });
         console.log("📌 State Tour", state.tours);
@@ -245,8 +247,8 @@ function updateTournamentDiv() {
     if (!state.selectedTourJson) {
         content.innerHTML = `
             <div class="text-center py-12">
-                <h3 class="text-xl font-medium text-gray-500">Select a tournament to view details</h3>
-                <p class="text-gray-400 mt-2">Choose from the list on the left</p>
+                <h3 class="i18n text-xl font-medium text-gray-500">Select a tournament to view details</h3>
+                <p class="i18n text-gray-400 mt-2">Choose from the list on the left</p>
             </div>`;
         return;
     }

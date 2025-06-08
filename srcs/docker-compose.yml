@@ -2,8 +2,8 @@ services:
   back:
     build: requirements/back/.
     container_name: back
-    # ports:
-      # - "3000:3000"
+    ports:
+      - "3000:3000"
     networks:
       - transcendence
     volumes:

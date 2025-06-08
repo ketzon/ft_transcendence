@@ -1,5 +1,5 @@
 import { router } from "./router";
-import { initI18n } from './i18next';
+import { updateI18nTranslations, initI18n } from './i18next';
 
 //init i18n apres le chargement du DOM pour recup original data
 document.addEventListener('DOMContentLoaded', () => {

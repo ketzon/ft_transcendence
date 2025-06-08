@@ -21,6 +21,7 @@ import { stopVersusGame } from "./versus/cleanUp.js";
 import { gameSettingsView, initGameSettings } from "./pongCustomization.js";
 import { friendsView, initFriends } from "./views/friends";
 import { API_URL } from "./config";
+import { updateI18nTranslations } from "./i18next";
 
 const routes = {
     indexhtml : "/index.html/",
@@ -57,6 +58,7 @@ export async function router(): Promise<void> {
 
     if(isAuth) {
         initLogoutButton();
+        updateI18nTranslations();
         //pour recuperer signal apres l'auth
         initFriends();
         //pour envoyer signal

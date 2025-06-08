@@ -14,8 +14,8 @@ export function dashboardView(): string {
         <!-- Navigation bar -->
         <div class="flex border-b border-gray-200 bg-white shadow-sm">
             <div class="flex">
-                <button id="statsTab" class="tab-button px-6 py-3 text-lg font-medium border-b-2 text-[#8672FF] border-[#8672FF]" data-tab="stats">📊 Stats</button>
-                <button id="historyTab" class="tab-button px-6 py-3 text-lg font-medium text-gray-500 hover:text-[#8672FF]" data-tab="history">📜 Game History</button>
+                <button id="statsTab" class="i18n tab-button px-6 py-3 text-lg font-medium border-b-2 text-[#8672FF] border-[#8672FF]" data-tab="stats">📊 Stats</button>
+                <button id="historyTab" class="i18n tab-button px-6 py-3 text-lg font-medium text-gray-500 hover:text-[#8672FF]" data-tab="history">📜 Game History</button>
             </div>
         </div>
 
@@ -32,7 +32,7 @@ export function dashboardView(): string {
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-md transition duration-500 hover:shadow-lg">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">📈 Performance Graph</h3>
+                    <h3 class="i18n text-lg font-semibold text-gray-700 mb-4">📈 Performance Graph</h3>
                     <div class="h-64">
                         <canvas id="performance-graph"></canvas>
                     </div>

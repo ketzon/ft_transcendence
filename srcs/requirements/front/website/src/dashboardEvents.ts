@@ -1,5 +1,6 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
+import { updateI18nTranslations } from './i18next';
 
 
 function setupTabs() {
@@ -297,6 +298,7 @@ async function updateGameHistory() {
 }
 
 export function initializeDashboard() {
+    updateI18nTranslations(); //traduction automatique
     const avatarUrl = localStorage.getItem('avatarUrl');
     const avatarImg = document.getElementById('profile-avatar') as HTMLImageElement;
     

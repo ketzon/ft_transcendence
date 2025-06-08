@@ -1,12 +1,13 @@
+import { updateI18nTranslations } from "../i18next";
 import { toasts } from "../toasts";
 
 export function friendsView(): string {
     return `
     <div class="p-6">
-    <h2 class="text-2xl font-bold mb-6 text-purple-400">friends</h2>
+    <h2 class="i18n text-2xl font-bold mb-6 text-purple-400">friends</h2>
 
     <div class="mb-6">
-    <h3 class="text-lg font-semibold mb-3 text-purple-400">add friend</h3>
+    <h3 class="i18n text-lg font-semibold mb-3 text-purple-400">add friend</h3>
     <div class="flex gap-2">
     <input id="friend-input" placeholder="enter username..." class="flex-1 p-2 border border-purple-400 rounded-lg">
     <button onclick="addFriend()" class="px-4 py-2 bg-purple-400 text-white rounded-lg hover:bg-purple-200">add</button>
@@ -14,7 +15,7 @@ export function friendsView(): string {
     </div>
 
     <div>
-    <h3 class="text-lg font-semibold mb-3 text-purple-400">my friends</h3>
+    <h3 class="i18n text-lg font-semibold mb-3 text-purple-400">my friends</h3>
     <div id="friends-list" class="space-y-2">
     <p class="text-gray-500">loading friends...</p>
     </div>
@@ -150,6 +151,7 @@ async function removeFriend(id: number): Promise<void> {
 }
 
 export function initFriends(): void {
+    updateI18nTranslations();
     loadFriends();
 }
 

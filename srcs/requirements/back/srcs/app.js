@@ -30,7 +30,7 @@ import prisma from './config/prismaClient.js';
 // Tournament
 import tournamentRoutes from './routes/tournamentRoutes.js';
 
-
+import fs from 'fs';
 
 const fastify = Fastify({
     logger: {
@@ -38,6 +38,10 @@ const fastify = Fastify({
             target: "pino-pretty",
             options: { colorize: true },
         },
+    },
+    https: {
+        cert: fs.readFileSync(path.join(__dirname, "../localhost.pem")),
+        key: fs.readFileSync(path.join(__dirname, "../localhost-key.pem")),
     },
 });
 
@@ -96,5 +100,5 @@ fastify.listen({port: PORT, host: "0.0.0.0"}, (err, _address) => {
 		fastify.log.error(err),
 		process.exit(1)
 	}
-	fastify.log.info(`Computer is transcending on : http://localhost:${PORT}`)
+	fastify.log.info(`Computer is transcending on : https://localhost:${PORT}`)
 })

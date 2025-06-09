@@ -1,8 +1,9 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
-import { updateI18nTranslations } from './i18next';
-import { API_URL } from './config';
 
+import { updateI18nTranslations } from './i18next';
+
+import { API_URL } from './config';
 
 function setupTabs() {
     const statsTab = document.getElementById('statsTab');
@@ -322,7 +323,7 @@ export function initializeDashboard() {
             if (rawAvatar && avatarImg) {
                 const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
                 // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
-                const avatarUrl = isFullUrl ? rawAvatar : `http://localhost:3000/${rawAvatar}`;
+                const avatarUrl = isFullUrl ? rawAvatar : `${API_URL}/${rawAvatar}`;
                 avatarImg.src = avatarUrl;
             }
             const usernameSpan = document.getElementById('profile-username');

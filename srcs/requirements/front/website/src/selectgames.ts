@@ -95,7 +95,7 @@ pongTournament.addEventListener("click", async () => {
     setPause(true);
     changingArea.innerHTML = selectView();
 
-    const tournamentName = await customPrompt("Enter tournament name:");
+    const tournamentName = await customPromptTournament("Enter tournament name:");
 
     // Collecte des pseudos uniques
     for (let i = 2; i <= 4; i++) {
@@ -243,6 +243,53 @@ function customPrompt(message: string): Promise<string> {
                 if (e.key === 'Enter') {
                     submitAndClose();
                 }
+            };
+        }
+    });
+}
+
+
+export function customPromptTournament(message: string): Promise<string> {
+    return new Promise((resolve) => {
+        const promptTitle = document.getElementById('prompt-title-tournament');
+        const promptInput = document.getElementById('prompt-input-tournament') as HTMLInputElement;
+        const promptModal = document.getElementById('custom-prompt-tournament');
+        const promptButton = document.getElementById('prompt-submit-tournament');
+
+        if (promptTitle) {
+            promptTitle.textContent = message;
+            promptTitle.classList.add("text-indigo-600");
+        }
+
+        if (promptInput) {
+            promptInput.value = '';
+            promptInput.placeholder = "Enter tournament's name";
+            promptInput.className = "border border-indigo-500 text-lg font-semibold px-3 py-2 rounded w-full";
+            promptInput.focus();
+        }
+
+        if (promptButton) {
+            promptButton.textContent = "Create Tournament";
+            promptButton.className = "mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700";
+        }
+
+        if (promptModal) {
+            promptModal.classList.remove('hidden');
+        }
+
+        const submitAndClose = () => {
+            const value = promptInput?.value || '';
+            if (promptModal) promptModal.classList.add('hidden');
+            resolve(value);
+        };
+
+        if (promptButton) {
+            promptButton.onclick = submitAndClose;
+        }
+
+        if (promptInput) {
+            promptInput.onkeydown = (e) => {
+                if (e.key === 'Enter') submitAndClose();
             };
         }
     });

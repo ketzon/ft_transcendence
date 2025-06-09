@@ -1,3 +1,5 @@
+import { API_URL } from "../config";
+
 export function dashboardView(): string {
     return /*html*/ `
     <div class="flex flex-col h-full bg-[#fdf8e1] transition-all duration-500 ease-in-out">
@@ -126,7 +128,7 @@ export function dashboardView(): string {
         async function loadStats(userId = 1) {
         console.log("✅ loadStats called");
             try {
-                const res = await fetch('https://back:3000/api/stats/user', { cache: 'no-store', credentials: 'include'})
+                const res = await fetch(${API_URL}/api/stats/user, { cache: 'no-store', credentials: 'include'})
                 if (!res.ok) throw new Error('Erreur API');
                 const data = await res.json();
 

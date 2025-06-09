@@ -1,4 +1,5 @@
 import { toasts } from "../toasts";
+import { API_URL } from "../config";
 
 export function friendsView(): string {
     return `
@@ -32,7 +33,7 @@ async function addFriend(): Promise<void> {
         return;
     }
     try {
-        const res = await fetch('https://back:3000/user/friends/add', {
+        const res = await fetch(`${API_URL}/user/friends/add`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -58,7 +59,7 @@ async function addFriend(): Promise<void> {
 
 async function loadFriends(): Promise<void> {
     try {
-        const res = await fetch('https://back:3000/user/friends/list', {
+        const res = await fetch(`${API_URL}/user/friends/list`, {
             credentials: 'include'
         });
         // si reply 401,500
@@ -132,7 +133,7 @@ function displayFriends(friends: any[]): void {
 
 async function removeFriend(id: number): Promise<void> {
     try {
-        const res = await fetch(`https://back:3000/user/friends/remove/${id}`, {
+        const res = await fetch(`${API_URL}/user/friends/remove/${id}`, {
             method: 'DELETE', 
         credentials: 'include'
         });

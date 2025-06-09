@@ -8,6 +8,8 @@ import { gameSounds } from '../utils/audio';
 import { tournamentResults } from '../core/gamestate'; 
 import { sendTournamentToBackend } from './tournamentResults';
 
+import { API_URL } from '../../config'
+
 export function resetScore(gameId: GameElements):void {
     if (gameId.scoreLeft || gameId.scoreLeft) {
         gameId.scoreLeft.textContent = '0';
@@ -50,7 +52,7 @@ export function checkWinner(gameId: GameElements): void {
     }
     // const isPlayer1ConnectedUser = (gameState.player1Id === connectedUserId); // ou une condition équivalente
 
-    fetch('https://back:3000/api/games',
+    fetch(`${API_URL}/api/games`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -91,7 +93,7 @@ export function checkWinner(gameId: GameElements): void {
       console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
 
-      fetch('https://back:3000/api/games', {
+      fetch(`${API_URL}/api/games`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',

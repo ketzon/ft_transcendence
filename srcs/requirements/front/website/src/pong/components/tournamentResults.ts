@@ -1,11 +1,12 @@
 import { tournamentResults, resetTournamentResults } from '../core/gamestate';
+import { API_URL } from '../../config'
 
 export async function sendTournamentToBackend(): Promise<void> {
   const players = JSON.parse(localStorage.getItem("tournamentPlayers") || "[]");
   const tournamentName = localStorage.getItem("tournamentName") || "Unnamed Tournament";
   const creatorId = localStorage.getItem("creatorId");
   try {
-    const res = await fetch("https://back:3000/api/tournaments", {
+    const res = await fetch(`${API_URL}/api/tournaments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

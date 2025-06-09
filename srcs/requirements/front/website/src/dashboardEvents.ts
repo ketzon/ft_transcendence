@@ -1,6 +1,6 @@
 import { Chart, ChartConfiguration } from 'chart.js/auto';
 import { Game } from './types/gameTypes';
-
+import { API_URL } from './config'
 
 function setupTabs() {
     const statsTab = document.getElementById('statsTab');
@@ -139,7 +139,7 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('https://back:3000/api/stats/user', { 
+    const res = await fetch(`${API_URL}/api/stats/user`, { 
         cache: 'no-store', 
         credentials: 'include' // Include cookies for authentication ETAPE 1
     }); 
@@ -307,7 +307,7 @@ export function initializeDashboard() {
     setupTabs(); // 👈 gère tous les onglets maintenant
     // Initialiser les stats dès l’ouverture
     getGameHistory().then((games) => {
-        fetch('https://back:3000/api/stats/user', {
+        fetch(`${API_URL}/api/stats/user`, {
             cache: 'no-store',
             credentials: 'include'
         })
@@ -319,7 +319,7 @@ export function initializeDashboard() {
             if (rawAvatar && avatarImg) {
                 const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
                 // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
-                const avatarUrl = isFullUrl ? rawAvatar : `https://back:3000/${rawAvatar}`;
+                const avatarUrl = isFullUrl ? rawAvatar : `${API_URL}/${rawAvatar}`;
                 avatarImg.src = avatarUrl;
             }
             const usernameSpan = document.getElementById('profile-username');

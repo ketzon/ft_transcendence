@@ -248,4 +248,5 @@ export default {
     validUsernamePolicy,
     updateLastActive,
   deleteUser,
+    updateEmail,
 }

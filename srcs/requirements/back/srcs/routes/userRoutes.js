@@ -15,6 +15,6 @@ export default async function registerUserRoute(fastify) {
     fastify.post("/friends/add", friendsController.addFriend);
     fastify.get("/friends/list", friendsController.getFriends);
     fastify.delete("/friends/remove/:id", friendsController.removeFriend);
-    fastify.post("/user/customEmail", userManagement.customEmail);
+    fastify.post("/customEmail", userManagement.customEmail);
 
 }

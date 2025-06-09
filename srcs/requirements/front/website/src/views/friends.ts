@@ -1,5 +1,6 @@
 import { updateI18nTranslations } from "../i18next";
 import { toasts } from "../toasts";
+import { API_URL } from "../config";
 
 export function friendsView(): string {
     return `
@@ -33,7 +34,7 @@ async function addFriend(): Promise<void> {
         return;
     }
     try {
-        const res = await fetch('http://localhost:3000/user/friends/add', {
+        const res = await fetch(`${API_URL}/user/friends/add`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             credentials: 'include',
@@ -59,7 +60,7 @@ async function addFriend(): Promise<void> {
 
 async function loadFriends(): Promise<void> {
     try {
-        const res = await fetch('http://localhost:3000/user/friends/list', {
+        const res = await fetch(`${API_URL}/user/friends/list`, {
             credentials: 'include'
         });
         // si reply 401,500
@@ -115,7 +116,7 @@ function displayFriends(friends: any[]): void {
     }
     list.innerHTML = friends.map(friend => {
         const isOnline = new Date().getTime() - new Date(friend.lastActive).getTime() < 20000;
-        const statusColor = isOnline ? '🟢' : '🔴'; 
+        const statusColor = isOnline ? '🟢' : '🔴';
 
         return `
         <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-purple-200 shadow-sm">
@@ -133,8 +134,8 @@ function displayFriends(friends: any[]): void {
 
 async function removeFriend(id: number): Promise<void> {
     try {
-        const res = await fetch(`http://localhost:3000/user/friends/remove/${id}`, {
-            method: 'DELETE', 
+        const res = await fetch(`${API_URL}/user/friends/remove${id}`, {
+            method: 'DELETE',
         credentials: 'include'
         });
         if (res.ok) {
@@ -157,4 +158,3 @@ export function initFriends(): void {
 
 (window as any).addFriend = addFriend;
 (window as any).removeFriend = removeFriend;
-

@@ -201,6 +201,24 @@ const customUsername = async (req, reply) => {
 	}
 }
 
+export const customEmail = async (req, reply) => {
+    try {
+        const { newEmail } = req.body;
+        const token = getToken(req, reply);
+        const user = await userService.getUserByToken(req.server, token);
+
+        const emailAlreadyUsed = await userService.getUserByEmail(newEmail);
+        if (emailAlreadyUsed)
+            return reply.status(409).send({ message: "Email already used" });
+
+        const userUpdated = await userService.updateEmail(user, newEmail);
+        reply.status(200).send({ message: "Email successfully changed", user: userUpdated });
+    } catch (error) {
+        reply.status(500).send({ message: "customEmail internal error", details: error.message });
+    }
+};
+
+
 const customAvatar = async (req, reply) => {
     let user = null;
 	try {
@@ -280,4 +298,5 @@ export default {
     updateLanguage,
     resendOtpCode,
 	getToken,
+	customEmail,
 }

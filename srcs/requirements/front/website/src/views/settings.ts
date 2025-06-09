@@ -109,6 +109,46 @@ async function updateNickname(newUsername: string): Promise<void> {
     }
 }
 
+async function updateEmail(newEmail: string): Promise<void> {
+    try {
+        const res = await fetch(`${API_URL}/user/customEmail`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: "include",
+            body: JSON.stringify({ newEmail }),
+        });
+        const resMsg = await res.json();
+
+        if (!res.ok) {
+            printResponse("/customEmail", resMsg);
+            toasts.error(resMsg.message);
+            return;
+        }
+
+        printResponse("/customEmail", resMsg);
+        localStorage.setItem("email", newEmail);
+        loadProfileCard();
+        toasts.success("Email updated");
+    } catch (error) {
+        console.error("Error with API when trying to update email");
+    }
+}
+
+function initEmailForm(): void {
+    const updateEmailForm = document.getElementById("update-email-form") as HTMLFormElement;
+    const emailValue = document.getElementById("update-email-value") as HTMLInputElement;
+
+    if (updateEmailForm) {
+        updateEmailForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            updateEmail(emailValue.value);
+            resetInput("update-email-value");
+        });
+    }
+}
+
+
+
 export async function updateLanguage(language: string): Promise<void> {
     console.log(`mon language selectionne est ${language}`)
     try {
@@ -307,6 +347,7 @@ export function initSettings(): void {
     initPasswordForm();
     initAvatarUpload();
     handleDeleteUser();
+    initEmailForm();
 }
 
 export function settingsView(): string {
@@ -336,6 +377,22 @@ export function settingsView(): string {
                                     <button id="update-nickname-btn" type="submit" class="i18n hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white px-6 py-2 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">Update</button>
                                 </div>
                             </form>
+
+                            <form id="update-email-form" class="flex flex-col w-full max-w-md gap-3">
+                                <label for="update-email-value" class="i18n text-center font-medium text-lg">Change Email</label>
+                                <div class="flex w-full">
+                                    <input type="email" name="update-email" id="update-email-value" placeholder="New Email"
+                                        class="bg-[var(--base-color)] flex-1 h-12 px-4 rounded-l-lg border-2 border-[var(--input-color)] ease-150 text-[length:inherit] hover:border-[var(--accent-color)] focus:border-[var(--text-color)] focus:outline-0 peer"
+                                        required>
+                                    <button id="update-email-btn" type="submit"
+                                        class="i18n hover:opacity-80 cursor-pointer bg-[var(--accent-color)] text-white px-6 py-2 font-medium rounded-r-lg peer-focus:bg-[var(--text-color)] whitespace-nowrap">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+
+
+
                             <div id="password-box" class="flex flex-col items-center w-full max-w-md">
                                 <p class="i18n text-center font-medium text-lg mb-4">Change Password</p>
                                 <form id="update-password-form" class="w-full space-y-3">

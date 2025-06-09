@@ -2,6 +2,8 @@ import { updateI18nTranslations } from './i18next';
 import { Player, Game, Round, Tournament } from './types/gameTypes';
 import { API_URL } from './config';
 
+import { API_URL } from './config'
+
 interface State {
     loading: boolean;
     serverUrl: string | null;
@@ -60,7 +62,7 @@ export async function initializeTournaments() {
         const tournaments = await res.json();
         state.tours = tournaments.map(normalizeTournament);
         state.loading = false;
-        state.serverUrl = 'http://localhost:5173';
+        state.serverUrl = 'https://localhost:5173';
         state.selectedTourJson = null;
         // document.getElementById('create-tour')?.addEventListener('click', createTour);
         updateTournamentDiv();

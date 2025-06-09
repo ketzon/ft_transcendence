@@ -45,6 +45,7 @@ const resources: Resources = {
       "Game Settings": "paramètres du jeu",
       "Custom Settings": "paramètres personnalisés",
       "Custom Map": "carte personnalisée",
+      "Delete Account": "Supprimer le compte",
     }
   },
   en: {
@@ -75,6 +76,7 @@ const resources: Resources = {
       "Game Settings": "Game Settings",
       "Custom Settings": "Custom Settings",
       "Custom Map": "Custom Map",
+      "Delete Account": "Delete Account",
     }
   },
   ja: {
@@ -106,6 +108,7 @@ const resources: Resources = {
       "Game Settings": "ゲーム設定",
       "Custom Settings": "カスタム設定",
       "Custom Map": "カスタムマップ",
+      "Delete Account":"アカウント削除",
     }
   }
 };

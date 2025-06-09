@@ -9,6 +9,8 @@ import { tournamentResults } from '../core/gamestate';
 import { sendTournamentToBackend } from './tournamentResults';
 import { API_URL } from '../../config';
 
+import { API_URL } from '../../config'
+
 export function resetScore(gameId: GameElements):void {
     if (gameId.scoreLeft || gameId.scoreLeft) {
         gameId.scoreLeft.textContent = '0';

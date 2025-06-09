@@ -12,6 +12,7 @@ import { execSelect} from "./selectgames";
 // import { selectView } from "./views/select";
 // import { setPause, setTournamentMode } from "./pong/core/gamestate";
 import { setStage } from "./pong/core/gameloop";
+import { updateI18nTranslations } from "./i18next";
 
 function setCustomSettings(): void {
     console.log("im in custom settings");
@@ -70,6 +71,7 @@ export function setChoosenBackground(): void {
 export function initGameSettings(): void {
     stopPong();
 
+    updateI18nTranslations();
     setStage(0);
     showCustomSettings();
     execSelect()

@@ -139,7 +139,7 @@ function showGameDetails(game: Game) {
 
 async function getGameHistory(): Promise<Game[]> {
   try {
-    const res = await fetch('http://back:3000/api/stats/user', { 
+    const res = await fetch('https://back:3000/api/stats/user', { 
         cache: 'no-store', 
         credentials: 'include' // Include cookies for authentication ETAPE 1
     }); 
@@ -307,7 +307,7 @@ export function initializeDashboard() {
     setupTabs(); // 👈 gère tous les onglets maintenant
     // Initialiser les stats dès l’ouverture
     getGameHistory().then((games) => {
-        fetch('http://back:3000/api/stats/user', {
+        fetch('https://back:3000/api/stats/user', {
             cache: 'no-store',
             credentials: 'include'
         })
@@ -319,7 +319,7 @@ export function initializeDashboard() {
             if (rawAvatar && avatarImg) {
                 const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
                 // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
-                const avatarUrl = isFullUrl ? rawAvatar : `http://back:3000/${rawAvatar}`;
+                const avatarUrl = isFullUrl ? rawAvatar : `https://back:3000/${rawAvatar}`;
                 avatarImg.src = avatarUrl;
             }
             const usernameSpan = document.getElementById('profile-username');

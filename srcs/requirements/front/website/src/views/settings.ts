@@ -61,6 +61,14 @@ function initPasswordForm(): void {
     const passwordForm = document.getElementById("update-password-form") as HTMLFormElement;
     const passwordValue = document.getElementById("update-password-value") as HTMLInputElement;
 
+    if (localStorage.getItem("googleAuth") === "true")
+    {
+        const passwordBox = document.getElementById("password-box")
+        console.log("passwordBox = ", passwordBox);
+        passwordBox?.classList.add("hidden");
+        return ;
+    }
+
     handleChecklist();
     if (passwordForm)
     {

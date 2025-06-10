@@ -139,6 +139,7 @@ export function handleCredentialResponse(response): void {
         repeatpassword: responsePayload.sub,
         googleAuth: true
     }
+    localStorage.setItem("googleAuth", "true");
 
     //On recupere les donnees des inputs du form.
     console.log("DATA TO BE SENT : ",inputsValues);
@@ -159,6 +160,7 @@ function getFormValues(): formValues {
         repeatpassword: repeatPasswordInput?.value,
         googleAuth: false
     }
+    localStorage.setItem("googleAuth", "false");
     return (data);
 }
 

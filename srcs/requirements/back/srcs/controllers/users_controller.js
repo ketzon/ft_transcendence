@@ -6,7 +6,7 @@ BigInt.prototype.toJSON = function () {
   };
 
 //tools
-const toSerializable = (obj) => 
+const toSerializable = (obj) =>
   JSON.parse(JSON.stringify(obj, (key, value) =>
     typeof value === 'bigint' ? Number(value) : value
   ));
@@ -155,7 +155,7 @@ const displayCurrentUser = async(req, reply) => {
 		if (!user || !user.id) {
 			return reply.status(500).send({message: "Token Authentification doesn't match with registered user"})
 		}
-		
+
         await userService.updateLastActive(user.id);
 		return reply.send(toSerializable(user));
 		// return user
@@ -246,8 +246,16 @@ const updateLanguage = async (req, reply) => {
 }
 
 const verify2FA = async (req, reply) => {
-	const {code, email} = req.body
+	const {code} = req.body
+    const twofaToken = req.cookies?.twofaToken;
+    if (!twofaToken)
+        return reply.status(401).send({message: "twofaToken missing"});
+    const email = await userService.getTempTwofaToken(req.server, twofaToken);
+    if (!email)
+        return reply.status(500).send({message: "twofaToken doesn't match with current user"})
     const user = await userService.getUserByEmail(email);
+    if (!user)
+        return reply.status(404).send({message: "No such user"});
 
 	if (parseInt(code) !== user.otp || Date.now > user.otp_expiration)
 		return reply.status(401).send({message: "One Time Password invalid."})

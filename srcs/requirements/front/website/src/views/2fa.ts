@@ -12,7 +12,7 @@ async function sendCode(userEmail: string, code: string): Promise<void> {
             "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({code, email: userEmail}),
+            body: JSON.stringify({code}),
         });
         const resMsg = await res.json();
         printResponse("/verify-2FA", resMsg);

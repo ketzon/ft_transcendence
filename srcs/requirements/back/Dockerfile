@@ -20,6 +20,8 @@ RUN mkcert localhost
 RUN mv ./localhost.pem /usr/src/app/srcs/localhost.pem
 RUN mv ./localhost-key.pem /usr/src/app/srcs/localhost-key.pem
 
+RUN cd prisma ; npx prisma migrate reset
+
 EXPOSE 3000
 
 CMD ["npm", "start"]

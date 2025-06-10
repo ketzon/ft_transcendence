@@ -208,40 +208,6 @@ function renderGamesHtml(tournament: Tournament): string {
 }
 
 
-function calculateRatings(tournament: Tournament): (Player & { rating: number })[] {
-    if (!tournament.rounds) return [];
-    const ratingsMap = new Map<string, Player & { rating: number }>();
-    tournament.rounds.forEach((round: Round) => {
-        if (!round.games || !round.players) return;
-        const roundRatings = new Map(
-            round.players.map((player: Player) => [player.username, { ...player, rating: 0 }])
-        );
-        round.games.forEach((game: Game) => {
-            if (game.score1 > game.score2 && game.player1) {
-                const player = roundRatings.get(typeof game.player1 === 'string' ? game.player1 : game.player1.username);
-                if (player) player.rating++;
-            } else if (game.score2 > game.score1 && game.player2Name) {
-                const player = roundRatings.get(game.player2Name);
-                if (player) player.rating++;
-            }
-        });
-        roundRatings.forEach((player, username) => {
-            const existingPlayer = ratingsMap.get(username);
-            if (existingPlayer)
-                existingPlayer.rating += player.rating;
-            else
-                ratingsMap.set(username, player);
-        });
-    });
-    const sortedPlayers= Array.from(ratingsMap.values()).sort((a, b) => b.rating - a.rating);
-      sortedPlayers.forEach((player, index) => {
-    (player as Player & { rank: number }).rank = index + 1;
-  });
-
-  return sortedPlayers;
-}
-
-
 function updateTournamentDiv() {
     updateTournamentsList();
     console.log("🎯 Les donnees dans UTDiv", state.selectedTourJson);
@@ -265,29 +231,8 @@ function updateTournamentDiv() {
                 <h2 class="text-2xl font-bold text-gray-800">${tour.name || `Tournament ${tour.id}`}</h2>
                 <p class="text-gray-500 mt-2">Starts at ${new Date(tour.start_time).toLocaleString()}</p>
             </div>
-            <div class="grid grid-cols-2 gap-6">
-                <div>
                     <h3 class="text-lg font-semibold text-gray-700 mb-4">Tournament Rounds</h3>
                     ${renderGamesHtml(tour)}
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Tournament Ratings</h3>
-                    <p class="text-sm text-gray-500 mb-4">(${tour.players.length} players)</p>
-                    <div class="bg-gray-50 p-4 rounded-lg space-y-3">
-                        ${calculateRatings(tour).map(user => {
-                            const userWithRank = user as Player & { rank: number };
-                            return `
-                            <div class="flex items-center space-x-3">
-                                <img src="${user.username === currentUser ? currentAvatar : (user.avatar || 'https://via.placeholder.com/40')}" class="w-10 h-10 rounded-full object-cover" alt="${user.username}">
-                                <div class="flex-1">
-                                    <div class="text-sm font-medium text-gray-900">${userWithRank.username}</div>
-                                    <div class="text-sm text-gray-500">Rank: ${userWithRank.rank} | Victories: ${user.rating}</div>
-
-                                 </div>
-                            </div>
-                        `;}).join('')}
-                    </div>
-                </div>
             </div>
         </div>
     `;

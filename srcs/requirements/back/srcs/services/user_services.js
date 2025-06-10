@@ -119,6 +119,14 @@ const updateUsername = async (user, newUsername) => {
 	})
 }
 
+const updateEmail = async (user, newEmail) => {
+    return await prisma.user.update({
+        where: { id: user.id },
+        data: { email: newEmail }
+    });
+};
+
+
 const updateAvatar = async (user, newAvatar) => {
     const fileBuffer = await newAvatar.toBuffer();
     const publicPath = `uploads/avatar-${user.id}.jpg`;
@@ -240,4 +248,5 @@ export default {
     validUsernamePolicy,
     updateLastActive,
   deleteUser,
+    updateEmail,
 }

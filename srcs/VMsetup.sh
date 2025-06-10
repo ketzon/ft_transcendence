@@ -20,6 +20,11 @@ if [[ -z "${VAGRANT_HOME}" ]]; then
     export VAGRANT_HOME="$HOME/goinfre"
 fi
 
+if [[ ! -d ${VAGRANT_HOME} ]]; then
+    echo -e "${YELLOW}WARNING: ${VAGRANT_HOME}: no such directory, creating it...${WHITE}"
+    mkdir -p ${VAGRANT_HOME}
+fi
+
 cd $VAGRANT_HOME
 
 echo -e "${GREEN}Creating VM...${WHITE}"

@@ -129,6 +129,7 @@ function handleCredentialResponse(response) {
         }
     }
     console.log("FORM IS VALID");
+    localStorage.setItem("googleAuth", "true");
     sendForm(data, errElement);
 }
 
@@ -182,6 +183,7 @@ export function loginEvents(): void {
 
         //Si pas d'erreurs on envoie les datas du form au backend
         console.log("FORM IS VALID");
+        localStorage.setItem("googleAuth", "false");
         await sendForm(inputsValues, errElement);
         isSubmitting = false;
     })

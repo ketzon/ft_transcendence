@@ -324,7 +324,7 @@ export function initializeDashboard() {
                 const isFullUrl = rawAvatar.startsWith('http'); // Vérifie si l'URL est complète
                 // Si l'URL n'est pas complète, on la préfixe avec l'URL de base du serveur
                 const avatarUrl = isFullUrl ? rawAvatar : `${API_URL}/${rawAvatar}`;
-                avatarImg.src = avatarUrl;
+                avatarImg.src = avatarUrl + `?ts=${Date.now()}`;
             }
             const usernameSpan = document.getElementById('profile-username');
             if (usernameSpan && data.user.username) {

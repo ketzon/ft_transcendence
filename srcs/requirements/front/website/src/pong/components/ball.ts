@@ -87,6 +87,9 @@ export function updateBall(gameId: GameElements): void {
         if (!isScoring) {
             gameId.ball.style.backgroundColor = "white";
             setIsScoring(true);
+             if (ballColors === "blue") {
+                gameState.scoreRight++;
+            }
             if (isBasic) {
                 gameState.scoreRight++;
             } else {
@@ -100,6 +103,9 @@ export function updateBall(gameId: GameElements): void {
         if (!isScoring) {
             gameId.ball.style.backgroundColor = "white";
             setIsScoring(true);
+            if (ballColors === "blue") {
+                gameState.scoreLeft++;
+            }
             if (isBasic) {
                 gameState.scoreLeft++;
             } else {

@@ -11,7 +11,7 @@
   "type": "module",
   "main": "/",
   "scripts": {
-    "start": "nodemon ./srcs/app.js",
+    "start": "node ./srcs/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

@@ -149,7 +149,7 @@ async function getGameHistory(): Promise<Game[]> {
     if (!res.ok) throw new Error('Erreur HTTP');
 
     const data = await res.json();
-    console.log('📊 Historique des parties récupéré :', data);
+    // console.log('📊 Historique des parties récupéré :', data);
     return data.games;
   } catch (err) {
     console.error('Erreur lors de la récupération de l’historique :', err);
@@ -290,11 +290,11 @@ async function updateGameHistory() {
         tableBody.appendChild(row);
     });
 
-    console.log("📊 Résultats des parties :", games.map(g => g.result));
-    console.log("📅 Dates des parties :", games.map(g => g.date));
-    console.log("👤 Joueurs des parties :", games.map(g => `${g.player1?.username || 'Unknown'} vs ${g.player2Name || 'Unknown'}`));
-    console.log("🏆 Scores des parties :", games.map(g => g.score));
-    console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
+    // console.log("📊 Résultats des parties :", games.map(g => g.result));
+    // console.log("📅 Dates des parties :", games.map(g => g.date));
+    // console.log("👤 Joueurs des parties :", games.map(g => `${g.player1?.username || 'Unknown'} vs ${g.player2Name || 'Unknown'}`));
+    // console.log("🏆 Scores des parties :", games.map(g => g.score));
+    // console.log("⏱️ Durée des parties :", games.map(g => g.gameStats.gameDuration));
 
     createPerformanceGraph(games);
 }
@@ -329,7 +329,7 @@ export function initializeDashboard() {
             const usernameSpan = document.getElementById('profile-username');
             if (usernameSpan && data.user.username) {
                 usernameSpan.textContent = data.user.username;
-                console.log('✅ Username mis à jour dans le DOM :', data.user.username);
+                // console.log('✅ Username mis à jour dans le DOM :', data.user.username);
                 } else {
                 console.warn('⚠️ Élément #profile-username non trouvé ou username absent');
                 }

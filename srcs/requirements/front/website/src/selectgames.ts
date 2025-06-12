@@ -70,7 +70,7 @@ export function execSelect(): void {
         if (player2 === "") { 
             player2 = "player2👻";
         }
-        console.log("prompt working")
+        // console.log("prompt working")
         localStorage.setItem("Player2", player2);
 
         setPause(true);
@@ -84,7 +84,7 @@ export function execSelect(): void {
     });
 
 pongTournament.addEventListener("click", async () => {
-    console.log("im in tournament mode")
+    // console.log("im in tournament mode")
     if (!changingArea) return;
 
     const connectedUser = localStorage.getItem('nickname') || 'player1👻';

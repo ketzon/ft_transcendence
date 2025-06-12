@@ -43,7 +43,7 @@ async function updatePassword(newPassword: string): Promise<void> {
 
         if (!res.ok)
         {
-            console.log(resMsg);
+            // console.log(resMsg);
             toasts.error(resMsg.details);
             return;
         }
@@ -64,7 +64,7 @@ function initPasswordForm(): void {
     if (localStorage.getItem("googleAuth") === "true")
     {
         const passwordBox = document.getElementById("password-box")
-        console.log("passwordBox = ", passwordBox);
+        // console.log("passwordBox = ", passwordBox);
         passwordBox?.classList.add("hidden");
         return ;
     }
@@ -158,7 +158,7 @@ function initEmailForm(): void {
 
 
 export async function updateLanguage(language: string): Promise<void> {
-    console.log(`mon language selectionne est ${language}`)
+    // console.log(`mon language selectionne est ${language}`)
     try {
         const res = await fetch(`${API_URL}/user/language`, {
             method: 'POST',
@@ -169,7 +169,7 @@ export async function updateLanguage(language: string): Promise<void> {
             body: JSON.stringify({ language}),
         });
         const resMsg = await res.json();
-        console.log(resMsg);
+        // console.log(resMsg);
         if (!res.ok) {
             printResponse("/language", resMsg);
             toasts.error("Failed to update language")
@@ -308,7 +308,7 @@ function handleSubmitAvatar(): void {
             if (avatarInput && avatarInput.files)
             {
                 formData.append("newAvatar", avatarInput.files[0]);
-                console.log(formData.get("newAvatar"));
+                // console.log(formData.get("newAvatar"));
 
                 //Call API to really upload file in DB. Atm it just use object URL to store it in localStorage.
                 updateAvatar(formData);

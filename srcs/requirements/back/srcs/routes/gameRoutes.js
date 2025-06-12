@@ -3,12 +3,12 @@ import userController from '../controllers/users_controller.js';
 import userService from "../services/user_services.js"
 
 
-console.log("✅ Route /api/games appelée");
+// console.log("✅ Route /api/games appelée");
 
 async function gameRoutes(fastify, opts) {
   fastify.post('/api/games', async function (request, reply) {
-  console.log("✅ POST /api/games bien reçu");
-  console.log("📦 Contenu body :", request.body);
+  // console.log("✅ POST /api/games bien reçu");
+  // console.log("📦 Contenu body :", request.body);
 
   try {
     const {
@@ -65,7 +65,7 @@ async function gameRoutes(fastify, opts) {
     data.player2 = { connect: { id: player2Id } };
   }
 
-    console.log("📤 Données envoyées à Prisma :", data);
+    // console.log("📤 Données envoyées à Prisma :", data);
 
     const newGame = await this.prisma.game.create({ data });
 

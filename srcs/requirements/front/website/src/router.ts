@@ -66,17 +66,17 @@ export async function router(): Promise<void> {
             try {
                 await fetch(`${API_URL}/user/profil`, {credentials: "include"});
             } catch (error) {
-                console.log("heartbeat failed");
+                // console.log("heartbeat failed");
             }
         }, 20000);
     }
     if (!changingArea)
     {
-        console.log("Could not find changingArea");
+        // console.log("Could not find changingArea");
         return;
     }
 
-    console.log("Current path = " + location.pathname);
+    // console.log("Current path = " + location.pathname);
     switch (location.pathname) {
 
         case routes.versus:

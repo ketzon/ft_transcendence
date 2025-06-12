@@ -3,7 +3,7 @@ import User from "../User.js"
 fastify.get('/', (_req, res) => res.send("Display main page")) //GET
 
 fastify.post('/signup', async ( req, reply) => {
-	console.log("entré")
+	// console.log("entré")
 	const { name, password, avatar} = req.body;
 
 	if (!name || !password) {

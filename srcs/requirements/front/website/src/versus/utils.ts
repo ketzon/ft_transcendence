@@ -24,7 +24,7 @@ export function determineWinner({player, enemy}: {player : Figther, enemy: Figth
 
     if (!gameResultElem)
     {
-        console.log("ERROR TO PRINT VERSUS RESULT");
+        // console.log("ERROR TO PRINT VERSUS RESULT");
         return;
     }
 

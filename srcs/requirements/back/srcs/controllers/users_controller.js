@@ -204,7 +204,7 @@ const customUsername = async (req, reply) => {
 export const customEmail = async (req, reply) => {
     try {
         const { newEmail } = req.body;
-		console.log("BODY REÇU :", req.body);
+		// console.log("BODY REÇU :", req.body);
         const token = getToken(req, reply);
         const user = await userService.getUserByToken(req.server, token);
 

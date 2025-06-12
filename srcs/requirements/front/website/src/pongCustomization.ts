@@ -15,7 +15,7 @@ import { setStage } from "./pong/core/gameloop";
 import { updateI18nTranslations } from "./i18next";
 
 function setCustomSettings(): void {
-    console.log("im in custom settings");
+    // console.log("im in custom settings");
     const customSettingsForm = document.getElementById("customSettingsForm") as HTMLFormElement | null;
 
     if (!customSettingsForm)

@@ -142,7 +142,7 @@ export function handleCredentialResponse(response): void {
     localStorage.setItem("googleAuth", "true");
 
     //On recupere les donnees des inputs du form.
-    console.log("DATA TO BE SENT : ",inputsValues);
+    // console.log("DATA TO BE SENT : ",inputsValues);
 
     sendForm(inputsValues, errElement);
 }
@@ -178,7 +178,7 @@ export function signupEvents(): void {
         isSubmitting = true;
         //On recupere les donnees des inputs du form.
         const inputsValues: formValues = getFormValues();
-        console.log("DATA TO BE SENT : ",inputsValues);
+        // console.log("DATA TO BE SENT : ",inputsValues);
 
 
         let errors = verifyInputs(inputsValues);
@@ -188,12 +188,12 @@ export function signupEvents(): void {
         {
             if (errElement)
                 errElement.innerText = errors.join(". ");
-            console.log("FORM NOT VALID");
+            // console.log("FORM NOT VALID");
             isSubmitting = false;
             return ;
         }
         //Sinon on envoie les datas au back et on redirige vers /login en cas de success.
-        console.log("FORM IS VALID");
+        // console.log("FORM IS VALID");
         await sendForm(inputsValues, errElement);
         isSubmitting = false;
     })

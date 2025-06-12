@@ -116,7 +116,7 @@ function handleCredentialResponse(response) {
         email: responsePayload.email,
         password: responsePayload.sub,
     }
-    console.log("DATA TO BE SENT : ",data);
+    // console.log("DATA TO BE SENT : ",data);
 
     let errors = verifyInputs(data);
 
@@ -125,10 +125,10 @@ function handleCredentialResponse(response) {
         if(errElement)
         {
             errElement.innerText = errors.join(". ");
-            console.log("FORM NOT VALID");
+            // console.log("FORM NOT VALID");
         }
     }
-    console.log("FORM IS VALID");
+    // console.log("FORM IS VALID");
     localStorage.setItem("googleAuth", "true");
     sendForm(data, errElement);
 }
@@ -166,7 +166,7 @@ export function loginEvents(): void {
         isSubmitting = true;
         //On recup les donnees des inputs du form.
         const inputsValues: signinformValues = getFormValues();
-        console.log("DATA TO BE SENT : ",inputsValues);
+        // console.log("DATA TO BE SENT : ",inputsValues);
 
 
         let errors = verifyInputs(inputsValues);
@@ -176,13 +176,13 @@ export function loginEvents(): void {
         {
             if(errElement)
                 errElement.innerText = errors.join(". ");
-            console.log("FORM NOT VALID");
+            // console.log("FORM NOT VALID");
             isSubmitting = false;
             return;
         }
 
         //Si pas d'erreurs on envoie les datas du form au backend
-        console.log("FORM IS VALID");
+        // console.log("FORM IS VALID");
         localStorage.setItem("googleAuth", "false");
         await sendForm(inputsValues, errElement);
         isSubmitting = false;

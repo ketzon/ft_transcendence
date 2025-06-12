@@ -34,20 +34,20 @@ export function gameLoop(gameId: GameElements): void {
 
 function updateUi(gameId: GameElements) : void {
     gameId.winnerMsg.textContent = `Reach ${WIN_SCORE} point(s) to claim victory!🏆`;
-    console.log("dans update ui")
+    // console.log("dans update ui")
     if(isBasic === false) {
         gameId.basicButton.textContent = "default-mode";
     }
     if (!tournamentMode) {
-        console.log("tournament mode off")
+        // console.log("tournament mode off")
         gameId.player1.textContent = localStorage.getItem('nickname');
         gameId.player2.textContent = localStorage.getItem('Player2');
     }
     if(tournamentMode){
-        console.log("tournament mode on")
+        // console.log("tournament mode on")
         const tournamentPlayers = JSON.parse(localStorage.getItem("tournamentPlayers") || "[]");
-        console.log(tournamentPlayers);
-        console.log(stage);
+        // console.log(tournamentPlayers);
+        // console.log(stage);
         switch (stage){
             case 0:
                 gameId.player1.textContent = player1;
@@ -126,7 +126,7 @@ export function setStage(value: number): void {
 }
 
 function checkTournament(): void {
-    console.log("je suis bien dans check tournament")
+    // console.log("je suis bien dans check tournament")
     if (tournamentMode) {
         if(pongScore.tempLeft >= WIN_SCORE || pongScore.tempRight >= WIN_SCORE){
             showBracket();
@@ -137,7 +137,7 @@ function checkTournament(): void {
                 getWinner("right", stage);
             }
             stage++;
-            console.log(`je suis stage ${stage}`)
+            // console.log(`je suis stage ${stage}`)
         }
     }
 }
@@ -270,7 +270,7 @@ export function resetGame(gameId: GameElements): void {
     gameId.ball.style.backgroundColor = "white";
     setPause(true);
     gameId.pauseGame.textContent = "start";
-    console.log("avant check tournament");
+    // console.log("avant check tournament");
     checkTournament();
 }
 

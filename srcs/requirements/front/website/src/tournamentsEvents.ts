@@ -58,7 +58,7 @@ export async function initializeTournaments() {
     updateI18nTranslations();
     try {
         const res = await fetch(`${API_URL}/api/tournaments`, { credentials: "include" });
-        console.log("📌 State Tour", state.tours);
+        // console.log("📌 State Tour", state.tours);
         const tournaments = await res.json();
         state.tours = tournaments.map(normalizeTournament);
         state.loading = false;
@@ -96,7 +96,7 @@ async function showTour(tourId: string) {
 
         const tournament = normalizeTournament(await res.json());
         state.selectedTourJson = tournament;
-        console.log("✅ Tournois ", tournament);
+        // console.log("✅ Tournois ", tournament);
         updateTournamentDiv();
     } catch (error) {
         console.error("Error showing tour:", error);
@@ -210,7 +210,7 @@ function renderGamesHtml(tournament: Tournament): string {
 
 function updateTournamentDiv() {
     updateTournamentsList();
-    console.log("🎯 Les donnees dans UTDiv", state.selectedTourJson);
+    // console.log("🎯 Les donnees dans UTDiv", state.selectedTourJson);
     const content = document.getElementById('tournament-content');
     if (!content) return;
     if (!state.selectedTourJson) {
@@ -223,7 +223,7 @@ function updateTournamentDiv() {
     }
 
     const tour = state.selectedTourJson;
-    console.log("Tour sélectionné :", tour);
+    // console.log("Tour sélectionné :", tour);
 
     let contentHtml = `
         <div class="space-y-6">

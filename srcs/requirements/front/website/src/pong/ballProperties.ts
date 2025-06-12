@@ -10,7 +10,7 @@ export const ballProperties: BallColorProperties = {
             const dirY = Math.sign(gameState.ballSpeedY || 1);
             gameState.ballSpeedX = 9 * dirX;
             gameState.ballSpeedY = 5 * dirY;
-            console.log("bounce balle blanche")
+            // console.log("bounce balle blanche")
         },
         onScore: (gameState, leftOrRight) => {
             if (leftOrRight === "left") gameState.scoreLeft++;

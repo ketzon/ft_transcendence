@@ -21,7 +21,7 @@ export async function sendTournamentToBackend(): Promise<void> {
 
     if (!res.ok) throw new Error("Erreur lors de l'envoi du tournoi");
     const data = await res.json();
-    console.log("✅ Tournoi enregistré dans la BDD :", data);
+    // console.log("✅ Tournoi enregistré dans la BDD :", data);
 
     // Nettoyer
     resetTournamentResults();

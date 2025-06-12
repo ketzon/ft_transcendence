@@ -186,11 +186,11 @@ export function autoChangeColor(gameId: GameElements): void {
         setColorChangeTimer(undefined);
     }
     const delay = Math.floor(Math.random() * 5000) + 5000; // 5s a 10s
-    console.log(`changement de couleur dans ${delay/1000} secondes`) //pour debug
+    // console.log(`changement de couleur dans ${delay/1000} secondes`) //pour debug
     const startTime = Date.now(); //pour debug
     setColorChangeTimer(window.setTimeout(() => {
         const actualDelay = (Date.now() - startTime) / 1000; //pour debug
-        console.log(`changement de couleur effectuer apres ${actualDelay} secondes`) //pour debug
+        // console.log(`changement de couleur effectuer apres ${actualDelay} secondes`) //pour debug
     if (pause === false) {
         changeBall(gameId);
         autoChangeColor(gameId);

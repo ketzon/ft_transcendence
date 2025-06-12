@@ -126,7 +126,7 @@ function handleResendBtn(userEmail: string): void {
         }
         catch (error)
         {
-            console.log("Could not contact /resendOtpCode");
+            // console.log("Could not contact /resendOtpCode");
         }
     })
 }

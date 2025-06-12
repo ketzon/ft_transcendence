@@ -49,7 +49,7 @@ export function checkWinner(gameId: GameElements): void {
       score1: gameState.scoreLeft,
       score2: gameState.scoreRight,
     });
-    console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
+    // console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
     // const isPlayer1ConnectedUser = (gameState.player1Id === connectedUserId); // ou une condition équivalente
 
@@ -71,7 +71,7 @@ export function checkWinner(gameId: GameElements): void {
         })
       })
     .then(res => res.json())
-    .then(data => console.log("✅ Partie enregistrée :", data))
+    // .then(data => console.log("✅ Partie enregistrée :", data))
     .catch(err => console.error("❌ Erreur enregistrement :", err));
 
 
@@ -91,7 +91,7 @@ export function checkWinner(gameId: GameElements): void {
         score1: gameState.scoreLeft,
         score2: gameState.scoreRight,
       });
-      console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
+      // console.log("✅ Résultat ajouté au tournoi :", tournamentResults);
     }
 
       fetch(`${API_URL}/api/games`, {
@@ -112,7 +112,7 @@ export function checkWinner(gameId: GameElements): void {
       })
     })
     .then(res => res.json())
-    .then(data => console.log("✅ Partie enregistrée :", data))
+    // .then(data => console.log("✅ Partie enregistrée :", data))
     .catch(err => console.error("❌ Erreur enregistrement :", err));
 
     changeWinnerMsg(gameId, player2Name);

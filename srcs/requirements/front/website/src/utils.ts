@@ -1,5 +1,5 @@
 export function printResponse(route: string, response: Response): void {
-    console.log("Response from " + route + " : " , response);
+    // console.log("Response from " + route + " : " , response);
 }
 
 export function resetInput(inputId: string): void {
@@ -29,8 +29,8 @@ export function hideNavbar(): void {
     let selectLanguage = document.getElementById("selector") as HTMLButtonElement;
     const navbarElem = document.getElementById("navbar-box");
 
-    console.log("HIDENAVBAR FUNCTION")
-    console.log(logoutBtn);
+    // console.log("HIDENAVBAR FUNCTION")
+    // console.log(logoutBtn);
     if(logoutBtn) logoutBtn.style.display = 'none'
     if(selectLanguage) selectLanguage.style.display = 'none'
     if(navbarElem) navbarElem.style.display = 'none'

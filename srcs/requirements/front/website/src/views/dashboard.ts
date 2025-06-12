@@ -105,8 +105,8 @@ export function dashboardView(): string {
 
             games.forEach((game) => {
                 const opponent = game.opponent;
-                console.log("Opponent:");
-                console.log("Opponent:", opponent);
+                // console.log("Opponent:");
+                // console.log("Opponent:", opponent);
                 const resultColor = game.result === "Win" ? "text-green-600" : "text-red-500";
                 const resultEmoji = game.result === "Win" ? "✅" : "❌";
 
@@ -126,7 +126,7 @@ export function dashboardView(): string {
         }
 
         async function loadStats(userId = 1) {
-        console.log("✅ loadStats called");
+        // console.log("✅ loadStats called");
             try {
                 const res = await fetch(${API_URL}/api/stats/user, { cache: 'no-store', credentials: 'include'})
                 if (!res.ok) throw new Error('Erreur API');
@@ -143,7 +143,7 @@ export function dashboardView(): string {
                 } else {
                     profileAvatar.src = "https://api.dicebear.com/7.x/bottts/svg?seed=" + username;
                 }
-                console.log("📛📛📛📛Avatar URL:", profileAvatar.src);
+                // console.log("📛📛📛📛Avatar URL:", profileAvatar.src);
                 // Stats
                 document.getElementById("total-matches").textContent = data.gamesPlayed;
                 document.getElementById("win-rate").textContent = data.winRate + "%";

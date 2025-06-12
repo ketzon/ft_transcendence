@@ -134,7 +134,7 @@ function displayFriends(friends: any[]): void {
 
 async function removeFriend(id: number): Promise<void> {
     try {
-        const res = await fetch(`${API_URL}/user/friends/remove${id}`, {
+        const res = await fetch(`${API_URL}/user/friends/remove/${id}`, {
             method: 'DELETE',
         credentials: 'include'
         });

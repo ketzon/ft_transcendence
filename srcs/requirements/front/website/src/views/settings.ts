@@ -146,6 +146,13 @@ function initEmailForm(): void {
     const updateEmailForm = document.getElementById("update-email-form") as HTMLFormElement;
     const emailValue = document.getElementById("update-email-value") as HTMLInputElement;
 
+     if (localStorage.getItem("googleAuth") === "true")
+    {
+        const emailBox = document.getElementById("update-email-form")
+        emailBox?.classList.add("hidden");
+        return ;
+    }
+
     if (updateEmailForm) {
         updateEmailForm.addEventListener("submit", (event) => {
             event.preventDefault();

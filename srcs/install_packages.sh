@@ -41,6 +41,9 @@ export NVM_DIR="$HOME/.nvm"
 nvm i --lts
 nvm use --lts
 
+sudo apt-get install language-pack-ja
+sudo apt-get install japan*
+
 cd requirements/back
 npm i nodemon
 
